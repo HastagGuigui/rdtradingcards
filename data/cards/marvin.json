@@ -1,0 +1,62 @@
+{
+  "groupname": "marvin",
+  "basechance": 3,
+  "cards": [{
+	  "chance": 3,
+	  "filename": "marvinr",
+	  "name": "Marvin (Rare)",
+	  "type": "Rare",
+	  "description": "(Art by 3T)",
+	  "smell": "Proper organization",
+	  "season": 11,
+	  "bonuses": {
+		"okamiiscollar": true,
+		"oversizedstethoscope": true,
+		"fanonplaceholder": true
+	  },
+	  "embed": "https://media.discordapp.net/attachments/1030420309947469904/1410309238173204600/marvinr.png"
+	},
+	{
+	  "chance": 2,
+	  "filename": "marvinsr",
+	  "name": "Rodney (Super Rare)",
+	  "type": "Super Rare",
+	  "description": "(Art by #Guigui)",
+	  "smell": "Proper organization",
+	  "season": 11,
+	  "bonuses": {
+		"oversizedstethoscope": true,
+		"fanonplaceholder": true
+	  },
+	  "embed": "https://media.discordapp.net/attachments/1030420309947469904/1410309237615235112/marvinsr.png"
+	},
+	{
+	  "chance": 1,
+	  "filename": "marvinur",
+	  "name": "Marvin (Ultra Rare)",
+	  "type": "Ultra Rare",
+	  "description": "(Art pending)",
+	  "smell": "Proper organization",
+	  "season": 11,
+	  "bonuses": {
+		"oversizedstethoscope": true,
+		"fanonplaceholder": true
+	  },
+	  "embed": "https://media.discordapp.net/attachments/1030420309947469904/1410325951287394438/guiguidc.png"
+	},
+	{
+	  "chance": 0,
+	  "filename": "marvinc",
+	  "name": "Marvin (Collector's)",
+	  "type": "Collector's",
+	  "description": "Requires the Rare, Super Rare, and Ultra Rare variants of Marvin (Art pending)",
+	  "smell": "Proper organization",
+	  "season": 11,
+	  "bonuses": {
+		"oversizedstethoscope": true,
+		"fanonplaceholder": true
+	  },
+	  "embed": "https://media.discordapp.net/attachments/1030420309947469904/1410325951287394438/guiguidc.png"
+	}
+  ]
+}

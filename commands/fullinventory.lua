@@ -44,7 +44,7 @@ function command.run(message, mt)
   end
 
   if not filename then
-    message.channel:send(lang.no_user_1 .. mt[1] .. lang.no_user_2)
+    message.channel:send(formatstring(lang.no_user, {mt[1]}))
     return
   end
 
@@ -530,50 +530,39 @@ function command.run(message, mt)
 		else
 			filtertitle = " " .. seasonnum
 		end
-		embedtitle = embedtitle .. lang.season_1 .. filtertitle .. lang.season_2
+		
+	embedtitle = formatstring(lang.embed_title_season, {filtertitle})
   end
 
 	if filterRarity then
 		embedtitle = embedtitle .. lang.rarity_1 .. raritytext .. lang.rarity_2
 	end
   
-  local contentstring = (uj.id == message.author.id and lang.embed_your or "<@" .. uj.id .. ">" .. lang.embed_s) .. lang.embed_contains
+  local contentstring = (uj.id == message.author.id and lang.embed_your or formatstring(lang.embed_s, {"<@" .. uj.id .. ">"})) .. lang.embed_contains
   local previnvstring = ''
-  if filterRarity then
-		if enableShortNames then
-			if enableSeason then
-				for k,v in pairs(invrfilter) do table.insert(invtable, "**" .. (cdb[k].name or k) .. "** x" .. v .. " (" .. k.. ") " ..  "(Season " .. cdb[k].season .. ")\n") end
-			else
-				for k,v in pairs(invrfilter) do table.insert(invtable, "**" .. (cdb[k].name or k) .. "** x" .. v .. " (" .. k.. ")\n") end
-			end
-		elseif enableSeason then
-			for k,v in pairs(invrfilter) do table.insert(invtable, "**" .. (cdb[k].name or k) .. "** x" .. v .. " (Season " .. cdb[k].season.. ")\n") end
-		else
-			for k,v in pairs(invrfilter) do table.insert(invtable, "**" .. (cdb[k].name or k) .. "** x" .. v .. "\n") end
+	if filterRarity then
+		for k,v in pairs(invrfilter) do
+			table.insert(invtable,
+				"**" .. (cdb[k].name or k) .. "** x" .. v ..
+				(enableShortNames and (" ("..k..") ") or "") ..
+				(enableSeason and formatstring(lang.season, {cdb[k].season}) or "") .."\n"
+			)
 		end
-  elseif filterSeason then
-		if enableShortNames then
-			if enableSeason then
-				for k,v in pairs(invsfilter) do table.insert(invtable, "**" .. (cdb[k].name or k) .. "** x" .. v .. " (" .. k.. ") " ..  "(Season " .. cdb[k].season .. ")\n") end
-			else
-				for k,v in pairs(invsfilter) do table.insert(invtable, "**" .. (cdb[k].name or k) .. "** x" .. v .. " (" .. k.. ")\n") end
-			end
-		elseif enableSeason then
-			for k,v in pairs(invsfilter) do table.insert(invtable, "**" .. (cdb[k].name or k) .. "** x" .. v .. " (Season " .. cdb[k].season.. ")\n") end
-		else
-			for k,v in pairs(invsfilter) do table.insert(invtable, "**" .. (cdb[k].name or k) .. "** x" .. v .. "\n") end
+	elseif filterSeason then
+		for k,v in pairs(invsfilter) do
+			table.insert(invtable,
+				"**" .. (cdb[k].name or k) .. "** x" .. v ..
+				(enableShortNames and (" ("..k..") ") or "") ..
+				(enableSeason and formatstring(lang.season, {cdb[k].season}) or "") .."\n"
+			)
 		end
 	else
-		if enableShortNames then
-			if enableSeason then
-				for k,v in pairs(uj.inventory) do table.insert(invtable, "**" .. (cdb[k].name or k) .. "** x" .. v .. " (" .. k.. ") " ..  "(Season " .. cdb[k].season .. ")\n") end
-			else
-				for k,v in pairs(uj.inventory) do table.insert(invtable, "**" .. (cdb[k].name or k) .. "** x" .. v .. " (" .. k.. ")\n") end
-			end
-		elseif enableSeason then
-			for k,v in pairs(uj.inventory) do table.insert(invtable, "**" .. (cdb[k].name or k) .. "** x" .. v .. " (Season " .. cdb[k].season.. ")\n") end
-		else
-			for k,v in pairs(uj.inventory) do table.insert(invtable, "**" .. (cdb[k].name or k) .. "** x" .. v .. "\n") end
+		for k,v in pairs(uj.inventory) do
+			table.insert(invtable,
+				"**" .. (cdb[k].name or k) .. "** x" .. v ..
+				(enableShortNames and (" ("..k..") ") or "") ..
+				(enableSeason and formatstring(lang.season, {cdb[k].season}) or "") .."\n"
+			)
 		end
   end
   table.sort(invtable)
@@ -583,7 +572,7 @@ function command.run(message, mt)
       message.author:send{
         content = contentstring,
         embed = {
-          color = 0x85c5ff,
+          color = uj.embedc,
           title = embedtitle,
           description = previnvstring
         },
@@ -597,7 +586,7 @@ function command.run(message, mt)
   message.author:send{
     content = contentstring,
     embed = {
-      color = 0x85c5ff,
+      color = uj.embedc,
       title = embedtitle,
       description = previnvstring
     },

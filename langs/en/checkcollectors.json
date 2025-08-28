@@ -1,8 +1,4 @@
 {
 	"congratulations": "Congratulations!",
-	"gotcard_1": "After collecting and storing some other cards, ",
-	"gotcard_2": " got a **",
-	"gotcard_3": "** card! The **",
-	"gotcard_4": "** card has been added to ",
-	"gotcard_5": " storage."
+	"gotcard_1": "After collecting and storing some other cards, {1} got a **{2}** card! The **{2}** card has been added to {3} storage."
 }

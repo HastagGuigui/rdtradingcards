@@ -13,7 +13,7 @@ function item.run(uj, ujf, message, mt, interaction)
     replying:reply(lang.fancyteaset_message)
     local randtime = math.random(4, 8)
     uj.lastpull = uj.lastpull - randtime
-    message:reply(lang.cooldown_decrease_1 .. randtime .. lang.cooldown_decrease_2)
+    message:reply(formatstring(lang.cooldown_decrease, {randtime}))
     dpf.savejson(ujf, uj)
   else
     replying:reply(lang.fancyteaset_conspt)

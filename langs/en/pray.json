@@ -7,11 +7,8 @@
 	"time_plural_s": "s",
 	"time_and": " and ",
 	"time_minute": " minute",
-	"wait_message_1": "Please wait ",
-	"wait_message_2": " before praying again.",
+	"wait_message": "Please wait {1} before praying again.",
 	
 	"prayed_message": "The Card Gods have listened to your plight. A **Token** appears in your pocket.",
-	"checktoken_1": "You currently have ",
-	"checktoken_2": " **Token",
-	"checktoken_3": "**.",
+	"checktoken": "You currently have {1} **Token{1s}**."
 }

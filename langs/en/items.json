@@ -1,15 +1,11 @@
 {
 	"needs_plural_s": true,
 	
-	"embed_contains": ", you have the following items:",
-	"embed_title": "'s Items",
+	"embed_contains": "{1}, you have the following items:",
+	"embed_title": "{1}'s Items",
 	
-	"embed_page_1": "(Page ",
-	"embed_page_2": " of ",
-	"embed_page_3": ")",
+	"embed_page": "(Page {1} of {2})",
 	
-	"embed_token_1": "You also have ",
-	"embed_token_2":  " **Token",
-	"embed_token_3": "**.",
+	"embed_token": "You also have {1} **Token{1s}**.",
 	"plural_s": "s",
 }

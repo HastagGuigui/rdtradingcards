@@ -339,42 +339,30 @@ function command.run(message, mt)
   print("Page number is " .. pagenumber)
   
 	if filterRarity then
-		if enableShortNames then
-			if enableSeason then
-				for k,v in pairs(invrfilter) do table.insert(invtable, "**" .. (cdb[k].name or k) .. "** x" .. v .. " (" .. k.. ") " ..  "(Season " .. cdb[k].season .. ")\n") end
-			else
-				for k,v in pairs(invrfilter) do table.insert(invtable, "**" .. (cdb[k].name or k) .. "** x" .. v .. " (" .. k.. ")\n") end
-			end
-		elseif enableSeason then
-			for k,v in pairs(invrfilter) do table.insert(invtable, "**" .. (cdb[k].name or k) .. "** x" .. v .. " (Season " .. cdb[k].season.. ")\n") end
-		else
-			for k,v in pairs(invrfilter) do table.insert(invtable, "**" .. (cdb[k].name or k) .. "** x" .. v .. "\n") end
+		for k,v in pairs(invrfilter) do
+			table.insert(invtable,
+				"**" .. (cdb[k].name or k) .. "** x" .. v ..
+				(enableShortNames and (" ("..k..") ") or "") ..
+				(enableSeason and formatstring(lang.season, {cdb[k].season}) or "") .."\n"
+			)
 		end
-  elseif filterSeason then
-		if enableShortNames then
-			if enableSeason then
-				for k,v in pairs(invsfilter) do table.insert(invtable, "**" .. (cdb[k].name or k) .. "** x" .. v .. " (" .. k.. ") " ..  "(Season " .. cdb[k].season .. ")\n") end
-			else
-				for k,v in pairs(invsfilter) do table.insert(invtable, "**" .. (cdb[k].name or k) .. "** x" .. v .. " (" .. k.. ")\n") end
-			end
-		elseif enableSeason then
-			for k,v in pairs(invsfilter) do table.insert(invtable, "**" .. (cdb[k].name or k) .. "** x" .. v .. " (Season " .. cdb[k].season.. ")\n") end
-		else
-			for k,v in pairs(invsfilter) do table.insert(invtable, "**" .. (cdb[k].name or k) .. "** x" .. v .. "\n") end
+	elseif filterSeason then
+		for k,v in pairs(invsfilter) do
+			table.insert(invtable,
+				"**" .. (cdb[k].name or k) .. "** x" .. v ..
+				(enableShortNames and (" ("..k..") ") or "") ..
+				(enableSeason and formatstring(lang.season, {cdb[k].season}) or "") .."\n"
+			)
 		end
 	else
-		if enableShortNames then
-			if enableSeason then
-				for k,v in pairs(uj.inventory) do table.insert(invtable, "**" .. (cdb[k].name or k) .. "** x" .. v .. " (" .. k.. ") " ..  "(Season " .. cdb[k].season .. ")\n") end
-			else
-				for k,v in pairs(uj.inventory) do table.insert(invtable, "**" .. (cdb[k].name or k) .. "** x" .. v .. " (" .. k.. ")\n") end
-			end
-		elseif enableSeason then
-			for k,v in pairs(uj.inventory) do table.insert(invtable, "**" .. (cdb[k].name or k) .. "** x" .. v .. " (Season " .. cdb[k].season.. ")\n") end
-		else
-			for k,v in pairs(uj.inventory) do table.insert(invtable, "**" .. (cdb[k].name or k) .. "** x" .. v .. "\n") end
+		for k,v in pairs(uj.inventory) do
+			table.insert(invtable,
+				"**" .. (cdb[k].name or k) .. "** x" .. v ..
+				(enableShortNames and (" ("..k..") ") or "") ..
+				(enableSeason and formatstring(lang.season, {cdb[k].season}) or "") .."\n"
+			)
 		end
-  end
+	end
   table.sort(invtable)
   
   for i = (pagenumber - 1) * 10 + 1, (pagenumber) * 10 do
@@ -560,51 +548,32 @@ function command.run(message, mt)
 	end		
 
 
-  local embedtitle = message.author.name .. lang.embed_title
-  if filterSeason then
-		local filtertitle = ""
-		if multipleSeasons then
-			if lang.needs_plural_s then
-				filtertitle = lang.plural_s .. seasonnum
-			else
-				filtertitle = " " .. seasonnum
-			end
+    local embedtitle = formatstring(lang.embed_title, {message.author.name})
+  if filterSeason == true then
+	local filtertitle = ""
+	if multipleSeasons == true then
+		if lang.needs_plural_s == true then
+			filtertitle = lang.plural_s .. seasonnum
 		else
 			filtertitle = " " .. seasonnum
 		end
-		embedtitle = embedtitle .. lang.season_1 .. filtertitle .. lang.season_2
-  end
-
-	if filterRarity then
-		embedtitle = embedtitle .. lang.rarity_1 .. raritytext .. lang.rarity_2
+	else
+		filtertitle = " " .. seasonnum
 	end
-
-  if uj.lang == "ko" then
-    message.channel:send{
-      content = message.author.mentionString .. lang.embed_contains,
-      embed = {
-        color = 0x85c5ff,
-        title = embedtitle,
-        description = invstring,
-        footer = {
-          text =  lang.embed_page_1 .. maxpn .. lang.embed_page_2 .. pagenumber .. lang.embed_page_3,
-          icon_url = message.author.avatarURL
-        }
-      }
-    }
-  else
-    message.channel:send{
-      content = message.author.mentionString .. lang.embed_contains,
-      embed = {
-        color = 0x85c5ff,
-        title = embedtitle,
-        description = invstring,
-        footer = {
-          text =  lang.embed_page_1 .. pagenumber .. lang.embed_page_2 .. maxpn .. lang.embed_page_3,
-          icon_url = message.author.avatarURL
-        }
-      }
-    }
+	embedtitle = formatstring(lang.embed_title_season, {message.author.name, filtertitle})
   end
+
+  message.channel:send{
+    content = formatstring(lang.embed_contains, {message.author.mentionString}),
+    embed = {
+      color = uj.embedc,
+      title = embedtitle,
+      description = invstring,
+      footer = {
+        text = formatstring(lang.embed_page, {pagenumber, maxpn}),
+        icon_url = message.author.avatarURL
+      }
+    }
+  }
 end
 return command

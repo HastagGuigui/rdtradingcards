@@ -15,12 +15,12 @@ function item.run(uj, ujf, message, mt, interaction)
 
     if interaction then interaction:updateDeferred() end
       if not item1 then
-        message.channel:send(lang.ddd_no_item_1 .. mt[2] .. lang.ddd_no_item_2)
+        message.channel:send(formatstring(lang.ddd_no_item, {mt[2]}))
         return
       end
 
       if not uj.storage[item1] then
-        message.channel:send(lang.ddd_dont_have_1 .. cdb[item1].name .. lang.ddd_dont_have_2)
+        message.channel:send(formatstring(lang.ddd_dont_have, {cdb[item1].name}))
         return
       end
 
@@ -37,11 +37,7 @@ function item.run(uj, ujf, message, mt, interaction)
           end    
       end
 
-      if uj.lang == "ko" then
-        message.channel:send(lang.ddd_use_1 .. uj.id .. lang.ddd_use_2 .. cdb[item1].name .. lang.ddd_use_3)
-      else
-        message.channel:send(lang.ddd_use_1 .. uj.id .. lang.ddd_use_2 .. cdb[item1].name .. lang.ddd_use_3 .. uj.pronouns["their"] .. lang.ddd_use_4)
-      end
+      message.channel:send(formatstring(lang.ddd_use, {uj.id, cdb[item1].name, uj.pronouns["their"]}))
       dpf.savejson(ujf, uj)
         cmd.checkcollectors.run(message, mt)
         cmd.checkmedals.run(message, mt)

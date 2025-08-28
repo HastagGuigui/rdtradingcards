@@ -6,13 +6,9 @@
 	"locations_hallway": "Dark Hallway",
 	"locations_casino": "Shady Casino",
 	
-	"already_in_1": "You are already in the **",
-	"already_in_2": "**!",
+	"already_in": "You are already in the **{1}**!",
 	
-	"room_changed_1": "Your location is now the **",
-	"room_changed_2": "**.",
-	"room_changed_3": "",
+	"room_changed": "Your location is now the **{1}**.",
 	
-	"no_room_1": "Sorry, but I could not find ",
-	"no_room_2": ". Make sure that you spelled it right!",
+	"no_room": "Sorry, but I could not find {1}. Make sure that you spelled it right!",
 }

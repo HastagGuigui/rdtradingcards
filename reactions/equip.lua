@@ -22,11 +22,8 @@ function reaction.run(message, interaction, data, response)
 	end
 	
     uj.equipped = newequip
-    if uj.lang == "ko" then
-	    message.channel:send("<@" .. uj.id .. "> " .. lang.equipped_1 .. itemdb[newequip].name .. lang.equipped_2 .. lang.equipped_3)
-    else
-	    message.channel:send("<@" .. uj.id .. "> " .. lang.equipped_1 .. itemdb[newequip].name .. lang.equipped_2 ..uj.pronouns["their"].. lang.equipped_3)
-	end
+    message.channel:send(formatstring(lang.equipped, {"<@" .. uj.id .. "> ", itemdb[newequip].name, uj.pronouns["their"]}))
+    
 	uj.lastequip = time:toHours()
 
     if uj.sodapt and uj.sodapt.equip then
@@ -40,11 +37,7 @@ function reaction.run(message, interaction, data, response)
 
   if response == "no" then
     print('user1 has denied')
-    if uj.lang == "ko" then
-	  interaction:reply("<@" .. uj.id .. "> " .. lang.stopped_1 .. lang.stopped_2)
-	else
-	  interaction:reply("<@" .. uj.id .. "> " .. lang.stopped_1 .. uj.pronouns["their"] .. lang.stopped_2)
-	end
+    interaction:reply(formatstring(lang.stopped, {"<@" .. uj.id .. "> ", uj.pronouns["their"]}))
   end
 end
 return reaction

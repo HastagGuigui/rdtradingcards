@@ -55,17 +55,13 @@ function command.run(message, mt)
   dpf.savejson("savedata/thrown.json", tj)
 
   local item = cardfilename and lang.card or lang.item
-  if uj.lang == "ko" then
-    local eul_leul = (item == "카드" and "를" or "을")
-	local eul_leul_2 = (item == "카드" and "가 " or "이 ")
-    message.channel:send(message.author.mentionString .. lang.caught_1 .. caughtname .. "** " .. item .. eul_leul .. lang.caught_2 .. caughtname .. "** " .. item .. eul_leul_2 .. lang.caught_3)
-  else
-    message.channel:send(message.author.mentionString .. lang.caught_1 .. caughtname .. "** " .. item .. lang.caught_2 .. caughtname .. "** " .. item .. lang.caught_3 .. uj.pronouns["their"] .. lang.caught_4)
-  end
+  local eul_leul = (uj.lang == "ko" and (item == "카드" and "를" or "을") or "")
+  local eul_leul_2 = (uj.lang == "ko" and (item == "카드" and "가 " or "이 ") or "")
+  message.channel:send(formatstring(lang.caught, {message.author.mentionString, caughtname, item, uj.pronouns["their"], eul_leul, eul_leul_2}))
   if not uj.togglecheckcard then
     if item == "card" or item == "카드" then
       if not uj.storage[cardfilename] then
-        message.channel:send(lang.not_in_storage_1 .. caughtname .. lang.not_in_storage_2)
+        message.channel:send(formatstring(lang.not_in_storage, {caughtname}))
       end
     end
   end

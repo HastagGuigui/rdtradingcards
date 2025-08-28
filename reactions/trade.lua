@@ -39,9 +39,9 @@ function reaction.run(message, interaction, data, response)
     uj2.timestraded = uj2.timestraded and uj2.timestraded + 1 or 1
     
 	if uj.lang == uj2.lang then
-      interaction:reply(lang.reaction_trade_done_1 .. uj2.id .. lang.reaction_trade_done_2 .. uj.id .. lang.reaction_trade_done_3)
+      interaction:reply(formatstring(lang.reaction_trade_done, {uj2.id, uj.id}))
     else
-	  interaction:reply(lang.reaction_trade_done_1 .. uj2.id .. lang.reaction_trade_done_2 .. uj.id .. lang.reaction_trade_done_3 .. "\n" .. lang2.reaction_trade_done_1 .. uj2.id .. lang2.reaction_trade_done_2 .. uj.id .. lang2.reaction_trade_done_3)
+	  interaction:reply(formatstring(lang.reaction_trade_done, {uj2.id, uj.id}) .. "\n" .. formatstring(lang2.reaction_trade_done, {uj2.id, uj.id}))
 	end
 	dpf.savejson(uj2f,uj2)
     dpf.savejson(ujf,uj)
@@ -50,9 +50,9 @@ function reaction.run(message, interaction, data, response)
   if response == "no" then
     print('user2 has denied')
     if uj.lang == uj2.lang then
-	  interaction:reply(lang.reaction_trade_denied_1 .. uj2.id .. lang.reaction_trade_denied_2 .. uj.id .. lang.reaction_trade_denied_3)
-    else
-	  interaction:reply(lang.reaction_trade_denied_1 .. uj2.id .. lang.reaction_trade_denied_2 .. uj.id .. lang.reaction_trade_denied_3 .. "\n" .. lang2.reaction_trade_denied_1 .. uj2.id .. lang2.reaction_trade_denied_2 .. uj.id .. lang2.reaction_trade_denied_3)
+	  interaction:reply(formatstring(lang.reaction_trade_denied, {uj2.id, uj.id}))
+  else
+	  interaction:reply(formatstring(lang.reaction_trade_denied, {uj2.id, uj.id}).."\n"..formatstring(lang2.reaction_trade_denied, {uj2.id, uj.id}))
     end
   end
 end

@@ -7,8 +7,7 @@
 	"time_plural_s": "s",
 	"time_and": " and ",
 	"time_minute": " minute",
-	"wait_message_1": "Please wait ",
-	"wait_message_2":  " before pulling again.",
+	"wait_message": "Please wait {1} before pulling again.",
 	
 	"pulling_card": "Pulling card...",
 	
@@ -18,15 +17,16 @@
 	"pulled_doubleclick": "Doubleclick!",
 	"pulled_tripleclick": "Tripleclick!!!",
 	
-	"rdnot_message_1": " got a What is RD Not? card! The What is RD Not? card has been added to ",
-	"rdnot_message_2": " inventory. The shorthand form of this card is rdnot.\n",
+	"rdnot_message": "{1} got a What is RD Not? card! The What is RD Not? card has been added to {2} inventory. The shorthand form of this card is rdnot.\n",
 	
-	"pulled_message_1": " got a **",
-	"pulled_message_2": "** card! The **",
-	"pulled_message_3": "** card has been added to ",
-	"pulled_message_4": " inventory. The shorthand form of this card is **",
-	"pulled_message_5": "**.",
+	"pulled_message": "{1} got a **{2}** card! The **{2}** card has been added to {3} inventory. The shorthand form of this card is **{4}**.",
 	
-	"not_in_storage_1": "You do not have the **",
-	"not_in_storage_2": "** card in your storage!",
+	"not_in_storage": "You do not have the **{1}** card in your storage!",
+
+	"ace_of_hearts": "Because of {1} **Ace of Hearts**, {2} also got **10 tokens**!",
+	"cryopod_miss": "You missed {1} opportunities to pull since last pull, ",
+	"cryopod_full": "but your **Spare Cryopod** is full, because it has already {1} pulls in it.",
+	"cryopod_filled": "however your **Spare Cryopod** was able to store {1} of them.",
+	"cryopod_partly": "however your **Spare Cryopod** was able to store all {1} of them, bringing your total stored pulls to {2}.",
+	"cryopod_pull": "You're on cooldown, but you have spare pulls stored in your **Spare Cryopod**, which means you can pull anyways! (You now have **{1}** spare pull{1s} remaining)"
 }

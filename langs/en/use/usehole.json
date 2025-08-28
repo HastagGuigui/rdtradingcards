@@ -4,8 +4,7 @@
 	"donated_hole": "A **Token** has been dropped into the **Hole.** Thank you for your generosity!",
 	
 	"using_terminal": "Using Terminal...",
-	"donated_terminal_1": "The **Terminal** whirrs happily. A printout lets you know that ",
-	"donated_terminal_2": " tokens have been donated so far.",
+	"donated_terminal": "The **Terminal** whirrs happily. A printout lets you know that {1} tokens have been donated so far.",
 	
 	"donated_hole_ws_1": "***The ground rumbles...",
 	"donated_hole_ws_506": " and so does the Strange Machine***",

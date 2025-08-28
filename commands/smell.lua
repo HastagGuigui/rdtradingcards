@@ -171,9 +171,9 @@ function command.run(message, mt)
       else
         print("user doesnt have card")
         if nopeeking then
-          message.channel:send(lang.error_nopeeking_1 .. request .. error_nopeeking_2)
+          message.channel:send(formatstring(lang.error_nopeeking, {request}))
         else
-          message.channel:send(lang.dont_have_card_1 .. cdb[curfilename].name .. lang.dont_have_card_2)
+          message.channel:send(formatstring(lang.dont_have_card, {cdb[curfilename].name}))
         end
       end
 	
@@ -187,7 +187,7 @@ function command.run(message, mt)
       if uj.items[request] or shophas(request) then
         message.channel:send(itemsmells[request])
       else
-        message.channel:send(lang.dont_have_item_1 .. itemdb[request].name .. lang.dont_have_item_2)
+        message.channel:send(formatstring(lang.dont_have_item, {itemdb[request].name}))
       end
     elseif constexttofn(request) then
       print("smelling consumable")
@@ -195,13 +195,13 @@ function command.run(message, mt)
       if uj.consumables[request] or shophas(request) then
         message.channel:send(consumablesmells[request])
       else
-        message.channel:send(lang.dont_have_cons_1 .. consdb[request].name .. lang.dont_have_cons_2)
+        message.channel:send(formatstring(lang.dont_have_cons, {consdb[request].name}))
       end
     else
       if nopeeking then
-        message.channel:send(lang.error_nopeeking_1 .. request .. error_nopeeking_2)
+        message.channel:send(formatstring(lang.error_nopeeking, {request}))
       else
-        message.channel:send(lang.no_card_1 .. request .. lang.no_card_2)
+        message.channel:send(formatstring(lang.no_card_1, {request}))
       end
     end
 

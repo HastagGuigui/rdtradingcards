@@ -42,35 +42,20 @@ function command.run(message, mt)
   end
 
   if not uj.tokens then uj.tokens = 0 end
-  invstring = invstring .. "\n" .. lang.embed_token_1 .. uj.tokens .. lang.embed_token_2 .. (uj.tokens ~= 1 and lang.needs_plural_s == true and lang.plural_s or "") .. lang.embed_token_3
+  invstring = invstring .. "\n" .. formatstring(lang.embed_token, {uj.tokens}, lang.plural_s)
 
 
-  if uj.lang == "ko" then
-    message.channel:send{
-      content = message.author.mentionString .. lang.embed_contains,
-      embed = {
-        color = 0x85c5ff,
-        title = message.author.name .. lang.embed_title,
-        description = invstring,
-        footer = {
-          text =  lang.embed_page_1 .. maxpn .. lang.embed_page_2 .. pagenumber .. lang.embed_page_3,
-          icon_url = message.author.avatarURL
-        }
+  message.channel:send{
+    content = formatstring(lang.embed_contains, {message.author.mentionString}),
+    embed = {
+      color = uj.embedc,
+      title = formatstring(lang.embed_title, {message.author.name}),
+      description = invstring,
+      footer = {
+        text = formatstring(lang.embed_page, {pagenumber, maxpn}),
+        icon_url = message.author.avatarURL
       }
     }
-  else
-    message.channel:send{
-      content = message.author.mentionString .. lang.embed_contains,
-      embed = {
-        color = 0x85c5ff,
-        title = message.author.name .. lang.embed_title,
-        description = invstring,
-        footer = {
-          text =  lang.embed_page_1 .. pagenumber .. lang.embed_page_2 .. maxpn .. lang.embed_page_3,
-          icon_url = message.author.avatarURL
-        }
-      }
-    }
-  end
+  }
 end
 return command

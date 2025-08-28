@@ -62,12 +62,12 @@ function reaction.run(message, interaction, data, response)
     
     dpf.savejson(ujf,uj)
     dpf.savejson("savedata/shop.json", sj)
-    interaction:reply(lang.bought_message_1 .. uj.id .. lang.bought_message_2 .. data.sname .. lang.bought_message_3)
+    interaction:reply(formatstring(lang.bought_message, {uj.id, data.sname}))
   end
 
   if response == "no" then
     print('user1 has denied')
-    interaction:reply(lang.denied_message_1 .. data.sname .. lang.denied_message_2)
+    interaction:reply(formatstring(lang.denied_message, {data.sname}))
   end
 end
 return reaction

@@ -22,7 +22,7 @@ function command.run(message)
         missingcount = missingcount + 1
       end
     end
-    message.channel:send(lang.missingcards_1 .. missingcount .. lang.missingcards_2)
+    message.channel:send(formatstring(lang.missingcards, {missingcount}))
     return
   end
 

@@ -14,9 +14,9 @@ function command.run(message, mt)
 
   if not curfilename then
     if nopeeking then
-      message.channel:send(lang.error_nopeeking_1 .. mt[1] .. lang.error_nopeeking_2)
+      message.channel:send(formatstring(lang.error_nopeeking, {mt[1]}))
     else
-      message.channel:send(lang.no_item_1 .. mt[1] .. lang.no_item_2)
+      message.channel:send(formatstring(lang.no_item, {mt[1]}))
     end
     return
   end
@@ -28,19 +28,19 @@ function command.run(message, mt)
   if not (uj.items[curfilename] or uj.consumables[curfilename] or (shophas(curfilename) and not (uj.lastrob + 3 > sj.stocknum and uj.lastrob ~= 0))) then
     print("user doesnt have item")
     if nopeeking then
-      message.channel:send(lang.error_nopeeking_1 .. mt[1] .. lang.error_nopeeking_2)
+      message.channel:send(formatstring(lang.error_nopeeking, {mt[1]}))
     else
-      message.channel:send(lang.dont_have_1 .. name .. lang.dont_have_2)
+      message.channel:send(formatstring(lang.dont_have, {name}))
     end
     return
   end
 
   print("user has item or consumable")
-  
+
   message.channel:send{embed = {
     color = 0x85c5ff,
     title = lang.showing_item,
-    description = lang.show_item_1 .. name .. lang.show_item_2 .. curfilename .. lang.show_item_3 .. description,
+    description = formatstring(lang.show_item, {name, curfilename, description}),
     image = {
       url = embedurl
     }

@@ -23,7 +23,7 @@ function reaction.run(message, interaction, data, response)
       interaction:reply{embed = {
         color = 0x85c5ff,
         title = lang.using_terminal,
-        description = lang.donated_terminal_1 .. wj.tokensdonated .. lang.donated_terminal_2,
+        description = formatstring(lang.donated_terminal, {wj.tokensdonated}),
         image = {
           url = upgradeimages[math.random(#upgradeimages)]
         },

@@ -1,0 +1,30 @@
+{
+    "allcolors": "All Colors",
+    
+    "default": "default",
+    "default2": "RDCards Blue",
+
+    "green": "green",
+    "green2": "Healion Green",
+
+    "red": "red",
+    "red2": "Stylish Red",
+
+    "blue": "blue",
+    "blue2": "Nice Blue",
+
+    "orange": "orange",
+    "orange2": "Pretty Orange",
+
+    "brown": "brown",
+    "brown2": "Beans Brown",
+
+    "yellow": "yellow",
+    "yellow2": "Light Yellow",
+    
+    "purple": "purple",
+    "purple2": "Fun Purple",
+
+    "pink": "pink",
+    "pink2": "Hot Pink"
+}

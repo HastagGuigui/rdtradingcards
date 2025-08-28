@@ -22,7 +22,7 @@ function item.run(uj, ujf, message, mt, interaction, fn)
     message:reply('Also, your pull cooldown was decreased by ' .. randtime .. ' hours!')]]--
     dpf.savejson(ujf, uj)
   else
-    replying:reply(lang.seasonbooster_conspt_1 .. itemname .. lang.seasonbooster_conspt_2)
+    replying:reply(formatstring(lang.seasonbooster_conspt_1, {itemname}))
   end
 end
 

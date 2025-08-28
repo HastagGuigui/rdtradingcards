@@ -29,12 +29,12 @@ function command.run(message)
     message.channel:send { embed = {
       color = 0x85c5ff,
       title = lang.congratulations,
-      description = lang.gotmedal_1 .. message.author.mentionString .. lang.gotmedal_2 .. medaldb[v.receive].name .. lang.gotmedal_3,
+      description = formatstring(lang.gotmedal, {message.author.mentionString, medaldb[v.receive].name}),
       image = { url = medaldb[v.receive].embed }
     } }
 
     if v.receive == 'cardmaestro' then
-      message.channel:send(gotmaestro)
+      message.channel:send(lang.gotmaestro)
     end
 
     ::continue::

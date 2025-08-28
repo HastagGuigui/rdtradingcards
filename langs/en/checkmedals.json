@@ -1,7 +1,5 @@
 {
 	"congratulations": "Congratulations!",
-	"gotmedal_1": "After collecting and storing some cards, ",
-	"gotmedal_2": " got the **\"",
-	"gotmedal_3": "\"** medal!",
+	"gotmedal_1": "After collecting and storing some cards, {1} got the **\"{2}\"** medal!",
 	"gotmaestro": "You also unlocked the ability to use **c!prestige**."
 }

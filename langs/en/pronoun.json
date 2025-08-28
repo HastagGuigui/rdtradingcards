@@ -56,8 +56,7 @@
 	"vee_changed": "You will now be reffered to with vee/veem.",
 	
 	"no_value": "Please enter your pronouns.",
-	"no_database_1": "Sorry, but I could not find ",
-	"no_database_2": " pronouns. See if you mispelled, or if your pronouns are in c!pronounlist. If they are not there, you may use c!pronounform to suggest adding them.", 
+	"no_database_1": "Sorry, but I could not find {1} pronouns. See if you mispelled, or if your pronouns are in c!pronounlist. If they are not there, you may use c!pronounform to suggest adding them.", 
 	
 	"pronounlist_message": "**Common Pronouns:**\nHe, She, They, It\n\n**Neopronouns:**\nXe, Ze, Sta, Vee\n\n*If your pronouns are not included, please use c!pronounform",
 	

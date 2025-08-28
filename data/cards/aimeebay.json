@@ -1,0 +1,21 @@
+{
+  "groupname": "aimeebay",
+  "basechance": 3,
+  "cards": [
+    {
+      "chance": 3,
+      "filename": "aimeebayr",
+      "name": "Aimee Bay (Rare)",
+      "type": "Rare",
+      "description": "(Art by Noche)",
+      "smell": "Bacterial infection",
+      "season": 11,
+      "bonuses": {
+        "okamiiscollar": true,
+        "oversizedstethoscope": true,
+        "fanonplaceholder": true
+      },
+      "embed": "https://cdn.discordapp.com/attachments/1030420309947469904/1410392838163664967/aimeebayr.png"
+    }
+  ]
+}

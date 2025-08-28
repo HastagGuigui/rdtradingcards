@@ -60,7 +60,7 @@ function command.run(message, mt,bypass)
           ynbuttons(message, {
             color = 0x85c5ff,
             title = lang.using_machine,
-            description = lang.use_machine_1 .. uj.tokens .. lang.use_machine_2,
+            description = formatstring(lang.use_machine, {uj.tokens}),
           },"usemachine",{}, uj.id, uj.lang)
           return
         else
@@ -68,26 +68,25 @@ function command.run(message, mt,bypass)
           uj.items[newitem] = true
           uj.tokens = uj.tokens - 3
           uj.timesused = uj.timesused and uj.timesused + 1 or 1
-		  if uj.lang == "ko" then		    
-        local dep = {"삽입하고", "넣고", "슬롯에 집어넣고"}
+        local dep = lang.dep
         local cdep = math.random(1, #dep)
-        local speen = {" 돌리", " 사용하", " 회전시키"}
+        local speen = lang.speen
         local cspeen = math.random(1, #speen)
-        local size = {" 큰 ", " 작은 ", " ", " "}
-        local csize = math.random(1, #size)
-        local action = {"나옵니다", "떨어져 나옵니다", "튕겨져 나옵니다", "굴려 나옵니다"}
+        local action = lang.action
         local caction = math.random(1, #action)
-        message.channel:send(lang.used_machine_1 .. dep[cdep] .. lang.used_machine_2 .. speen[cspeen] .. lang.used_machine_3 .. size[csize] .. lang.used_machine_4 .. action[caction] .. lang.used_machine_5 .. itemdb[newitem].name .. lang.used_machine_6 .. itemdb[newitem].name .. lang.used_machine_7)
-		  else
-		    message.channel:send(trf("crank") .. itemdb[newitem].name .. lang.used_machine_1 .. itemdb[newitem].name .. lang.used_machine_2)
-		  end
+        local truaction = formatstring(action[caction], {speen[cspeen]})
+        local size = lang.size
+        local csize = math.random(1, #size)
+        local action2 = lang.action2
+        local caction2 = math.random(1, #action2)
+        message.channel:send(formatstring(lang.used_machine, {dep[cdep], truaction, size[csize], action[caction2], itemdb[newitem].name, speen[cspeen]}))
 		end
       else
         if uj.tokens >= 4 then
           ynbuttons(message, {
           color = 0x85c5ff,
           title = lang.using_machine,
-          description = lang.use_machine_four_1 .. uj.tokens .. lang.use_machine_four_2, 
+          description = formatstring(lang.use_machine_four, {uj.tokens}), 
           },"getladder", {}, uj.id, uj.lang)
           return
         else
@@ -105,7 +104,7 @@ function command.run(message, mt,bypass)
         ynbuttons(message, {
         color = 0x85c5ff,
         title = lang.using_hole,
-        description = lang.use_hole_1 .. uj.tokens .. lang.use_hole_2, 
+        description = formatstring(lang.use_hole, {uj.tokens}), 
         },"usehole", {}, uj.id, uj.lang)
         return
       else
@@ -248,7 +247,7 @@ function command.run(message, mt,bypass)
             end
           end
         end
-        message.channel:send(lang.wait_message_1 .. durationtext .. lang.wait_message_2)
+        message.channel:send(formatstring(lang.wait_message, {durationtext}))
         return
       end
 
@@ -290,15 +289,11 @@ function command.run(message, mt,bypass)
         
         wj.boxpool[boxpoolindex] = givecard
         
-        if uj.lang == "ko" then
-          message.channel:send(lang.boxed_message_1 .. uj.id .. lang.boxed_message_2 .. cdb[givecard].name .. lang.boxed_message_3 .. cdb[getcard].name .. lang.boxed_message_4 .. getcard .. lang.boxed_message_5)
-        else
-          message.channel:send(lang.boxed_message_1 .. uj.id .. lang.boxed_message_2 .. cdb[givecard].name .. lang.boxed_message_3 .. uj.pronouns["their"] .. lang.boxed_message_4 .. cdb[getcard].name .. lang.boxed_message_5 .. uj.pronouns["their"] .. lang.boxed_message_6 .. getcard .. lang.boxed_message_7)
-        end
+        message.channel:send(formatstring(lang.boxed_message, {uj.id, cdb[givecard].name, uj.pronouns["their"], cdb[getcard].name, getcard}))
 
         if not uj.storage[getcard] then
           if not uj.togglecheckcard then
-            message.channel:send(lang.not_in_storage_1 .. cdb[getcard].name .. lang.not_in_storage_2)
+            message.channel:send(formatstring(lang.not_in_storage, {cdb[getcard].name}))
           end
         end
         uj.timesusedbox = uj.timesusedbox and uj.timesusedbox + 1 or 1
@@ -336,6 +331,7 @@ function command.run(message, mt,bypass)
       local embeddescription = nil
       local embedimage = nil
       local filename = nil
+      print("on the terminal. doing my "..mt[2])
       if wj.ws < 508 then
         if string.lower(mt[2]) == "gnuthca" then
           embedimage = "https://cdn.discordapp.com/attachments/829197797789532181/838841498757234728/terminal3.png"
@@ -378,6 +374,7 @@ o-''|\\_____/)
           embeddescription = lang.help_message .. "\nHELP\nSTATS\nUPGRADE\nCREDITS\nSAVEDATA" .. (wj.ws >= 701 and "\nLOGS" or "") .. "`"
           embedimage = "https://cdn.discordapp.com/attachments/829197797789532181/838836625391484979/terminal2.gif"
         elseif string.lower(mt[2]) == "stats" then
+          embedtitle = "Statistics"
           if not uj.timespulled then uj.timespulled = 0 end
           if not uj.timesshredded then uj.timesshredded = 0 end
           if not uj.timesused then uj.timesused = 0 end
@@ -399,7 +396,7 @@ o-''|\\_____/)
           if not uj.timesrobbed then uj.timesrobbed = 0 end
           if not uj.timesrobsucceeded then uj.timesrobsucceeded = 0 end
           if not uj.timesrobfailed then uj.timesrobfailed = 0 end
-          embeddescription = lang.stats_message .. "\n`" .. lang.stats_timespulled .. uj.timespulled .. "\n" .. lang.stats_timesused .. uj.timesused .. "\n" .. lang.stats_timesitemused .. uj.timesitemused .. "\n" .. lang.stats_timeslooked .. uj.timeslooked .. "\n" .. lang.stats_timesprayed .. uj.timesprayed .. "\n" .. lang.stats_timesshredded .. uj.timesshredded .. "\n" .. lang.stats_timesstored .. uj.timesstored .. "\n" .. lang.stats_timestraded .. uj.timestraded .. "\n" .. lang.stats_timesusedbox .. uj.timesusedbox .. "\n" .. lang.stats_timesdoubleclicked .. uj.timesdoubleclicked .. "\n" .. lang.stats_timesdonated .. uj.tokensdonated .. "\n" .. lang.stats_timesitemgiven .. uj.timesitemgiven .. "\n" .. lang.stats_timesitemreceived .. uj.timesitemreceived .. "\n" .. lang.stats_timescardgiven .. uj.timescardgiven .. "\n" .. lang.stats_timescardreceived .. uj.timescardreceived .. "\n" .. lang.stats_timesthrown .. uj.timesthrown .. "\n" .. lang.stats_timescaught .. uj.timescaught .. "\n" .. lang.stats_timesprestiged .. uj.timesprestiged .. "\n" .. lang.stats_timesrobbed .. uj.timesrobbed .. "\n" .. lang.stats_timesrobsucceeded .. uj.timesrobsucceeded .. "\n" .. lang.stats_timesrobfailed .. uj.timesrobfailed ..(math.random(100) == 1 and "\n" .. lang.stats_factory or "") .. "`"
+          embeddescription = lang.stats_message .. "\n```" .. lang.stats_timespulled .. uj.timespulled .. "\n" .. lang.stats_timesused .. uj.timesused .. "\n" .. lang.stats_timesitemused .. uj.timesitemused .. "\n" .. lang.stats_timeslooked .. uj.timeslooked .. "\n" .. lang.stats_timesprayed .. uj.timesprayed .. "\n" .. lang.stats_timesshredded .. uj.timesshredded .. "\n" .. lang.stats_timesstored .. uj.timesstored .. "\n" .. lang.stats_timestraded .. uj.timestraded .. "\n" .. lang.stats_timesusedbox .. uj.timesusedbox .. "\n" .. lang.stats_timesdoubleclicked .. uj.timesdoubleclicked .. "\n" .. lang.stats_timesdonated .. uj.tokensdonated .. "\n" .. lang.stats_timesitemgiven .. uj.timesitemgiven .. "\n" .. lang.stats_timesitemreceived .. uj.timesitemreceived .. "\n" .. lang.stats_timescardgiven .. uj.timescardgiven .. "\n" .. lang.stats_timescardreceived .. uj.timescardreceived .. "\n" .. lang.stats_timesthrown .. uj.timesthrown .. "\n" .. lang.stats_timescaught .. uj.timescaught .. "\n" .. lang.stats_timesprestiged .. uj.timesprestiged .. "\n" .. lang.stats_timesrobbed .. uj.timesrobbed .. "\n" .. lang.stats_timesrobsucceeded .. uj.timesrobsucceeded .. "\n" .. lang.stats_timesrobfailed .. uj.timesrobfailed ..(math.random(100) == 1 and "\n" .. lang.stats_factory or "") .. "```"
         elseif string.lower(mt[2]) == "credits" then
           embedtitle = lang.credits_title
           embeddescription = 'https://docs.google.com/document/d/1WgUqA8HNlBtjaM4Gpp4vTTEZf9t60EuJ34jl2TleThQ/edit?usp=sharing'
@@ -416,7 +413,7 @@ o-''|\\_____/)
               ynbuttons(message, {
                 color = 0x85c5ff,
                 title = lang.using_terminal_upgrade,
-                description = lang.upgrade_prompt_1 .. uj.tokens .. lang.upgrade_prompt_2,
+                description = formatstring(lang.upgrade_prompt, {uj.tokens}),
                 image = {
                   url = "https://cdn.discordapp.com/attachments/829197797789532181/838894186472275988/terminal5.png"
                 },
@@ -431,7 +428,7 @@ o-''|\\_____/)
               uj.timesused = uj.timesused and uj.timesused + 1 or 1
               uj.tokensdonated = uj.tokensdonated and uj.tokensdonated + 1 or 1
               wj.tokensdonated = wj.tokensdonated + 1
-              embeddescription = lang.donated_terminal_1 .. wj.tokensdonated .. lang.donated_terminal_2
+              embeddescription = formatstring(lang.donated_terminal, {wj.tokensdonated})
               embedimage = upgradeimages[math.random(#upgradeimages)]
             end
           else
@@ -448,21 +445,34 @@ o-''|\\_____/)
             embeddescription = lang.pull_jammed
           end
         else
-          embeddescription = lang.unknown_1 .. mt[2] ..  lang.unknown_2
+          embeddescription = formatstring(lang.unknown, {mt[2]})
         end
       end
-      message.channel:send{embed = {
-        color = 0x85c5ff,
-        title = embedtitle,
-        description = embeddescription,
-        image = {
-          url = embedimage
-        },
-        footer = {
-          text =  message.author.name,
-          icon_url = message.author.avatarURL
-        }
-      }}
+      -- thank you discord /neg
+      if embedimage then
+        message.channel:send{embed = {
+          color = 0x85c5ff,
+          title = embedtitle,
+          description = embeddescription,
+          image = {
+            url = embedimage
+          },
+          footer = {
+            text =  message.author.name,
+            icon_url = message.author.avatarURL
+          }
+        }}
+      else
+        message.channel:send{embed = {
+          color = 0x85c5ff,
+          title = embedtitle,
+          description = embeddescription,
+          footer = {
+            text =  message.author.name,
+            icon_url = message.author.avatarURL
+          }
+        }}
+      end
       if filename then 
         message.channel:send{
           file = filename
@@ -559,12 +569,7 @@ o-''|\\_____/)
     if uj.lastrob + 4 > sj.stocknum and uj.lastrob ~= 0 then
       lang = dpf.loadjson("langs/" .. uj.lang .. "/rob.json")
       local stocksleft = uj.lastrob + 4 - sj.stocknum
-      local stockstring = lang.more_restock_1 .. stocksleft .. lang.more_restock_2
-      if lang.needs_plural_s == true then
-        if stocksleft > 1 then
-          stockstring = stockstring .. lang.plural_s
-        end
-      end
+      local stockstring = formatstring(lang.more_restock, {stocksleft}, lang.plural_s)
       local minutesleft = math.ceil((26/24 - time:toDays() + sj.lastrefresh) * 24 * 60)
       
       local durationtext = ""
@@ -588,9 +593,9 @@ o-''|\\_____/)
         end
       end
       if uj.lastrob + 3 == sj.stocknum then
-        message.channel:send(lang.blacklist_next_1 .. durationtext .. lang.blacklist_next_2)
+        message.channel:send(formatstring(lang.blacklist_next, {durationtext}))
       else
-        message.channel:send(lang.blacklist_1 .. stockstring .. lang.blacklist_2 .. durationtext .. lang.blacklist_3)
+        message.channel:send(formatstring(lang.blacklist, {stockstring, durationtext}))
       end
       return
     end
@@ -619,35 +624,27 @@ o-''|\\_____/)
       --error handling
       local sendshoperror = {
       notenough = function()
-        if uj.lang == "ko" then
-          message.channel:send(lang.no_tokens_1 .. sname .. lang.no_tokens_2 .. sprice .. lang.no_tokens_3)
-        else
-          message.channel:send(lang.no_tokens_1 .. sprice .. lang.no_tokens_2 .. sname .. lang.no_tokens_3)
-        end
+        message.channel:send(formatstring(lang.no_tokens, {sprice, sname}))
       end,
 
       outofstock = function()
-        message.channel:send(lang.out_of_stock_1 .. sname .. lang.out_of_stock_2)
+        message.channel:send(formatstring(lang.out_of_stock, {sname}))
       end,
 
       toomanyrequested = function()
-        if uj.lang == "ko" then
-          message.channel:send(lang.too_many_requested_1 .. sname .. lang.too_many_requested_2 .. stock .. lang.too_many_requested_3)
-        else
-          message.channel:send(lang.too_many_requested_1 .. stock .. lang.too_many_requested_2 .. sname .. lang.too_many_requested_3)
-        end
+        message.channel:send(formatstring(lang.too_many_requested, {stock, sname}))
       end,
 
       donthave = function()
         if nopeeking then
-          message.channel:send(lang.nopeeking_error_1 .. mt[2] .. lang.nopeeking_error_2)
+          message.channel:send(formatstring(lang.nopeeking_error, {mt[2]}))
         else
-          message.channel:send(lang.donthave_1 .. sname .. lang.donthave_2)
+          message.channel:send(formatstring(lang.donthave_1, {sname}))
         end
       end,
 
       alreadyhave = function()
-        message.channel:send(lang.alreadyhave_1 .. sname .. lang.alreadyhave_2)
+        message.channel:send(formatstring(lang.alreadyhave, {sname}))
       end,
         
       hasfixedmouse = function()
@@ -660,9 +657,9 @@ o-''|\\_____/)
 
       unknownrequest = function()
         if nopeeking then
-          message.channel:send(lang.nopeeking_error_1 .. mt[2] .. lang.nopeeking_error_2)
+          message.channel:send(formatstring(lang.nopeeking_error, {mt[2]}))
         else
-          message.channel:send(lang.unknownrequest_1 .. mt[2] .. lang.unknownrequest_2)
+          message.channel:send(formatstring(lang.unknownrequest, {mt[2]}))
         end
       end
       }
@@ -703,8 +700,10 @@ o-''|\\_____/)
         --can buy consumable
         ynbuttons(message,{
           color = 0x85c5ff,
-          title = lang.buying_item_1 .. sname .. lang.buying_item_2,
-          description = lang.consumable_desc .. "\n`".. consdb[srequest].description .."`\n" .. lang.consumable_buy_1 .. message.author.id .. lang.consumable_buy_2 .. numrequest .. lang.consumable_buy_3 .. sprice .. lang.consumable_buy_4 .. (sprice ~= 1 and lang.needs_plural_s == true and lang.plural_s or "") .. lang.consumable_buy_5,
+          title = formatstring(lang.buying_item, {sname}),
+          description = lang.consumable_desc .. "\n`".. consdb[srequest].description .."`\n" .. formatstring(
+            lang.consumable_buy, {message.author.id, numrequest, sprice}, lang.plural_s
+          ),
         },"buy",{itemtype = "consumable",sname=sname,sprice=sprice,sindex=sindex,srequest=srequest,numrequest=numrequest}, message.author.id, uj.lang)
         return
       end
@@ -747,8 +746,8 @@ o-''|\\_____/)
         --can buy item
         ynbuttons(message,{
           color = 0x85c5ff,
-          title = lang.buying_item_1 .. sname .. lang.buying_item_2,
-          description = lang.item_desc .. "\n`".. itemdb[srequest].description .."`\n" .. lang.item_buy_1 .. message.author.id .. lang.item_buy_2 .. sprice .. lang.item_buy_3,
+          title = formatstring(lang.buying_item, {sname}),
+          description = lang.item_desc .. "\n`".. itemdb[srequest].description .."`\n" .. formatstring(lang.item_buy, {message.author.id, sprice}),
         },"buy",{itemtype = "item",sname=sname,sprice=sprice,sindex=sindex,srequest=srequest,numrequest=1}, message.author.id, uj.lang)
         return
       end
@@ -790,8 +789,10 @@ o-''|\\_____/)
         --can buy card
         ynbuttons(message,{
           color = 0x85c5ff,
-          title = lang.buying_card_1 .. sname .. lang.buying_card_2,
-          description = lang.card_desc .. "\n`".. cdb[srequest].description .."`\n" .. lang.card_buy_1 .. message.author.id .. lang.card_buy_2 .. numrequest .. lang.card_buy_3 .. sprice .. lang.card_buy_4 .. (sprice ~= 1 and lang.needs_plural_s == true and lang.plural_s or "") .. lang.card_buy_5,
+          title = formatstring(lang.buying_card, {sname}),
+          description = lang.card_desc .. "\n`".. cdb[srequest].description .."`\n" .. formatstring(
+            lang.card_buy, {message.author.id, numrequest, sprice}, lang.plural_s
+          ),
         },"buy",{itemtype = "card",sname=sname,sprice=sprice,sindex=sindex,srequest=srequest,numrequest=numrequest}, message.author.id, uj.lang)
         return
       end

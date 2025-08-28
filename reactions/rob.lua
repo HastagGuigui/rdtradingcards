@@ -136,13 +136,10 @@ function reaction.run(message, interaction, data, response)
           else
             finalpm = 0
           end
-          if uj.lang == "ko" then
-            send_robmessage(interaction, message, lang.rob_gun_1 .. data.sname .. lang.rob_gun_2 .. data.numrequest .. lang.cons_unit .. lang.rob_gun_3 .. 6 + finalpm .. lang.rob_gun_4)
-            uj.robconspt = "none"
-          else
-            send_robmessage(interaction, message, lang.rob_gun_1 .. data.numrequest .. lang.rob_gun_2 .. data.sname .. lang.rob_gun_3 .. 6 + finalpm .. lang.rob_gun_4)
-            uj.robconspt = "none"
-          end
+          send_robmessage(interaction, message, 
+            formatstring(lang.rob_gun .. {data.numrequest, data.sname, 6 + finalpm})
+          )
+          uj.robconspt = "none"
           if not uj.timesrobsucceeded then uj.timesrobsucceeded = 1 else uj.timesrobsucceeded = uj.timesrobsucceeded + 1 end
           uj.lastrob = sj.stocknum + finalpm + 2
           uj.room = 2
@@ -220,11 +217,9 @@ function reaction.run(message, interaction, data, response)
           else
             finalpm = 0
           end
-          if uj.lang == "ko" then
-            send_robmessage(interaction, message, lang.rob_gun_1 .. data.sname .. lang.rob_gun_2 .. data.numrequest .. lang.cons_unit .. lang.rob_gun_3 .. 6 + finalpm .. lang.rob_gun_4)
-          else
-            send_robmessage(interaction, message, lang.rob_gun_1 .. data.numrequest .. lang.rob_gun_2 .. data.sname .. lang.rob_gun_3 .. 6 + finalpm .. lang.rob_gun_4)
-          end
+          send_robmessage(interaction, message, 
+            formatstring(lang.rob_gun, {data.numrequest, data.sname, 6 + finalpm})
+          )
           if not uj.timesrobsucceeded then uj.timesrobsucceeded = 1 else uj.timesrobsucceeded = uj.timesrobsucceeded + 1 end
           uj.lastrob = sj.stocknum + finalpm + 2
           uj.room = 2
@@ -256,7 +251,7 @@ function reaction.run(message, interaction, data, response)
           else
             finalpm = 0
           end
-          send_robmessage(interaction, message, lang.rob_gun_item_1 .. data.sname .. lang.rob_gun_item_2 .. 6 + finalpm .. lang.rob_gun_item_3)
+          send_robmessage(interaction, message, formatstring(lang.rob_gun_item, {data.sname, 6 + finalpm}))
           if not uj.timesrobsucceeded then uj.timesrobsucceeded = 1 else uj.timesrobsucceeded = uj.timesrobsucceeded + 1 end
           uj.lastrob = sj.stocknum + finalpm + 2
           uj.room = 2
@@ -372,11 +367,7 @@ function reaction.run(message, interaction, data, response)
           else
             uj.consumables[data.srequest] = uj.consumables[data.srequest] + adding
           end
-          if uj.lang == "ko" then
-            send_robmessage(interaction, message, lang.rob_succeeded_1 .. data.sname .. lang.rob_succeeded_2 .. data.numrequest .. lang.cons_unit .. lang.rob_succeeded_3)
-          else
-            send_robmessage(interaction, message, lang.rob_succeeded_1 .. data.numrequest .. lang.rob_succeeded_2 .. data.sname .. lang.rob_succeeded_3)
-          end
+          send_robmessage(interaction, message, formatstring(lang.rob_succeeded, {data.numrequest, data.sname}))
           if not uj.timesrobsucceeded then uj.timesrobsucceeded = 1 else uj.timesrobsucceeded = uj.timesrobsucceeded + 1 end
         else
           print("rob failed")
@@ -391,11 +382,10 @@ function reaction.run(message, interaction, data, response)
             finalpm = 0
           end
           
-          if uj.lang == "ko" then
-            send_robmessage(interaction, message, lang.rob_failed_1 .. data.sname .. lang.rob_failed_2 .. data.numrequest .. lang.cons_unit .. lang.rob_failed_3 .. 4 + finalpm .. lang.rob_failed_4)
-          else
-            send_robmessage(interaction, message, lang.rob_failed_1 .. data.numrequest .. lang.rob_failed_2 .. data.sname .. lang.rob_failed_3 .. 4 + finalpm .. lang.rob_failed_4)
-          end
+          send_robmessage(interaction, message, 
+            formatstring(lang.rob_failed, {data.numrequest, data.sname, 4 + finalpm})
+          )
+
           uj.lastrob = sj.stocknum + finalpm
           uj.room = 2
           if not uj.timesrobfailed then uj.timesrobfailed = 1 else uj.timesrobfailed = uj.timesrobfailed + 1 end
@@ -459,11 +449,9 @@ function reaction.run(message, interaction, data, response)
           else
             uj.inventory[data.srequest] = uj.inventory[data.srequest] + data.numrequest
           end
-          if uj.lang == "ko" then
-            send_robmessage(interaction, message, lang.rob_succeeded_1 .. data.sname .. lang.rob_succeeded_2 .. data.numrequest .. lang.card_unit .. lang.rob_succeeded_3)
-          else
-            send_robmessage(interaction, message, lang.rob_succeeded_1 .. data.numrequest .. lang.rob_succeeded_2 .. data.sname .. lang.rob_succeeded_3)
-          end
+          send_robmessage(interaction, message,
+            formatstring(lang.rob_succeeded, {data.numrequest, data.sname})
+          )
           if not uj.timesrobsucceeded then uj.timesrobsucceeded = 1 else uj.timesrobsucceeded = uj.timesrobsucceeded + 1 end
         else
           print("rob failed")
@@ -481,11 +469,10 @@ function reaction.run(message, interaction, data, response)
             finalpm = 0
           end
           
-          if uj.lang == "ko" then
-            send_robmessage(interaction, message, lang.rob_failed_1 .. data.sname .. lang.rob_failed_2 .. data.numrequest .. lang.card_unit .. lang.rob_failed_3 .. 4 + finalpm .. lang.rob_failed_4)
-          else
-            send_robmessage(interaction, message, lang.rob_failed_1 .. data.numrequest .. lang.rob_failed_2 .. data.sname .. lang.rob_failed_3 .. 4 + finalpm .. lang.rob_failed_4)
-          end
+          send_robmessage(interaction, message, 
+            formatstring(lang.rob_failed, {data.numrequest, data.sname, 4 + finalpm})
+          )
+          
           uj.lastrob = sj.stocknum + finalpm
           uj.room = 2
           if not uj.timesrobfailed then uj.timesrobfailed = 1 else uj.timesrobfailed = uj.timesrobfailed + 1 end
@@ -508,7 +495,7 @@ function reaction.run(message, interaction, data, response)
           print("rob succeeded")
           sj.itemstock = sj.itemstock - 1
           uj.items[data.srequest] = true
-          send_robmessage(interaction, message, lang.rob_succeeded_item_1 .. data.sname .. lang.rob_succeeded_item_2)
+          send_robmessage(interaction, message, formatstring(lang.rob_succeeded_item, {data.sname}))
           if not uj.timesrobsucceeded then uj.timesrobsucceeded = 1 else uj.timesrobsucceeded = uj.timesrobsucceeded + 1 end
         else
           print("rob failed")
@@ -522,7 +509,7 @@ function reaction.run(message, interaction, data, response)
             finalpm = 0
           end
           
-          send_robmessage(interaction, message, lang.rob_failed_item_1 .. data.sname .. lang.rob_failed_item_2 .. 4 + finalpm .. lang.rob_failed_item_3)
+          send_robmessage(interaction, message, formatstring(lang.rob_failed_item, {data.sname, 4 + finalpm}))
           uj.lastrob = sj.stocknum + finalpm
           uj.room = 2
           if not uj.timesrobfailed then uj.timesrobfailed = 1 else uj.timesrobfailed = uj.timesrobfailed + 1 end
@@ -542,7 +529,7 @@ function reaction.run(message, interaction, data, response)
 
     if response == "no" then
       print('user1 has denied')
-      send_robmessage(interaction, message, lang.rob_cancelled_1 .. uj.id .. lang.rob_cancelled_2)
+      send_robmessage(interaction, message, formatstring(lang.rob_cancelled, {uj.id}))
     end
 end
 return reaction

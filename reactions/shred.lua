@@ -26,22 +26,14 @@ function reaction.run(message, interaction, data, response)
 
     uj.timesshredded = uj.timesshredded and uj.timesshredded + numcards or numcards
 
-    if uj.lang == "ko" then
-		interaction:reply(lang.shredded_message_1 .. uj.id .. lang.shredded_message_2 .. cdb[curfilename].name .. lang.shredded_message_3 .. numcards .. lang.shredded_message_4)
-	else
-		interaction:reply(lang.shredded_message_1 .. uj.id .. lang.shredded_message_2 .. uj.pronouns["their"] .. lang.shredded_message_3 .. numcards .. lang.shredded_message_4 .. cdb[curfilename].name .. lang.shredded_message_5 .. (numcards ~= 1 and lang.needs_plural_s == true and lang.plural_s or "") .. lang.shredded_message_6)
-	end
+    interaction:reply(formatstring(lang.shredded_message, {uj.id, uj.pronouns["their"], numcards, cdb[curfilename].name}, lang.plural_s))
     dpf.savejson(ujf, uj)
     cmd.checkmedals.run(message, {}, message.channel)
   end
 
   if response == "no" then
     print('user1 has denied')
-    if uj.lang == "ko" then
-		interaction:reply(lang.denied_message_1 .. uj.id .. lang.denied_message_2 .. cdb[curfilename].name .. lang.denied_message_3)
-	else
-		interaction:reply(lang.denied_message_1 .. uj.id .. lang.denied_message_2 .. uj.pronouns["their"] .. lang.denied_message_3 .. cdb[curfilename].name .. lang.denied_message_4 .. (numcards ~= 1 and lang.needs_plural_s == true and lang.plural_s or "").. lang.denied_message_5)
-	end
+    interaction:reply(formatstring(lang.denied_message, {uj.id, uj.pronouns["their"], cdb[curfilename].name}, lang.plural_s))
   end
 end
 return reaction

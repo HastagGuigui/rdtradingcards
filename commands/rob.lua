@@ -37,7 +37,7 @@ function command.run(message, mt)
 
   if uj.lastrob + 4 > sj.stocknum and uj.lastrob ~= 0 then
     local stocksleft = uj.lastrob + 4 - sj.stocknum
-    local stockstring = lang.more_restock_1 .. stocksleft .. lang.more_restock_2
+    local stockstring = formatstring(lang.more_restock_1, {stocksleft})
     if lang.needs_plural_s == true then
       if stocksleft > 1 then
         stockstring = stockstring .. lang.plural_s
@@ -66,9 +66,9 @@ function command.run(message, mt)
       end
     end
     if uj.lastrob + 3 == sj.stocknum then
-      message.channel:send(lang.blacklist_next_1 .. durationtext .. lang.blacklist_next_2)
+      message.channel:send(formatstring(lang.blacklist_next, {durationtext}))
     else
-      message.channel:send(lang.blacklist_1 .. stockstring .. lang.blacklist_2 .. durationtext .. lang.blacklist_3)
+      message.channel:send(formatstring(lang.blacklist, {stockstring, durationtext}))
     end
     return
   end
@@ -81,27 +81,23 @@ function command.run(message, mt)
   --error handling
   local sendshoperror = {
     outofstock = function()
-      message.channel:send(lang.out_of_stock_1 .. sname .. lang.out_of_stock_2)
+      message.channel:send(formatstring(lang.out_of_stock, {sname}))
     end,
 
     toomanyrequested = function()
-      if uj.lang == "ko" then
-        message.channel:send(lang.too_many_requested_1 .. sname .. lang.too_many_requested_2 .. stock .. lang.too_many_requested_3)
-      else
-        message.channel:send(lang.too_many_requested_1 .. stock .. lang.too_many_requested_2 .. sname .. lang.too_many_requested_3)
-      end
+      message.channel:send(formatstring(lang.too_many_requested, {stock, sname}))
     end,
 
     donthave = function()
       if nopeeking then
-        message.channel:send(lang.nopeeking_error_1 .. mt[1] .. lang.nopeeking_error_2)
+        message.channel:send(formatstring(lang.nopeeking_error, {mt[1]}))
       else
-        message.channel:send(lang.donthave_1 .. sname .. lang.donthave_2)
+        message.channel:send(formatstring(lang.donthave, {sname}))
       end
     end,
 
     alreadyhave = function()
-      message.channel:send(lang.alreadyhave_1 .. sname .. lang.alreadyhave_2)
+      message.channel:send(formatstring(lang.alreadyhave, {sname}))
     end,
       
     hasfixedmouse = function()
@@ -114,9 +110,9 @@ function command.run(message, mt)
 
     unknownrequest = function()
       if nopeeking then
-        message.channel:send(lang.nopeeking_error_1 .. mt[1] .. lang.nopeeking_error_2)
+        message.channel:send(formatstring(lang.nopeeking_error, {mt[1]}))
       else
-        message.channel:send(lang.unknownrequest_1 .. mt[1] .. lang.unknownrequest_2)
+        message.channel:send(formatstring(lang.unknownrequest, {mt[1]}))
       end
     end
   }
@@ -188,19 +184,11 @@ function command.run(message, mt)
       if uj.skipprompts and wj.skiprob then
         cmdre["rob"].run(message, nil, {itemtype = "consumable",sname=sname,sindex=sindex,srequest=srequest,sprice=sprice,numrequest=numrequest, random=false}, "yes")
       else
-        if uj.lang == "ko" then
-          ynbuttons(message,{
+        ynbuttons(message,{
             color = 0x85c5ff,
-            title = lang.robbing_shop_1 .. sname .. lang.robbing_shop_2,
-            description = "_" .. lang.rob_shop_desc .. "_\n`" .. consdb[srequest].description .. "`\n" .. lang.rob_shop_1 ..sname .. lang.rob_shop_2 .. numrequest .. lang.cons_unit .. lang.rob_shop_3 .. "\n"
+            title = formatstring(lang.robbing_shop, {sname}),
+            description = "_" .. lang.rob_shop_desc .. "_\n`" .. consdb[srequest].description .. "`\n" .. formatstring(lang.rob_shop, {numrequest, sname})
           },"rob",{itemtype = "consumable",sname=sname,sindex=sindex,srequest=srequest,sprice=sprice,numrequest=numrequest, random=false}, uj.id, uj.lang)
-        else
-          ynbuttons(message,{
-            color = 0x85c5ff,
-            title = lang.robbing_shop_1 .. sname .. lang.robbing_shop_2,
-            description = "_" .. lang.rob_shop_desc .. "_\n`" .. consdb[srequest].description .. "`\n" .. lang.rob_shop_1 .. numrequest .. lang.rob_shop_2 .. sname .. lang.rob_shop_3
-          },"rob",{itemtype = "consumable",sname=sname,sindex=sindex,srequest=srequest,sprice=sprice,numrequest=numrequest, random=false}, uj.id, uj.lang)
-        end
       end
       return
     end
@@ -241,8 +229,8 @@ function command.run(message, mt)
       else
         ynbuttons(message,{
           color = 0x85c5ff,
-          title = lang.robbing_shop_1 .. sname .. lang.robbing_shop_2,
-          description = "_" .. lang.rob_shop_desc .. "_\n`" .. itemdb[srequest].description .. "`\n" .. lang.rob_shop_item_1 .. sname .. lang.rob_shop_item_2
+          title = formatstring(lang.robbing_shop, {sname}),
+          description = "_" .. lang.rob_shop_desc .. "_\n`" .. itemdb[srequest].description .. "`\n" .. formatstring(lang.rob_shop_item, {sname})
         },"rob",{itemtype = "item",sname=sname,srequest=srequest,sprice=sprice,random=false}, uj.id, uj.lang)
       end
       return
@@ -280,19 +268,11 @@ function command.run(message, mt)
       if uj.skipprompts and wj.skiprob then
         cmdre["rob"].run(message, nil, {itemtype = "card",sname=sname,sindex=sindex,srequest=srequest,numrequest=numrequest, random=false}, "yes")
       else
-        if uj.lang == "ko" then
-          ynbuttons(message,{
-            color = 0x85c5ff,
-            title = lang.robbing_shop_1 .. sname .. lang.robbing_shop_2,
-            description = "_" .. lang.rob_shop_desc .. "_\n`" .. cdb[srequest].description  .. "`\n" .. lang.rob_shop_1 .. sname .. lang.rob_shop_2 .. numrequest .. lang.card_unit .. lang.rob_shop_3
-          },"rob",{itemtype = "card",sname=sname,sindex=sindex,srequest=srequest,numrequest=numrequest, random=false}, uj.id, uj.lang)
-        else
-          ynbuttons(message,{
-            color = 0x85c5ff,
-            title = lang.robbing_shop_1 .. sname .. lang.robbing_shop_2,
-            description = "_" .. lang.rob_shop_desc .. "_\n`" .. cdb[srequest].description  .. "`\n" .. lang.rob_shop_1 .. numrequest .. lang.rob_shop_2 .. sname .. lang.rob_shop_3
-          },"rob",{itemtype = "card",sname=sname,sindex=sindex,srequest=srequest,numrequest=numrequest, random=false}, uj.id, uj.lang)
-        end
+        ynbuttons(message,{
+          color = 0x85c5ff,
+          title = formatstring(lang.robbing_shop, {sname}),
+          description = "_" .. lang.rob_shop_desc .. "_\n`" .. cdb[srequest].description  .. "`\n" .. formatstring(lang.rob_shop, {numrequest, sname})
+        },"rob",{itemtype = "card",sname=sname,sindex=sindex,srequest=srequest,numrequest=numrequest, random=false}, uj.id, uj.lang)
       end
       return
     end

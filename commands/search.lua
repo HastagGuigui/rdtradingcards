@@ -13,9 +13,9 @@ function command.run(message, mt)
 
   if not curfilename then
     if nopeeking then
-      message.channel:send(lang.error_nopeeking_1 .. request .. lang.error_nopeeking_2)
+      message.channel:send(formatstring(lang.error_nopeeking, {request}))
     else
-      message.channel:send(lang.no_item_1 .. request .. lang.no_item_2)
+      message.channel:send(formatstring(lang.no_item, {request}))
     end
     return
   end
@@ -23,9 +23,9 @@ function command.run(message, mt)
   local invnum = uj.inventory[curfilename] or 0
   local stornum = uj.storage[curfilename] or 0
   if nopeeking and invnum + stornum == 0 then
-    message.channel:send(lang.error_nopeeking_1 .. request .. lang.error_nopeeking_2)
+    message.channel:send(formatstring(lang.error_nopeeking, {request}))
   else
-    message.channel:send(lang.search_message_1 .. cdb[curfilename].name .. lang.search_message_2 .. invnum .. lang.search_message_3 .. stornum .. lang.search_message_4)
+    message.channel:send(formatstring(lang.search_message, {cdb[curfilename].name, invnum, stornum}))
   end
 end
 return command

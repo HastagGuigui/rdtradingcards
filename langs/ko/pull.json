@@ -7,8 +7,7 @@
 	"time_plural_s": "",
 	"time_and": " ",
 	"time_minute": "분",
-	"wait_message_1": "다시 뽑기 전에 ",
-	"wait_message_2":  " 만큼 기다려 주세요.",
+	"wait_message_1": "다시 뽑기 전에 {1} 만큼 기다려 주세요.",
 	
 	"pulling_card": "카드를 뽑는 중...",
 	
@@ -18,16 +17,16 @@
 	"pulled_doubleclick": "더블클릭!",
 	"pulled_tripleclick": "트리플클릭!!!",
 	
-	"rdnot_message_1": "님이 What is RD Not? 카드를 얻으셨어요! What is RD Not? 카드가 ",
-	"rdnot_message_2": "인벤토리에 들어갑니다. 이 카드의 축약명은 rdnot입니다.\n",
+	"rdnot_message": "{1} 님이 What is RD Not? 카드를 얻으셨어요! What is RD Not? 카드가 인벤토리에 들어갑니다. 이 카드의 축약명은 rdnot입니다.\n",
 	
+	"pulled_message": "{1} 님이 **{2}** 카드를 얻으셨어요! **{2}** 카드가 인벤토리에 들어갑니다. 이 카드의 축약명은 **{4}**입니다.",
 	
-	"pulled_message_1": "님이 **",
-	"pulled_message_2": "** 카드를 얻으셨어요! **",
-	"pulled_message_3": "** 카드가 ",
-	"pulled_message_4": "인벤토리에 들어갑니다. 이 카드의 축약명은 **",
-	"pulled_message_5": "**입니다.",
-	
-	"not_in_storage_1": "**",
-	"not_in_storage_2": "** 카드가 당신의 저장고에 저장되어 있지 않습니다!",
+	"not_in_storage": "**{1}** 카드가 당신의 저장고에 저장되어 있지 않습니다!",
+
+	"ace_of_hearts": "Because of their **Ace of Hearts**, they also got **10 tokens**!",
+	"cryopod_miss": "You missed {1} opportunities to pull since last pull, ",
+	"cryopod_full": "but your **Spare Cryopod** is full, because it has already {1} pulls in it.",
+	"cryopod_filled": "however your **Spare Cryopod** was able to store {1} of them.",
+	"cryopod_partly": "however your **Spare Cryopod** was able to store all {1} of them, bringing your total stored pulls to {2}.",
+	"cryopod_pull": "You're on cooldown, but you have spare pulls stored in your **Spare Cryopod**, which means you can pull anyways! (You now have **{1}** spare pull{1s} remaining)"
 }

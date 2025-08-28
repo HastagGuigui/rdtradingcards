@@ -41,7 +41,7 @@ function command.run(message, mt)
   end
   
   if not uj2f then
-    message.channel:send(lang.no_user_1 .. user_argument .. lang.no_user_2)
+    message.channel:send(formatstring(lang.no_user, {user_argument}))
     return
   end
 
@@ -62,9 +62,9 @@ function command.run(message, mt)
   
   if not curfilename then
     if nopeeking then
-      message.channel:send(lang.no_item_nopeeking_1 .. thing_argument .. lang.no_item_nopeeking_2)
+      message.channel:send(formatstring(lang.no_item_nopeeking, {thing_argument}))
     else
-      message.channel:send(lang.no_item_1 .. thing_argument .. lang.no_item_2)
+      message.channel:send(formatstring(lang.no_item, {thing_argument}))
     end
     return
   end
@@ -72,16 +72,16 @@ function command.run(message, mt)
   if not uj.inventory[curfilename] then
     print("user doesnt have card")
     if nopeeking then
-      message.channel:send(lang.no_item_nopeeking_1 .. thing_argument .. lang.no_item_nopeeking_2)
+      message.channel:send(formatstring(lang.no_item_nopeeking, {thing_argument}))
     else
-      message.channel:send(lang.dont_have_1 .. cdb[curfilename].name .. lang.dont_have_2)
+      message.channel:send(formatstring(lang.dont_have, {cdb[curfilename].name}))
     end
     return
   end
   
   if not (uj.inventory[curfilename] >= numcards) then
     print("user doesn't have enough cards")
-    message.channel:send(lang.not_enough_1 .. cdb[curfilename].name .. lang.not_enough_2)
+    message.channel:send(formatstring( lang.not_enough, { cdb[curfilename].name}) )
     return
   end
 
@@ -107,17 +107,10 @@ function command.run(message, mt)
   
   local isplural = numcards ~= 1 and lang.needs_plural_s == true and lang.plural_s or ""
   local isplural2 = numcards ~= 1 and lang2.needs_plural_s == true and lang2.plural_s or ""
-  
-  if uj.lang == "ko" then
-    _G['giftedmessage'] = lang.gifted_message_1 .. uj2.id .. lang.gifted_message_2 .. cdb[curfilename].name .. lang.gifted_message_3 .. numcards .. lang.gifted_message_4 .. lang.gifted_message_5
-  else
-    _G['giftedmessage'] = lang.gifted_message_1 .. numcards .. lang.gifted_message_2 .. cdb[curfilename].name .. lang.gifted_message_3 .. isplural .. lang.gifted_message_4 .. uj2.id .. lang.gifted_message_5
-  end
-  if uj2.lang == "ko" then
-    _G['recievedmessage'] = lang2.recieved_message_1 .. uj.id .. lang2.recieved_message_2 .. cdb[curfilename].name .. lang2.recieved_message_3 .. numcards .. lang2.recieved_message_4 .. lang2.recieved_message_5
-  else
-    _G['recievedmessage'] = lang2.recieved_message_1 .. uj.id .. lang2.recieved_message_2 .. numcards .. lang2.recieved_message_3 .. cdb[curfilename].name .. lang2.recieved_message_4 .. isplural2 .. lang2.recieved_message_5
-  end
+
+  _G['giftedmessage'] = formatstring(lang.giftedmessage, {numcards, cdb[curfilename].name, uj2.id}, lang.plural_s)
+
+  _G['recievedmessage'] = formatstring(lang2.recieved_message, {uj.id, numcards, cdb[curfilename].name}, lang2.plural_s)
   if uj.lang == uj2.lang then
     message.channel:send {
       content = giftedmessage

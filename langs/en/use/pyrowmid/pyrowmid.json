@@ -1,8 +1,7 @@
 {
 	"hole_nodonations": "The **Hole** is not accepting donations at this time.",
 	"using_hole": "Using Hole...",
-	"use_hole_1": "Will you put a **Token** into the **Hole?** (tokens remaining: ",
-	"use_hole_2": ")",
+	"use_hole": "Will you put a **Token** into the **Hole?** (tokens remaining: {1})",
 	"hole_notokens": "You have no **Tokens** to offer to the **Hole.**",
 	
 	"panda_ssss45": "The **Panda** takes one look at your **Cool Hat**, and puts a **Shaun's Server Statistics Sampling #45** card into your storage out of respect.",

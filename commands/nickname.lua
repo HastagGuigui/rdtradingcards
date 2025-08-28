@@ -34,7 +34,7 @@ function command.run(message, mt)
 
     if usernametojson(mt[2]) then
       if string.find(usernametojson(mt[2]), uj.id, 10) then
-        message.channel:send(lang.add_already_1 .. mt[2] .. lang.add_already_2)
+        message.channel:send(formatstring(lang.add_already, {mt[2]}))
       else
         message.channel:send(lang.add_other_user)
       end
@@ -47,12 +47,12 @@ function command.run(message, mt)
     end
 
     if numnames >= maxnicknames then
-      message.channel:send(lang.add_too_many_1 .. maxnicknames .. lang.add_too_many_2)
+      message.channel:send(formatstring(lang.add_too_many, {maxnicknames}))
       return
     end
 
     uj.names[mt[2]] = true
-    message.channel:send(lang.add_success_1 .. mt[2] .. lang.add_success_2)
+    message.channel:send(formatstring(lang.add_success, {mt[2]}))
   elseif mt[1] == "remove" then
     if not mt[2] then
       message.channel:send(lang.remove_nothing)
@@ -65,16 +65,16 @@ function command.run(message, mt)
     end
 
     if not uj.names[mt[2]] then
-      message.channel:send(lang.remove_no_such_1 .. mt[2] .. lang.remove_no_such_2)
+      message.channel:send(formatstring(lang.remove_no_such, {mt[2]}))
       return
     end
 
     uj.names[mt[2]] = nil
-    message.channel:send(lang.remove_success_1 .. mt[2] .. lang.remove_success_2)
+    message.channel:send(formatstring(lang.remove_success, {mt[2]}))
   elseif mt[1] == "reset" then
     uj.names = {}
     uj.names[message.author.name .. "#" .. message.author.discriminator] = true
-    message.channel:send(lang.reset_success_1 .. message.author.name .. "#" .. message.author.discriminator .. lang.reset_success_2)
+    message.channel:send(formatstring(lang.reset_success, {message.author.name .. "#" .. message.author.discriminator}))
   elseif mt[1] == "check" then
     local nicknamestring = ""
     if not mt[2] then
@@ -83,7 +83,7 @@ function command.run(message, mt)
 
     local uj2f = usernametojson(mt[2])
     if not uj2f then
-      message.channel:send(lang.check_no_user_1 .. mt[2] .. lang.check_no_user_2)
+      message.channel:send(formatstring(lang.check_no_user, {mt[2]}))
       return
     end
 
@@ -103,13 +103,13 @@ function command.run(message, mt)
       local numnames2 = 0
       for k in pairs(uj2.names) do numnames2 = numnames2 + 1 end
       if numnames2 == 1 then
-        message.channel:send(nicknamestring .. lang.check_other_singular_1 .. (uj.lang ~= "ko" and uj2.pronouns["their"]) .. lang.check_other_singular_2)
+        message.channel:send(formatstring(lang.check_other_singular, {nicknamestring, (uj.lang ~= "ko" and uj2.pronouns["their"])}))
       else
-        message.channel:send(mt[2] .. lang.check_other_plural .. nicknamestring)
+        message.channel:send(formatstring(lang.check_other_plural, {mt[2], nicknamestring}))
       end
     end
   else
-    message.channel:send(lang.invalid_command_1 .. mt[1] .. lang.invalid_command_2)
+    message.channel:send(formatstring(lang.invalid_command, {mt[1]}))
   end
 
   dpf.savejson("savedata/" .. message.author.id .. ".json",uj)

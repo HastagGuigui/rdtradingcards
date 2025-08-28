@@ -96,18 +96,13 @@
 	"smell_spider": "The **Spider** smells like a small friend!",
 	"smell_hand": "The **Hand** smells like nail polish.",
 	
-	"dont_have_item_1": "Sorry, but you do not have the **",
-	"dont_have_item_2": "** item.",
-	"dont_have_cons_1": "Sorry, but the **",
-	"dont_have_cons_2": "** item can't be found in the shop or your inventory.",
+	"dont_have_item": "Sorry, but you do not have the **{1}** item.",
+	"dont_have_cons": "Sorry, but the **{2}** item can't be found in the shop or your inventory.",
 	
-	"error_nopeeking_1": "Sorry, but I either could not find the ",
-	"error_nopeeking_2": " card in the database, or you do not have it. Make sure that you spelled it right!",
+	"error_nopeeking": "Sorry, but I either could not find the {1} card in the database, or you do not have it. Make sure that you spelled it right!",
 	
-	"dont_have_card_1": "Sorry, but you don't have the **",
-	"dont_have_card_2": "** card in your inventory or your storage.",
-	"no_card_1": "Sorry, but I could not find the ",
-	"no_card_2": " card in the database. Make sure that you spelled it right!",
+	"dont_have_card": "Sorry, but you don't have the **{1}** card in your inventory or your storage.",
+	"no_card": "Sorry, but I could not find the {1} card in the database. Make sure that you spelled it right!",
 	
 	"no_arguments": "Sorry, but the c!smell command expects 1 argument. Please see c!help for more details.",
 }

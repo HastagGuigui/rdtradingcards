@@ -14,4 +14,3 @@ function command.run(message, mt)
   end
 end
 return command
-  

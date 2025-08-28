@@ -86,6 +86,10 @@ function command.run(message, mt, overwrite)
     else
       errorping = false
     end
+
+    if privatestuff.prefix then
+      _G["prefix"] = privatestuff.prefix
+    end
     
     _G['defaultworldsave'] = {
       tokensdonated = 0,
@@ -677,6 +681,7 @@ function command.run(message, mt, overwrite)
     addcommand("langlist",cmd.langlist)
     addcommand("rob",cmd.rob)
     addcommand("rtsitem",cmd.rtsitem)
+    addcommand("embed",cmd.embed)
     
     _G['handlemessage'] = function (message, content)
 	  if message.author.id ~= client.user.id or content then
@@ -825,11 +830,11 @@ function command.run(message, mt, overwrite)
     end
     -- getshopimage()
 		
-	_G['formatstring'] = function (baseString, objectsToAdd, plural_s)
+    _G['formatstring'] = function (baseString, objectsToAdd, plural_s)
       -- Replace the base {X}
       local output = baseString
 
-      print(output)
+      -- print(output)
       
       for key, value in pairs(objectsToAdd) do
         output = output:gsub("{"..tostring(key).."}",tostring(value))

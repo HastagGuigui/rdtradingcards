@@ -17,7 +17,7 @@ function item.run(uj, ujf, message, mt, interaction)
   if chance <= 2 then
     local winnings = math.random(3, 6) * 10
     uj.tokens = uj.tokens + winnings
-    message:reply(lang.scratchoffticket_won_1 .. uj.id .. lang.scratchoffticket_won_2 .. winnings .. lang.scratchoffticket_won_3)
+    message:reply(formatstring(lang.scratchoffticket_won, {uj.id, winnings}))
   elseif chance == 3 then
     message:reply{
       content = lang.scratchoffticket_lost,

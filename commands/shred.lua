@@ -13,18 +13,18 @@ function command.run(message, mt)
 
   if not curfilename then 
     if nopeeking then
-      message.channel:send(lang.error_nopeeking_1 .. mt[1] .. lang.error_nopeeking_2)
+      message.channel:send(formatstring(lang.error_nopeeking, {mt[1]}))
     else
-      message.channel:send(lang.no_item_1 .. mt[1] .. lang.no_item_2)
+      message.channel:send(formatstring(lang.no_item, {mt[1]}))
     end
     return
   end
 
   if not uj.inventory[curfilename] then
     if nopeeking then
-      message.channel:send("Sorry, but I either could not find the " .. mt[1] .. " card in the database, or you do not have it. Make sure that you spelled it right!")
+      message.channel:send(formatstring(lang.error_nopeeking, {cdb[curfilename].name}))
     else
-      message.channel:send(lang.dont_have_1 .. cdb[curfilename].name .. lang.dont_have_2)
+      message.channel:send(formatstring(lang.dont_have, {cdb[curfilename].name}))
     end
     return
   end

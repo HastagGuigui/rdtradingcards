@@ -4,7 +4,7 @@
 _G["discordia"] = require('discordia')
 require("discordia-components")
 _G["client"] = discordia.Client()
-_G["prefix"] = "c!"
+_G["prefix"] = "h!"
 _G["json"] = require('libs/json')
 _G["fs"] = require('fs')
 --from https://github.com/DeltaF1/lua-tracery, TODO properly follow the license lmao
@@ -53,4 +53,4 @@ stockshop()
 
 client:run(privatestuff.botid)
 
-client:setGame("with cards | c!help")
+client:setGame("with cards | "..privatestuff.prefix.."help")

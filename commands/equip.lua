@@ -1,13 +1,13 @@
 local command = {}
 function command.run(message, mt)
   local time = sw:getTime()
+  local ujf = ("savedata/" .. message.author.id .. ".json")
+  local uj = dpf.loadjson(ujf, defaultjson)
+  local lang = dpf.loadjson("langs/" .. uj.lang .. "/equip.json", "")
   if #mt == 1 then
     print(message.author.name .. " did !equip")
     print(string.sub(message.content, 0, 8))
-    local ujf = ("savedata/" .. message.author.id .. ".json")
 
-    local uj = dpf.loadjson(ujf, defaultjson)
-	local lang = dpf.loadjson("langs/" .. uj.lang .. "/equip.json", "")
     if not uj.equipped then
       uj.equipped = "nothing"
     end
@@ -46,7 +46,7 @@ function command.run(message, mt)
           end
 		end
       end
-      message.channel:send(lang.wait_message_1 .. durationtext .. lang.wait_message_2)
+      message.channel:send(formatstring(lang.wait_message, {durationtext}))
       return
     end
 
@@ -55,31 +55,31 @@ function command.run(message, mt)
     
     if not curfilename then
       if nopeeking then
-        message.channel:send(lang.nopeeking_1 .. request .. lang.nopeeking_2)
+        message.channel:send(formatstring(lang.nopeeking, {request}))
       else
-        message.channel:send(lang.nodatabase_1 .. request .. lang.nodatabase_2)
+        message.channel:send(formatstring(lang.nodatabase, {request}))
       end
       return
     end
 
     if not uj.items[curfilename] then
       if nopeeking then
-        message.channel:send(lang.nopeeking_1 .. request .. lang.nopeeking_2)
+        message.channel:send(formatstring(lang.nopeeking, {request}))
       else
-        message.channel:send(lang.donthave_1 .. itemdb[curfilename].name .. lang.donthave_2)
+        message.channel:send(formatstring(lang.donthave, {itemdb[curfilename].name}))
       end
       return
     end
 
     if uj.equipped == curfilename then
-      message.channel:send(lang.already_equipped_1 .. itemdb[curfilename].name .. lang.already_equipped_2)
+      message.channel:send(formatstring(lang.already_equipped, {itemdb[curfilename].name}))
       return
     end
 
     --woo hoo
     print(uj.equipped)
     if not uj.skipprompts then
-      ynbuttons(message,lang.prompt_1 .. itemdb[uj.equipped].name .. lang.prompt_2 .. itemdb[curfilename].name .. lang.prompt_3,"equip",{newequip = curfilename}, uj.id, uj.lang)
+      ynbuttons(message, formatstring(lang.prompt, {itemdb[uj.equipped].name, itemdb[curfilename].name}),"equip",{newequip = curfilename}, uj.id, uj.lang)
     else
 		if uj.equipped == 'aceofhearts' then
 			if uj.acepulls ~= 0 then
@@ -88,11 +88,7 @@ function command.run(message, mt)
 			end
 		end
       uj.equipped = curfilename
-	  if uj.lang == "ko" then
-	    message.channel:send("<@" .. uj.id .. "> " .. lang.equipped_1 .. itemdb[curfilename].name .. lang.equipped_2 .. lang.equipped_3)
-      else
-	    message.channel:send("<@" .. uj.id .. "> " .. lang.equipped_1 .. itemdb[curfilename].name .. lang.equipped_2 ..uj.pronouns["their"].. lang.equipped_3)
-	  end
+      message.channel:send(formatstring(lang.equipped, {uj.id, itemdb[curfilename].name, uj.pronouns["their"]}))
 	  uj.lastequip = time:toHours()
 	  
 	  if uj.sodapt and uj.sodapt.equip then

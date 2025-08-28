@@ -1,14 +1,17 @@
 {
+	"dep": ["depositing", "inserting", "putting in", "slotting in"],
+	"size": [" small ", " large ", " ", " "],
+	"speen": ["spinning", "turning", "rotating", "using"],
+	"action": ["{1} the crank", "cranking"],
+	"action2": ["comes out","falls out","tumbles out","rolls out","launches out"],
+	"used_machine": "After {1} 3 **Tokens** and {2}, a{3}capsule {4} of the **Strange Machine**. Inside it is the **{5}**! You put the **{5}** with your items.",
+	
 	"allitems": "You already have every item that is currently available.",
 	"notokens": "You try to turn the crank, but it does not budge. There is a slot above it that looks like it could fit three **Tokens**...",
 	"using_machine": "Using Strange Machine...",
-	"use_machine_1": "Will you put three **Tokens** into the **Strange Machine?** (tokens remaining: ",
-	"use_machine_2": ")",
-	"used_machine_1": "**! You put the **",
-	"used_machine_2": "** with your items.",
+	"use_machine_1": "Will you put three **Tokens** into the **Strange Machine?** (tokens remaining: {1})",
 	
-	"use_machine_four_1": "Will you put four **Tokens** into the **Strange Machine?** (tokens remaining: ",
-	"use_machine_four_2": ")",
+	"use_machine_four": "Will you put four **Tokens** into the **Strange Machine?** (tokens remaining: {1})",
 	"used_machine_ladder": "After depositing 4 **Tokens** and turning the crank, a capsule comes out of the **Strange Machine**. Inside it is the **Ladder!**! You put the **Ladder** in the hole. In addition, the **Strange Machine** seems to have calmed down.",
 	"notokens_four": "You try to turn the crank, but it does not budge. There is a slot above it that looks like it could fit four **Tokens**...",
 	

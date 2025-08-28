@@ -30,12 +30,12 @@ function reaction.run(message, interaction, data, response)
       end
     end
     
-    cmdcons[request].run(uj, ujf, message, data.mt, interaction, fn)    
+    cmdcons[request].run(uj, ujf, message, data.mt, interaction, fn)
   end
 
   if response == "no" then
     print('user has denied')
-    interaction:reply(lang.denied_message_1 .. consdb[data.crequest].name .. lang.denied_message_2)
+    interaction:reply(formatstring(lang.denied_message, consdb[data.crequest].name))
   end
 end
 return reaction

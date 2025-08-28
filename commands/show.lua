@@ -13,9 +13,9 @@ function command.run(message, mt)
 
   if not curfilename then
     if nopeeking then
-      message.channel:send(lang.error_nopeeking_1 .. mt[1] .. lang.error_nopeeking_2)
+      message.channel:send(formatstring(lang.error_nopeeking, {mt[1]}))
     else
-      message.channel:send(lang.no_item_1 .. mt[1] .. lang.no_item_2)
+      message.channel:send(formatstring(lang.no_item, {mt[1]}))
     end
     return
   end
@@ -23,9 +23,9 @@ function command.run(message, mt)
   if not ((uj.inventory[curfilename] or uj.storage[curfilename])) and not (shophas(curfilename) and not (uj.lastrob + 3 > sj.stocknum and uj.lastrob ~= 0)) then
     print("user doesnt have card")
     if nopeeking then
-      message.channel:send(lang.error_nopeeking_1 .. mt[1] .. lang.error_nopeeking_2)
+      message.channel:send(formatstring(lang.error_nopeeking, {mt[1]}))
     else
-      message.channel:send(lang.dont_have_1 .. cdb[curfilename].name .. lang.dont_have_2)
+      message.channel:send(formatstring(lang.dont_have, {cdb[curfilename].name}))
     end
     return
   end
@@ -39,8 +39,7 @@ function command.run(message, mt)
     message.channel:send{embed = {
       color = 0x85c5ff,
       title = lang.showing_card,
-      description = 
-      lang.show_card_1 .. cdb[curfilename].name .. lang.show_card_2 .. curfilename .. lang.show_card_3 .. embeddescription,
+      description = formatstring(lang.show_card, {cdb[curfilename].name, curfilename, embeddescription}),
       image = {
         url = type(cdb[curfilename].embed) == "table" and cdb[curfilename].embed[math.random(#cdb[curfilename].embed)] or cdb[curfilename].embed
       }
@@ -48,7 +47,7 @@ function command.run(message, mt)
   else
     print("spiderrrrrrr")
     message.channel:send{
-      content = lang.show_card_1 .. cdb[curfilename].name .. lang.show_card_2 .. curfilename .. lang.show_card_3,
+      content = formatstring(lang.show_card, {cdb[curfilename].name, curfilename}),
       file = "card_images/SPOILER_" .. curfilename .. ".png"
     }
     if cdb[curfilename].description then

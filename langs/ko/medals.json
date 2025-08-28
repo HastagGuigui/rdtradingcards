@@ -1,8 +1,6 @@
 {
-	"embed_contains": "님의 메달 목록입니다.",
-	"embed_title": "님의 메달 목록",
+	"embed_contains": "{1}님의 메달 목록입니다.",
+	"embed_title": "{1}님의 메달 목록",
 	
-	"embed_page_1": "(",
-	"embed_page_2": "페이지 중 ",
-	"embed_page_3": "페이지)",
+	"embed_page": "({2}페이지 중 {1}페이지)",
 }
