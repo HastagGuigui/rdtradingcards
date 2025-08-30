@@ -58,7 +58,7 @@ function command.run(message, mt,bypass)
         end
         if not uj.skipprompts then
           ynbuttons(message, {
-            color = 0x85c5ff,
+            color = uj.embedc,
             title = lang.using_machine,
             description = formatstring(lang.use_machine, {uj.tokens}),
           },"usemachine",{}, uj.id, uj.lang)
@@ -84,7 +84,7 @@ function command.run(message, mt,bypass)
       else
         if uj.tokens >= 4 then
           ynbuttons(message, {
-          color = 0x85c5ff,
+          color = uj.embedc,
           title = lang.using_machine,
           description = formatstring(lang.use_machine_four, {uj.tokens}), 
           },"getladder", {}, uj.id, uj.lang)
@@ -102,7 +102,7 @@ function command.run(message, mt,bypass)
       end
       if uj.tokens > 0 then
         ynbuttons(message, {
-        color = 0x85c5ff,
+        color = uj.embedc,
         title = lang.using_hole,
         description = formatstring(lang.use_hole, {uj.tokens}), 
         },"usehole", {}, uj.id, uj.lang)
@@ -140,7 +140,7 @@ function command.run(message, mt,bypass)
           wj.labdiscovered = true
         end
         message.channel:send{embed = {
-          color = 0x85c5ff,
+          color = uj.embedc,
           title = embedtitle,
           description = lang.used_ladder,
           image = {
@@ -153,7 +153,7 @@ function command.run(message, mt,bypass)
         return
       else
         message.channel:send{embed = {
-          color = 0x85c5ff,
+          color = uj.embedc,
           title = lang.using_ladder,
           description = lang.using_ladder_small,
           image = {
@@ -177,7 +177,7 @@ function command.run(message, mt,bypass)
     
     elseif request == "table" or (uj.lang ~= "en" and request == lang.request_table) then 
       message.channel:send{embed = {
-        color = 0x85c5ff,
+        color = uj.embedc,
         title = lang.using_table,
         description = lang.use_table,
       }}
@@ -185,7 +185,7 @@ function command.run(message, mt,bypass)
     elseif request == "poster" or request == "catposter" or request == "cat poster" or (uj.lang ~= "en" and request == lang.request_poster_1 or request == lang.request_poster_2 or request == lang.request_poster_3) then 
       if wj.ws ~= 901 then
         message.channel:send{embed = {
-          color = 0x85c5ff,
+          color = uj.embedc,
           title = lang.using_poster_before801,
           image = {
             url = 'https://cdn.discordapp.com/attachments/829197797789532181/838793078574809098/blankwall.png'
@@ -193,7 +193,7 @@ function command.run(message, mt,bypass)
         }}
       else
         message.channel:send{embed = {
-          color = 0x85c5ff,
+          color = uj.embedc,
           title = lang.using_poster,
           description = lang.use_poster,
           image = {
@@ -206,14 +206,14 @@ function command.run(message, mt,bypass)
     elseif request == "mouse hole" or request == "mouse" or request == "mousehole" or (uj.lang ~= "en" and request == lang.request_hole_1 or request == lang.request_hole_2 or request == lang.request_hole_3) then 
       if uj.equipped == "brokenmouse" then
         ynbuttons(message,{
-          color = 0x85c5ff,
+          color = uj.embedc,
           title = lang.using_hole,
           description = message.author.mentionString .. lang.use_hole_mouse,
         },"usemousehole",{},uj.id,uj.lang)
         return
       else
         message.channel:send{embed = {
-          color = 0x85c5ff,
+          color = uj.embedc,
           title = lang.using_hole,
           description = lang.use_hole,
         }}
@@ -253,7 +253,7 @@ function command.run(message, mt,bypass)
 
       if not next(uj.inventory) then
         message.channel:send{embed = {
-          color = 0x85c5ff,
+          color = uj.embedc,
           title = lang.embed_title,
           description = lang.embed_no_card,
         }}
@@ -262,7 +262,7 @@ function command.run(message, mt,bypass)
       
       if not uj.skipprompts then
         ynbuttons(message,{
-          color = 0x85c5ff,
+          color = uj.embedc,
           title = lang.embed_title,
           description = message.author.mentionString .. lang.confirm_message,
         },"usebox",{}, uj.id, uj.lang)
@@ -411,7 +411,7 @@ o-''|\\_____/)
           if uj.tokens > 0 then
             if not uj.skipprompts then
               ynbuttons(message, {
-                color = 0x85c5ff,
+                color = uj.embedc,
                 title = lang.using_terminal_upgrade,
                 description = formatstring(lang.upgrade_prompt, {uj.tokens}),
                 image = {
@@ -451,7 +451,7 @@ o-''|\\_____/)
       -- thank you discord /neg
       if embedimage then
         message.channel:send{embed = {
-          color = 0x85c5ff,
+          color = uj.embedc,
           title = embedtitle,
           description = embeddescription,
           image = {
@@ -464,7 +464,7 @@ o-''|\\_____/)
         }}
       else
         message.channel:send{embed = {
-          color = 0x85c5ff,
+          color = uj.embedc,
           title = embedtitle,
           description = embeddescription,
           footer = {
@@ -495,7 +495,7 @@ o-''|\\_____/)
       
     elseif (request == "bridge" or (uj.lang ~= "en" and request == lang.request_bridge)) then 
       message.channel:send{embed = {
-        color = 0x85c5ff,
+        color = uj.embedc,
         title = lang.using_bridge,
         description = lang.use_bridge,
       }}
@@ -546,14 +546,14 @@ o-''|\\_____/)
       end
     elseif (request == "barrels" or (uj.lang ~= "en" and request == lang.request_barrels)) then 
       message.channel:send{embed = {
-        color = 0x85c5ff,
+        color = uj.embedc,
         title = lang.using_barrels,
         description = lang.use_barrels,
       }}
       
     elseif (request == "clouds" or (uj.lang ~= "en" and request == lang.request_clouds)) then 
       message.channel:send{embed = {
-        color = 0x85c5ff,
+        color = uj.embedc,
         title = lang.using_clouds,
         description = lang.use_clouds,
       }}
@@ -699,7 +699,7 @@ o-''|\\_____/)
 
         --can buy consumable
         ynbuttons(message,{
-          color = 0x85c5ff,
+          color = uj.embedc,
           title = formatstring(lang.buying_item, {sname}),
           description = lang.consumable_desc .. "\n`".. consdb[srequest].description .."`\n" .. formatstring(
             lang.consumable_buy, {message.author.id, numrequest, sprice}, lang.plural_s
@@ -745,7 +745,7 @@ o-''|\\_____/)
 
         --can buy item
         ynbuttons(message,{
-          color = 0x85c5ff,
+          color = uj.embedc,
           title = formatstring(lang.buying_item, {sname}),
           description = lang.item_desc .. "\n`".. itemdb[srequest].description .."`\n" .. formatstring(lang.item_buy, {message.author.id, sprice}),
         },"buy",{itemtype = "item",sname=sname,sprice=sprice,sindex=sindex,srequest=srequest,numrequest=1}, message.author.id, uj.lang)
@@ -788,7 +788,7 @@ o-''|\\_____/)
 
         --can buy card
         ynbuttons(message,{
-          color = 0x85c5ff,
+          color = uj.embedc,
           title = formatstring(lang.buying_card, {sname}),
           description = lang.card_desc .. "\n`".. cdb[srequest].description .."`\n" .. formatstring(
             lang.card_buy, {message.author.id, numrequest, sprice}, lang.plural_s
@@ -809,7 +809,7 @@ o-''|\\_____/)
       
     elseif request == "wolf" or (uj.lang ~= "en" and request == lang.request_wolf) then
       message.channel:send{embed = {
-        color = 0x85c5ff,
+        color = uj.embedc,
         title = lang.petting_wolf,
         description = lang.petted_wolf,
         image = {url = "https://cdn.discordapp.com/attachments/829197797789532181/882289357128618034/petwolf.gif"}
@@ -817,14 +817,14 @@ o-''|\\_____/)
         
     elseif request == "ghost" or (uj.lang ~= "en" and request == lang.request_ghost) then
       message.channel:send{embed = {
-        color = 0x85c5ff,
+        color = uj.embedc,
         title = lang.petting_ghost,
         description = lang.petted_ghost
       }}
       
     elseif request == "photo" or request == "dog" or (uj.lang ~= "en" and request == lang.request_photo or request == lang.request_dog) then
       message.channel:send{embed = {
-        color = 0x85c5ff,
+        color = uj.embedc,
         title = lang.petting_dog,
         description = lang.petted_dog,
         image = {url = "https://cdn.discordapp.com/attachments/829197797789532181/882287705638203443/okamii_triangle_frame_4.png"}
@@ -855,7 +855,7 @@ o-''|\\_____/)
 		if not consdb[request].unusable then
 			if not uj.skipprompts then
 			  ynbuttons(message,{
-				color = 0x85c5ff,
+				color = uj.embedc,
 				title = lang.using_1 .. consdb[request].name .. lang.using_2,
 				description = lang.use_confirm_1 .. consdb[request].name .. lang.use_confirm_2,
 			  },"useconsumable",{crequest=request,mt=mt},uj.id,uj.lang)

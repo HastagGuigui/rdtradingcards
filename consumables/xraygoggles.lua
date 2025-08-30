@@ -20,7 +20,7 @@ function item.run(uj, ujf, message, mt, interaction)
     embed = {
       title = lang.xraygoggles_title,
       description = boxstring,
-      color = 0x85c5ff,
+      color = uj.embedc,
     }
   }
 end

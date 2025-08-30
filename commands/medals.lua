@@ -32,7 +32,7 @@ function command.run(message, mt)
   message.channel:send{
     content = formatstring(lang.embed_contains, {message.author.mentionString}),
     embed = {
-      color = 0x85c5ff,
+      color = uj.embedc,
       title = formatstring(lang.embed_title, {message.author.name}),
       description = medalstring,
       footer = {

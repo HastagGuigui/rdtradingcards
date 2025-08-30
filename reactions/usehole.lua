@@ -21,7 +21,7 @@ function reaction.run(message, interaction, data, response)
       interaction:reply(lang.donated_hole)
     else
       interaction:reply{embed = {
-        color = 0x85c5ff,
+        color = uj.embedc,
         title = lang.using_terminal,
         description = formatstring(lang.donated_terminal, {wj.tokensdonated}),
         image = {

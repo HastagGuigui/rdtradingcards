@@ -27,7 +27,7 @@ function command.run(message)
     uj.medals[v.receive] = true
 
     message.channel:send { embed = {
-      color = 0x85c5ff,
+      color = uj.embedc,
       title = lang.congratulations,
       description = formatstring(lang.gotmedal, {message.author.mentionString, medaldb[v.receive].name}),
       image = { url = medaldb[v.receive].embed }

@@ -31,7 +31,7 @@ function command.run(message, mt)
 
   print("user has medal")
   message.channel:send{embed = {
-    color = 0x85c5ff,
+    color = uj.embedc,
     title = lang.showing_medal,
     description = formatstring(lang.show_medal_1, {medaldb[curfilename].name, curfilename, medaldb[curfilename].description}),
     image = {

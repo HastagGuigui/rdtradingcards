@@ -1,15 +1,16 @@
 local command = {}
 
+local colororder = {"default", "red", "orange", "yellow", "green", "blue", "purple", "pink", "brown"}
 local embedcolors = { -- easy to add more: just put a new line!
   default =  {colorcode = 0x85c5ff, shortname = "default", fullname = "RDCards Blue"},
-  green =    {colorcode = 0x00ff00, shortname = "green", fullname = "Healion Green"},
   red =      {colorcode = 0xff0000, shortname = "red", fullname = "Stylish Red"},
-  blue =     {colorcode = 0x33ccff, shortname = "blue", fullname = "Nice Blue"},
   orange =   {colorcode = 0xff8000, shortname = "orange", fullname = "Pretty Orange"},
-  brown =    {colorcode = 0x481b1d, shortname = "brown", fullname = "Beans Brown"},
   yellow =   {colorcode = 0xfcd68d, shortname = "yellow", fullname = "Light Yellow"},
+  green =    {colorcode = 0x00ff88, shortname = "green", fullname = "Jade Green"},
+  blue =     {colorcode = 0x33ccff, shortname = "blue", fullname = "Nice Blue"},
   purple =   {colorcode = 0x7c00bf, shortname = "purple", fullname = "Fun Purple"},
   pink =     {colorcode = 0xff00dc, shortname = "pink", fullname = "Hot Pink"},
+  brown =    {colorcode = 0x481b1d, shortname = "brown", fullname = "Beans Brown"},
 }
 
 function command.run(message, mt)
@@ -28,12 +29,22 @@ function command.run(message, mt)
   local colorDescText = ""
 
   -- sincerely apologizing for optimising your code
-  for k, v in pairs(embedcolors) do
+  for _, k in ipairs(colororder) do
+    local v = embedcolors[k]
     colorDescText = colorDescText.."**"..lang[k.."2"].."** ("..lang[k]..")\n" -- for the description
 
     if mt[1] == v.shortname or mt[1] == v.fullname or mt[1] == lang[k] or mt[1] == lang[k.."2"] then
       uj.embedc = v.colorcode
       message.channel:send("Successfully changed color to **"..v.fullname.."**!")
+    end
+  end
+  if string.sub(mt[1],1,1) == "#" then
+    local new_value = tonumber(string.sub(mt[1],2,7), 16)
+    if new_value and #mt[1] == 7 then
+      uj.embedc = new_value
+      message.channel:send("Successfully changed color to RGB color **#"..string.sub(mt[1],2,7).."**!")
+    else
+      message.channel:send("Invalid RGB color: **#"..string.sub(mt[1],2,7).."**")
     end
   end
 

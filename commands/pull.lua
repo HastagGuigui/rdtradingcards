@@ -205,7 +205,7 @@ _________________```]])
     elseif not cdb[v].spoiler then
       local msg = formatstring(lang.pulled_message, {message.author.mentionString, cardname, uj.pronouns["their"], v})
       message.channel:send{embed = {
-        color = 0x85c5ff,
+        color = uj.embedc,
         title = title,
         description = msg,
         image = {url = type(cdb[v].embed) == "table" and cdb[v].embed[math.random(#cdb[v].embed)] or cdb[v].embed}

@@ -11,7 +11,7 @@ function reaction.run(message, interaction, data, response)
   if response == "yes" then
     print('user1 has accepted')
     interaction:reply{embed = {
-      color = 0x85c5ff,
+      color = uj.embedc,
       title = lang.using_spider,
       description = lang.use_spider,
       image = {
@@ -23,7 +23,7 @@ function reaction.run(message, interaction, data, response)
   if response == "no" then
     print('user1 has denied')
     interaction:reply{embed = {
-      color = 0x85c5ff,
+      color = uj.embedc,
       title = lang.using_spiderweb,
       description = lang.use_spiderweb,
       image = {
