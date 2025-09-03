@@ -1,0 +1,74 @@
+{
+  "groupname": "rdsrt3",
+  "basechance": 3,
+  "cards": [
+    {
+      "chance": 2,
+      "filename": "nastiest",
+      "name": "The Nastiest",
+      "type": "Super Rare",
+      "description": "(Level by 3T)",
+      "smell": "[TODO]",
+      "season": 11,
+      "embed": "https://media.discordapp.net/attachments/1030420309947469904/1412155446633955391/nastiest.png",
+      "bonuses": {
+        "rustysword":true
+      }
+    },
+    {
+      "chance": 2,
+      "filename": "metronogik",
+      "name": "Metronogik",
+      "type": "Super Rare",
+      "description": "(Level by DPS2004)",
+      "smell": "[TODO]",
+      "season": 11,
+      "embed": "https://media.discordapp.net/attachments/1030420309947469904/1412155446000746636/metronogik.png",
+      "bonuses": {
+        "driftingmetronome":true
+      }
+    },
+    {
+      "chance": 1,
+      "filename": "mineblox",
+      "name": "Mineblox",
+      "type": "Ultra Rare",
+      "description": "(Level by Kin, Zoresthrough, 3T)",
+      "smell": "Sandbox games",
+      "season": 11,
+      "embed": "https://media.discordapp.net/attachments/1030420309947469904/1410325951287394438/guiguidc.png",
+      "bonuses": {
+        "filmreel":true,
+        "paddedstickersheet":true,
+        "valentinesdaycard":true
+      }
+    },
+    {
+      "chance": 1,
+      "filename": "thegovknows",
+      "name": "The Government Knows",
+      "type": "Ultra Rare",
+      "description": "(Level by #Guigui, DPS2004)",
+      "smell": "Government documents",
+      "season": 11,
+      "embed": "https://media.discordapp.net/attachments/1030420309947469904/1412155447187869788/thegovknows.png",
+      "bonuses": {
+        "rustysword":true,
+        "cafemixtape":true
+      }
+    },
+    {
+      "chance": 2,
+      "filename": "wetmoist",
+      "name": "The Wet Moist",
+      "type": "Super Rare",
+      "description": "(Level by noche)",
+      "smell": "Sewage systems",
+      "season": 11,
+      "embed": "https://media.discordapp.net/attachments/1030420309947469904/1412155447682662511/wetmoist.png",
+      "bonuses": {
+        "paddedstickersheet":true
+      }
+    }
+  ]
+}

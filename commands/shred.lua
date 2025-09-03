@@ -38,11 +38,7 @@ function command.run(message, mt)
   end
 
   if uj.inventory[curfilename] >= numcards then
-    if uj.lang == "ko" then
-		ynbuttons(message, lang.shred_confirm_1 .. uj.id .. lang.shred_confirm_2 .. cdb[curfilename].name .. lang.shred_confirm_3 .. numcards .. lang.shred_confirm_4 .. lang.shred_confirm_5, "shred", {curfilename = curfilename,numcards = numcards}, uj.id, uj.lang)
-	else
-		ynbuttons(message, lang.shred_confirm_1 .. uj.id .. lang.shred_confirm_2 .. numcards .. lang.shred_confirm_3 .. cdb[curfilename].name .. lang.shred_confirm_4 .. (numcards ~= 1 and lang.needs_plural_s == true and lang.plural_s or "") .. lang.shred_confirm_5, "shred", {curfilename = curfilename,numcards = numcards}, uj.id, uj.lang)
-	end
+    ynbuttons(message, formatstring(lang.shred_confirm, {uj.id, numcards, cdb[curfilename].name}, lang.plural_s), "shred", {curfilename = curfilename,numcards = numcards}, uj.id, uj.lang)
   else
     message.channel:send(lang.not_enough_1 .. cdb[curfilename].name .. lang.not_enough_2)
   end

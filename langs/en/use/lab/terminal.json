@@ -1,5 +1,6 @@
 {
 	"using_terminal": "Using Terminal...",
+	"using_terminal_upgrade": "Upgrading Terminal...",
 	
 	"logged_in": "`ERROR: USER ALREADY LOGGED IN`",
 	"savedata_not_found": "`ERROR: DATA NOT FOUND.`",
@@ -7,7 +8,7 @@
 	
 	"piss_message": "`peachy moment 😳😳😳`",
 	
-	"help_message": "`AVAILABLE COMMANDS: ",
+	"help_message": "AVAILABLE COMMANDS: ",
 	
 	"stats_message": "The **Terminal** prints out a slip of paper. It reads:",
 	"stats_timespulled": "Times Pulled: ",
@@ -48,6 +49,15 @@
 	"pull_title": "PULLING CARD... ERROR!",
 	"pull_keycard": "",
 	"pull_jammed": "`ERROR: CARD PRINTER JAMMED. PLEASE WAIT.`",
+
+	"trade_offer": "```SHELL is offering a {1} for {{2}}.```",
+	"trade_reload": "You reload the terminal.\n```SHELL is now offering a {1} for {{2}}.```",
+	"trade_unknown": "Shell doesn't seem to understand your request.",
+	"trade_no": "`Oh, okay. Sorry for bothering.`",
+	"trade_not_enough": "You unfortunately don't have the required cards. Shell apologizes.",
+	"trade_successful_theme": "You put the required cards into the terminal. Shell meows in a new color.\n```You've unlocked the embed theme {1}!\nEquip it with {2}embed {3}.```",
+	"trade_successful_engwish": "You put the required cards into the terminal. Shell meows.\n```You've unlocked the engwish language! :3\nEquip it with {1}lang engwish.```",
+
 	
 	"unknown": "`COMMAND \"{1}\" NOT RECOGNIZED`",
 }

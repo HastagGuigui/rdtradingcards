@@ -14,4 +14,8 @@
 
 	"denied_hole": "You decide to not put a **Token** into the **Hole.** (how rude!)",
 	"denied_terminal": "You decide to not put a **Token** into the **Terminal.** (how rude!)",
+	"denied_terminal_1101": "You decide to not **upgrade** the **Terminal.** (what!)",
+
+	"restart_1102": "```RESTARTING...```",
+	"bootup_1102": "The **Terminal**'s screen turns off, as you hear the whirring get louder. Eventually, a **chime** can be heard, as the screen lights up. \n\nYou hear a **meow** coming from the **Terminal**'s screen."
 }

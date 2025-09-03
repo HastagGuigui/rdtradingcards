@@ -4,19 +4,19 @@
 	
 	"no_arguments": "Sorry, but the c!shred command expects 1 or 2 arguments. Please see c!help for more details.",
 	
-	"error_nopeeking_1": "Sorry, but I either could not find the {1} card in the database, or you do not have it. Make sure that you spelled it right!",
+	"error_nopeeking": "Sorry, but I either could not find the {1} card in the database, or you do not have it. Make sure that you spelled it right!",
 	
-	"no_item_1": "Sorry, but I could not find the {1} card in the database. Make sure that you spelled it right!",
-	"dont_have_1": "Sorry, but you don't have the **{1}** card in your inventory.",
+	"no_item": "Sorry, but I could not find the {1} card in the database. Make sure that you spelled it right!",
+	"dont_have": "Sorry, but you don't have the **{1}** card in your inventory.",
 	
-	"not_enough_1": "Sorry, but you do not have enough **{1}** cards in your inventory.",
+	"not_enough": "Sorry, but you do not have enough **{1}** cards in your inventory.",
 	
-	"shred_confirm_1": "<@{1}>, do you want to shred your {2} **{3}** card{3s}? **This cannot be undone.** Click the Yes button to confirm and No to deny.",
+	"shred_confirm": "<@{1}>, do you want to shred your {2} **{3}** card{3s}? **This cannot be undone.** Click the Yes button to confirm and No to deny.",
 	
 	"reaction_dont_have": "An error has occured. Please make sure that you still have the card in your inventory!",
-	"reaction_not_enough_1": "An error has occured. Please make sure that you still have enough **{1}** cards in your inventory!",
+	"reaction_not_enough": "An error has occured. Please make sure that you still have enough **{1}** cards in your inventory!",
 	
-	"shredded_message_1": "<@{1}> successfully shredded {2} {3} **{4}** card{3s}.",
+	"shredded_message": "<@{1}> successfully shredded {2} {3} **{4}** card{3s}.",
 	
-	"denied_message_1": "<@{1}> has successfully stopped the shredding of {2} **{3}** card{2s}.",
+	"denied_message": "<@{1}> has successfully stopped the shredding of {2} **{3}** card{2s}.",
 }

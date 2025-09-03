@@ -309,17 +309,17 @@ function command.run(message, mt,bypass)
         end
       end
       
-    elseif request == "scanner" and wj.ws >= 902 then
-      if wj.ws < 904 then -- lab not unlocked
-        if uj.storage.key then
-          --interact with key card and unlock hallway
-          wj.ws = 904
-        else
-          -- no key card, but interacted with
-        end
-      else
-        --hallway unlocked
-      end
+    -- elseif request == "scanner" and wj.ws >= 902 then
+    --   if wj.ws < 904 then -- lab not unlocked
+    --     if uj.storage.key then
+    --       --interact with key card and unlock hallway
+    --       wj.ws = 904
+    --     else
+    --       -- no key card, but interacted with
+    --     end
+    --   else
+    --     --hallway unlocked
+    --   end
       
     elseif request == "terminal" or (uj.lang ~= "en" and request == lang.request_terminal) then 
       local lang = dpf.loadjson("langs/" .. uj.lang .. "/use/lab/terminal.json", "")
@@ -327,27 +327,34 @@ function command.run(message, mt,bypass)
       if not mt[2] then
         mt[2] = "" 
       end
-      local embedtitle = lang.using_terminal
-      local embeddescription = nil
-      local embedimage = nil
       local filename = nil
+      local embedfiles = nil
+      local embed = {
+        color = uj.embedc,
+        title = lang.using_terminal,
+        description = nil,
+        footer = {
+          text =  message.author.name,
+          icon_url = message.author.avatarURL
+        }
+      }
       print("on the terminal. doing my "..mt[2])
       if wj.ws < 508 then
         if string.lower(mt[2]) == "gnuthca" then
-          embedimage = "https://cdn.discordapp.com/attachments/829197797789532181/838841498757234728/terminal3.png"
+          embed["image"] = {url = "https://cdn.discordapp.com/attachments/829197797789532181/838841498757234728/terminal3.png"}
           wj.ws = 508
         else
-          embedimage = "https://cdn.discordapp.com/attachments/829197797789532181/838841479698579587/terminal4.png"
+          embed["image"] = {url = "https://cdn.discordapp.com/attachments/829197797789532181/838841479698579587/terminal4.png"}
         end
       else
         if string.lower(mt[2]) == "gnuthca" then
-          embeddescription = lang.logged_in
-          embedimage = "https://cdn.discordapp.com/attachments/829197797789532181/838836625391484979/terminal2.gif"
+          embed["description"] = lang.logged_in
+          embed["image"] = {url = "https://cdn.discordapp.com/attachments/829197797789532181/838836625391484979/terminal2.gif"}
         elseif string.lower(mt[2]) == "cat" then
-          embeddescription = '`=^•_•^=`'
-          embedimage = "https://cdn.discordapp.com/attachments/829197797789532181/838840001310752788/terminalcat.gif"
+          embed["description"] = '`=^•_•^=`'
+          embed["image"] = {url = "https://cdn.discordapp.com/attachments/829197797789532181/838840001310752788/terminalcat.gif"}
         elseif string.lower(mt[2]) == "dog" then
-          embeddescription = [[```
+          embed["description"] = [[```
    __
 o-''|\\_____/)
  \\_/|_)     )
@@ -360,21 +367,26 @@ o-''|\\_____/)
             data = usernametojson(mt[3])
           end
           if not data then
-            embeddescription = lang.savedata_not_found
+            embed["description"] = lang.savedata_not_found
           else
-            embeddescription = lang.savedata_success
+            embed["description"] = lang.savedata_success
             filename = data
           end
         elseif string.lower(mt[2]) == "piss" then
-          embeddescription = lang.piss_message
-          embedimage = "https://cdn.discordapp.com/attachments/793993844789870603/880369620442304552/unknown.png"
+          embed["description"] = lang.piss_message
+          embed["image"] = {url = "https://cdn.discordapp.com/attachments/793993844789870603/880369620442304552/unknown.png"}
         elseif string.lower(mt[2]) == "teikyou" then
-          embedimage = "https://cdn.discordapp.com/attachments/829197797789532181/849431570103664640/teikyou.png"
+          embed["image"] = {url = "https://cdn.discordapp.com/attachments/829197797789532181/849431570103664640/teikyou.png"}
         elseif string.lower(mt[2]) == "help" or mt[2] == "" then
-          embeddescription = lang.help_message .. "\nHELP\nSTATS\nUPGRADE\nCREDITS\nSAVEDATA" .. (wj.ws >= 701 and "\nLOGS" or "") .. "`"
-          embedimage = "https://cdn.discordapp.com/attachments/829197797789532181/838836625391484979/terminal2.gif"
+          local command_options = {"HELP", "STATS", "UPGRADE", "CREDITS", "SAVEDATA"}
+          if wj.ws >= 701 then command_options[#command_options+1] = "LOGS" end
+          if wj.ws >= 1102 then command_options[#command_options+1] = "TRADE" end
+          local prefix = wj.ws >= 1102 and "```" or "`"
+          local join = wj.ws >= 1102 and "\n  " or "\n"
+          embed["description"] = prefix .. lang.help_message .. join .. table.concat(command_options, join) .. prefix
+          embed["image"] = {url = "https://cdn.discordapp.com/attachments/829197797789532181/838836625391484979/terminal2.gif"}
         elseif string.lower(mt[2]) == "stats" then
-          embedtitle = "Statistics"
+          embed["title"] = "Statistics"
           if not uj.timespulled then uj.timespulled = 0 end
           if not uj.timesshredded then uj.timesshredded = 0 end
           if not uj.timesused then uj.timesused = 0 end
@@ -396,22 +408,37 @@ o-''|\\_____/)
           if not uj.timesrobbed then uj.timesrobbed = 0 end
           if not uj.timesrobsucceeded then uj.timesrobsucceeded = 0 end
           if not uj.timesrobfailed then uj.timesrobfailed = 0 end
-          embeddescription = lang.stats_message .. "\n```" .. lang.stats_timespulled .. uj.timespulled .. "\n" .. lang.stats_timesused .. uj.timesused .. "\n" .. lang.stats_timesitemused .. uj.timesitemused .. "\n" .. lang.stats_timeslooked .. uj.timeslooked .. "\n" .. lang.stats_timesprayed .. uj.timesprayed .. "\n" .. lang.stats_timesshredded .. uj.timesshredded .. "\n" .. lang.stats_timesstored .. uj.timesstored .. "\n" .. lang.stats_timestraded .. uj.timestraded .. "\n" .. lang.stats_timesusedbox .. uj.timesusedbox .. "\n" .. lang.stats_timesdoubleclicked .. uj.timesdoubleclicked .. "\n" .. lang.stats_timesdonated .. uj.tokensdonated .. "\n" .. lang.stats_timesitemgiven .. uj.timesitemgiven .. "\n" .. lang.stats_timesitemreceived .. uj.timesitemreceived .. "\n" .. lang.stats_timescardgiven .. uj.timescardgiven .. "\n" .. lang.stats_timescardreceived .. uj.timescardreceived .. "\n" .. lang.stats_timesthrown .. uj.timesthrown .. "\n" .. lang.stats_timescaught .. uj.timescaught .. "\n" .. lang.stats_timesprestiged .. uj.timesprestiged .. "\n" .. lang.stats_timesrobbed .. uj.timesrobbed .. "\n" .. lang.stats_timesrobsucceeded .. uj.timesrobsucceeded .. "\n" .. lang.stats_timesrobfailed .. uj.timesrobfailed ..(math.random(100) == 1 and "\n" .. lang.stats_factory or "") .. "```"
+          embed["description"] = lang.stats_message .. "\n```" .. lang.stats_timespulled .. uj.timespulled .. "\n" .. lang.stats_timesused .. uj.timesused .. "\n" .. lang.stats_timesitemused .. uj.timesitemused .. "\n" .. lang.stats_timeslooked .. uj.timeslooked .. "\n" .. lang.stats_timesprayed .. uj.timesprayed .. "\n" .. lang.stats_timesshredded .. uj.timesshredded .. "\n" .. lang.stats_timesstored .. uj.timesstored .. "\n" .. lang.stats_timestraded .. uj.timestraded .. "\n" .. lang.stats_timesusedbox .. uj.timesusedbox .. "\n" .. lang.stats_timesdoubleclicked .. uj.timesdoubleclicked .. "\n" .. lang.stats_timesdonated .. uj.tokensdonated .. "\n" .. lang.stats_timesitemgiven .. uj.timesitemgiven .. "\n" .. lang.stats_timesitemreceived .. uj.timesitemreceived .. "\n" .. lang.stats_timescardgiven .. uj.timescardgiven .. "\n" .. lang.stats_timescardreceived .. uj.timescardreceived .. "\n" .. lang.stats_timesthrown .. uj.timesthrown .. "\n" .. lang.stats_timescaught .. uj.timescaught .. "\n" .. lang.stats_timesprestiged .. uj.timesprestiged .. "\n" .. lang.stats_timesrobbed .. uj.timesrobbed .. "\n" .. lang.stats_timesrobsucceeded .. uj.timesrobsucceeded .. "\n" .. lang.stats_timesrobfailed .. uj.timesrobfailed ..(math.random(100) == 1 and "\n" .. lang.stats_factory or "") .. "```"
         elseif string.lower(mt[2]) == "credits" then
-          embedtitle = lang.credits_title
-          embeddescription = 'https://docs.google.com/document/d/1WgUqA8HNlBtjaM4Gpp4vTTEZf9t60EuJ34jl2TleThQ/edit?usp=sharing'
+          embed["title"] = lang.credits_title
+          embed["description"] = 'https://docs.google.com/document/d/1WgUqA8HNlBtjaM4Gpp4vTTEZf9t60EuJ34jl2TleThQ/edit?usp=sharing'
         elseif string.lower(mt[2]) == "logs" then
-          embedtitle = lang.logs_title
-          embeddescription = 'https://docs.google.com/document/d/1td9u_n-ou-yIKHKU766T-Ue4EdJGYThjcl-MRxRUA5E/edit?usp=sharing'
+          embed["title"] = lang.logs_title
+          embed["description"] = 'https://docs.google.com/document/d/1td9u_n-ou-yIKHKU766T-Ue4EdJGYThjcl-MRxRUA5E/edit?usp=sharing'
         elseif string.lower(mt[2]) == "laureladams" and wj.ws >= 701 then
-          embedtitle = lang.emaillogs_title
-          embeddescription = "https://docs.google.com/document/d/1_dXPtCVsvDOL_XHpQ6CzX8A2KcLtymPERV3MSEJ5eZo/edit?usp=sharing"
+          embed["title"] = lang.emaillogs_title
+          embed["description"] = "https://docs.google.com/document/d/1_dXPtCVsvDOL_XHpQ6CzX8A2KcLtymPERV3MSEJ5eZo/edit?usp=sharing"
           if wj.ws == 701 then wj.ws = 702 end
         elseif string.lower(mt[2]) == "upgrade" then
-          if uj.tokens > 0 then
-            if not uj.skipprompts then
-              ynbuttons(message, {
-                color = uj.embedc,
+          if (wj.ws >= 702 and wj.ws <= 1101) then
+            ynbuttons(message, {
+                  color = uj.embedc,
+                title = lang.using_terminal_upgrade,
+                description = "A new RDCards version was detected! Would you like to upgrade?",
+                image = {
+                  url = "https://media.discordapp.net/attachments/1030420309947469904/1412415322258145341/upgrade1101.png"
+                },
+                footer = {
+                  text =  message.author.name,
+                  icon_url = message.author.avatarURL
+                }
+            },"usehole",{},uj.id,uj.lang)
+            return
+          else
+            if uj.tokens > 0 then
+              if not uj.skipprompts then
+                ynbuttons(message, {
+                  color = uj.embedc,
                 title = lang.using_terminal_upgrade,
                 description = formatstring(lang.upgrade_prompt, {uj.tokens}),
                 image = {
@@ -423,56 +450,104 @@ o-''|\\_____/)
                 }
               },"usehole",{},uj.id,uj.lang)
               return
+              else
+                uj.tokens = uj.tokens - 1
+                uj.timesused = uj.timesused and uj.timesused + 1 or 1
+                uj.tokensdonated = uj.tokensdonated and uj.tokensdonated + 1 or 1
+                wj.tokensdonated = wj.tokensdonated + 1
+                embed["description"] = formatstring(lang.donated_terminal, {wj.tokensdonated})
+                embed["image"] = {url = upgradeimages[math.random(#upgradeimages)]}
+              end
             else
-              uj.tokens = uj.tokens - 1
-              uj.timesused = uj.timesused and uj.timesused + 1 or 1
-              uj.tokensdonated = uj.tokensdonated and uj.tokensdonated + 1 or 1
-              wj.tokensdonated = wj.tokensdonated + 1
-              embeddescription = formatstring(lang.donated_terminal, {wj.tokensdonated})
-              embedimage = upgradeimages[math.random(#upgradeimages)]
+              embed["description"] = lang.upgrade_no_tokens
+              embed["image"] = {url = "https://cdn.discordapp.com/attachments/829197797789532181/838894186472275988/terminal5.png"}
             end
-          else
-            embeddescription = lang.upgrade_no_tokens
-            embedimage = "https://cdn.discordapp.com/attachments/829197797789532181/838894186472275988/terminal5.png"
           end
         elseif string.lower(mt[2]) == "pull" then
-          if (wj.ws >= 904)  then
-            embedtitle = lang.pull_title
-            embeddescription = '`message.author.mentionString .. \" got a **\" .. KEY .. \"** card! The **\" .. KEY ..\"** card has been added to \" .. uj.pronouns[\"their\"] .. \"STORAGE. The shorthand form of this card is **\" .. newcard .. \"**.\" uj.storage.key = 1 dpf.savejson(\"savedata/\" .. message.author.id .. \".json\", uj)`'
-            embedimage = "https://cdn.discordapp.com/attachments/829197797789532181/865792363167219722/key.png"
-            uj.storage.key = 1
+          -- if (wj.ws == 1101) then
+          -- if (wj.ws >= 904)  then
+          --   embed["title"] = lang.pull_title
+          --   embed["description"] = '`message.author.mentionString .. \" got a **\" .. KEY .. \"** card! The **\" .. KEY ..\"** card has been added to \" .. uj.pronouns[\"their\"] .. \"STORAGE. The shorthand form of this card is **\" .. newcard .. \"**.\" uj.storage.key = 1 dpf.savejson(\"savedata/\" .. message.author.id .. \".json\", uj)`'
+          --   embed["image"] = {url = "https://cdn.discordapp.com/attachments/829197797789532181/865792363167219722/key.png"}
+          --   uj.storage.key = 1
+          -- else
+          embed["description"] = lang.pull_jammed
+          -- end
+        elseif string.lower(mt[2]) == "trade" then
+          if (wj.ws >= 1102) then
+            local trade_cards = uj.themeoffers[uj.currentoffer]
+            local show_trade = true
+            if mt[3] then
+              print("got response" .. mt[3])
+              if string.lower(mt[3]) == "yes" then
+                show_trade = false
+                local can_trade = true
+                for i, value in ipairs(trade_cards) do
+                  if not uj.inventory[value] then
+                    can_trade = false
+                  end
+                end
+                if can_trade then
+                  if uj.currentoffer == "_owo" then
+                    embed["description"] = formatstring(lang.trade_successful_engwish, {prefix})
+                    uj.hasengwish = true
+                  else
+                    embed["description"] = formatstring(lang.trade_successful_theme, {string.upper(uj.currentoffer), prefix, uj.currentoffer})
+                    embed["color"] = embed_colors[uj.currentoffer].colorcode
+                    for i, value in ipairs(trade_cards) do
+                      uj.inventory[value] = uj.inventory[value] - 1
+                      if uj.inventory[value] == 0 then uj.inventory[value] = nil end
+                    end
+                    uj.unlocked_colors[uj.currentoffer] = true
+                  end
+                  reload_theme_trade(uj)
+                else
+                  embed["description"] = lang.trade_not_enough
+                end
+              elseif string.lower(mt[3]) == "no" then
+                show_trade = false
+                embed["description"] = lang.trade_no
+                embed["image"] = {url = "https://cdn.discordapp.com/attachments/829197797789532181/838836625391484979/terminal2.gif"}
+              elseif string.lower(mt[3]) == "reload" then
+                reload_theme_trade(uj)
+                print("new theme offer: "..tostring(uj.currentoffer))
+                trade_cards = uj.themeoffers[uj.currentoffer]
+                local funnystring = string.upper(trade_cards[1])
+                for i, value in ipairs(trade_cards) do
+                  if i > 1 then
+                    funnystring = funnystring..", "..string.upper(value)
+                  end
+                end
+                local name = uj.currentoffer ~= "_owo" and string.upper(uj.currentoffer).."_THEME" or "OWO_LANG"
+                embed["description"] = formatstring(lang.trade_reload, {name, funnystring})
+              else
+                embed["description"] = lang.trade_unknown
+              end
+            end
+            if show_trade then
+              local funnystring = string.upper(trade_cards[1])
+              for i, value in ipairs(trade_cards) do
+                if i > 1 then
+                  funnystring = funnystring..", "..string.upper(value)
+                end
+              end
+              if not embed["description"] then
+                local name = uj.currentoffer ~= "_owo" and string.upper(uj.currentoffer).."_THEME" or "OWO_LANG"
+                embed["description"] = formatstring(lang.trade_offer, {name, funnystring})
+              end
+              if not embed["image"] then
+                embed["image"] = {url = "attachment://terminal_trade.png"}
+                embedfiles = {getthemeofferimage(uj)}
+              end
+            end
           else
-            embeddescription = lang.pull_jammed
+            embed["description"] = formatstring(lang.unknown, {mt[2]})
           end
         else
-          embeddescription = formatstring(lang.unknown, {mt[2]})
+          embed["description"] = formatstring(lang.unknown, {mt[2]})
         end
       end
-      -- thank you discord /neg
-      if embedimage then
-        message.channel:send{embed = {
-          color = uj.embedc,
-          title = embedtitle,
-          description = embeddescription,
-          image = {
-            url = embedimage
-          },
-          footer = {
-            text =  message.author.name,
-            icon_url = message.author.avatarURL
-          }
-        }}
-      else
-        message.channel:send{embed = {
-          color = uj.embedc,
-          title = embedtitle,
-          description = embeddescription,
-          footer = {
-            text =  message.author.name,
-            icon_url = message.author.avatarURL
-          }
-        }}
-      end
+      message.channel:send{embed = embed, files = embedfiles}
       if filename then 
         message.channel:send{
           file = filename

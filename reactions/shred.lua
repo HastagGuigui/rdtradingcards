@@ -16,7 +16,7 @@ function reaction.run(message, interaction, data, response)
     end
 
     if uj.inventory[curfilename] < numcards then
-      interaction:reply(lang.reaction_not_enough_1 .. cdb[curfilename].name .. lang.reaction_not_enough_2)
+      interaction:reply(formatstring(lang.reaction_not_enough, {cdb[curfilename].name}))
       return
     end
 

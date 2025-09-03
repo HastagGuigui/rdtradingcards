@@ -42,6 +42,19 @@ function command.run(message, mt, overwrite)
     end
     print("done loading tracery")
 
+    _G["embed_colors"] = { -- easy to add more: just put a new line!
+      default =  {colorcode = 0x85c5ff, shortname = "default", fullname = "RDCards Blue"},
+      red =      {colorcode = 0xff0000, shortname = "red", fullname = "Stylish Red"},
+      orange =   {colorcode = 0xff8000, shortname = "orange", fullname = "Pretty Orange"},
+      yellow =   {colorcode = 0xfcd68d, shortname = "yellow", fullname = "Light Yellow"},
+      green =    {colorcode = 0x00ff88, shortname = "green", fullname = "Jade Green"},
+      blue =     {colorcode = 0x33ccff, shortname = "blue", fullname = "Nice Blue"},
+      purple =   {colorcode = 0x7c00bf, shortname = "purple", fullname = "Fun Purple"},
+      pink =     {colorcode = 0xff00dc, shortname = "pink", fullname = "Hot Pink"},
+      brown =    {colorcode = 0x481b1d, shortname = "brown", fullname = "Beans Brown"},
+    }
+
+
     _G['defaultjson'] = {
       inventory = {},
       storage = {},
@@ -56,6 +69,21 @@ function command.run(message, mt, overwrite)
       lastbox = -24,
       lastrob = 0,
       tokens = 0,
+      embedc = 0x85c5ff,
+      unlocked_colors = {
+        default = true
+      },
+      -- themeoffers = {
+      --   red = {},
+      --   orange = {},
+      --   yellow = {},
+      --   green = {},
+      --   blue = {},
+      --   purple = {},
+      --   pink = {},
+      --   brown = {},
+      -- },
+      -- currentoffer = "",
       pronouns = {
         selection = "they",
         their = "their",
@@ -691,19 +719,28 @@ function command.run(message, mt, overwrite)
           if not (message.author.bot == true) then
           local uj = dpf.loadjson("savedata/" .. message.author.id .. ".json", defaultjson)
           local sj = dpf.loadjson("savedata/shop.json",defaultshopsave)
+          if not uj.embedc then
+            uj.embedc = embed_colors["default"].colorcode
+          end
+          if not uj.unlocked_colors then
+            uj.unlocked_colors = {default = true}
+          end
+          if not uj.themeoffers then
+            setup_theme_offers(uj)
+          end
           if not sj.stocknum then
             sj.stocknum = 1
             dpf.savejson("savedata/shop.json",sj)
           end
-            if not uj.lang then
-              uj.lang = "en"
-            end
-            if not uj.pronouns["selection"] then
-              uj.pronouns["selection"] = uj.pronouns["they"]
-            end
-            if not uj.lastrob then
-              uj.lastrob = 0
-            end
+          if not uj.lang then
+            uj.lang = "en"
+          end
+          if not uj.pronouns["selection"] then
+            uj.pronouns["selection"] = uj.pronouns["they"]
+          end
+          if not uj.lastrob then
+            uj.lastrob = 0
+          end
           dpf.savejson("savedata/" .. message.author.id .. ".json",uj)
           end
           print("found ".. v.trigger)
@@ -829,7 +866,90 @@ function command.run(message, mt, overwrite)
       return "vips_out/shop.png"
     end
     -- getshopimage()
+
+    _G["colortablefromint"] = function(col)
+      return {math.floor(col / (256*256))%256, math.floor(col/256)%256, col%256,255}
+    end
+
+    _G['getthemeofferimage'] = function(uj)
+      print("remaking trade")
+      local base = vips.Image.new_from_file("assets/terminal_trade.png")
+
+      local cards = {"srtgoatr", "marvinr", "doctahr"}
+      if uj.currentoffer then
+        cards = uj.themeoffers[uj.currentoffer]
+      end
+      for index, value in ipairs(cards) do
+        local yposition = 78+32*(index-1)
+        local card = vips.Image.new_from_file(getcardthumb(value))
+        card = card:resize(32/card:height())
+        base = base:composite2(card, "over", {x=29,y=yposition})
+        local text = vips.Image.text("<span foreground='white'>"..value.."</span>", {width=96, rgba=true, font="Departure Mono 11px"})
+        base = base:composite2(text, "over", {x=64,y=yposition+10})
+      end
+      local offer_text = "theme :3"
+      if uj.currentoffer == "_owo" then
+        offer_text = "owo"
+      end
+      local text_img = vips.Image.text("<span foreground='white'>"..offer_text.."</span>", {width=96, rgba=true, font="Departure Mono 11px"})
+      if uj.currentoffer ~= "_owo" then
+        base = base:draw_rect(colortablefromint(embed_colors[uj.currentoffer].colorcode), 243, 88, 64, 32, {fill = true})
+      end
+      base = base:composite2(text_img, "over", {x=248,y=uj.currentoffer == "_owo" and 81 or 79})
+      base:write_to_file("vips_out/terminal_trade.png")
+      return "vips_out/terminal_trade.png"
+
+    end
+
+    _G['reload_theme_trade'] = function (uj)
+      local themes_not_unlocked = {}
+      for themename, themedata in pairs(embed_colors) do
+        if not uj.unlocked_colors[themename] then
+          themes_not_unlocked[#themes_not_unlocked+1] = themename
+          print(" doesn't have ".. themename)
+        else
+          print(" has ".. themename)
+        end
+      end
+      print(tostring(#themes_not_unlocked).." themes not unlocked")
+      if not uj.hasengwish then
+        themes_not_unlocked[#themes_not_unlocked+1] = "_owo"
+      end
+      if #themes_not_unlocked > 0 then
+        uj.currentoffer = themes_not_unlocked[math.random(#themes_not_unlocked)]
+      end
+    end
 		
+    _G['setup_theme_offers'] = function(uj)
+      -- Get all the themes you don't have
+      local themes_not_unlocked = {}
+      for themename, themedata in pairs(embed_colors) do
+        if not uj.unlocked_colors[themename] then
+          themes_not_unlocked[#themes_not_unlocked+1] = themename
+          print(" doesn't have ".. themename)
+        else
+          print(" has ".. themename)
+        end
+      end
+      print(tostring(#themes_not_unlocked).." themes not unlocked")
+      if not uj.hasengwish then
+        themes_not_unlocked[#themes_not_unlocked+1] = "_owo"
+      end
+      if not uj.themeoffers then
+        uj.themeoffers = {}
+      end
+      for _, color in ipairs(themes_not_unlocked) do
+        if not uj.themeoffers[color] then
+          uj.themeoffers[color] = {}
+          for i = 1, 3, 1 do
+            uj.themeoffers[color][i] = ptable["nothing"][math.random(#ptable["nothing"])]
+          end
+        end
+      end
+      uj.currentoffer = themes_not_unlocked[math.random(#themes_not_unlocked)]
+      return uj
+    end
+
     _G['formatstring'] = function (baseString, objectsToAdd, plural_s)
       -- Replace the base {X}
       local output = baseString

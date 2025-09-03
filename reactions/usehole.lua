@@ -7,6 +7,26 @@ function reaction.run(message, interaction, data, response)
   local wj = dpf.loadjson("savedata/worldsave.json", defaultworldsave)
 
   if response == "yes" then
+    if wj.ws >= 702 and wj.ws <= 1101 then
+      uj.timesused = uj.timesused and uj.timesused + 1 or 1
+      wj.ws = 1102
+      interaction:reply{embed = {
+        color = 0x0,
+        title = "...?",
+        description = lang.restart_1102,
+        image = {
+          url = "https://media.discordapp.net/attachments/1030420309947469904/1412415321955897515/downloading1101.png"
+        },
+        -- footer = {
+        --   text =  message.author.name,
+        --   icon_url = message.author.avatarURL
+        -- }
+      }}
+      message.channel:send(lang.bootup_1102)
+      dpf.savejson(ujf, uj)
+      dpf.savejson("savedata/worldsave.json", wj)
+      return
+    end
     print('user1 has accepted')
     if uj.tokens < 1 then
       interaction:reply(lang.error_no_tokens)
@@ -55,7 +75,11 @@ function reaction.run(message, interaction, data, response)
     if not wj.labdiscovered then
       interaction:reply(lang.denied_hole)
     else
-      interaction:reply(lang.denied_terminal)
+      if wj.ws == 1101 then
+        interaction:reply(lang.denied_terminal_1101)
+      else
+        interaction:reply(lang.denied_terminal)
+      end
     end
   end
 end

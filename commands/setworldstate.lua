@@ -20,6 +20,7 @@ function command.run(message, mt)
     --701: s7 intro, c!terminal logs unlocked
     
     
+    -- THIS IS NOT ACTUALLY FUNCTIONAL v 
     --801: s8 intro, The cat poster can be pulled away.
     --802: the cat poster has been pulled away and relocated to reveal the scanner, the terminal is waiting to be pulled from (by kin).
     --803: key card pulled by kin
@@ -50,6 +51,10 @@ function command.run(message, mt)
     --Misc notes:
     --attempting to look at the factory will alias as c!look hallway or casino when in the hallway or casino. This is because the hallway, and the casino, are located in the factory.
     
+
+    -- UPDATE: everything after 801 is inaccessible so here's the actual new season 11 code stuff
+    --<= 1101: an update can be pulled from the terminal
+    --1102: update pulled, SHELL shows up and allows you to trade
 
     wj.ws = tonumber(mt[1]) 
     
