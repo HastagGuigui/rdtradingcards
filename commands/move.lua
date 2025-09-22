@@ -51,7 +51,7 @@ function command.run(message, mt)
       lang = dpf.loadjson("langs/" .. uj.lang .. "/rob.json")
       local time = sw:getTime()
       local stocksleft = uj.lastrob + 4 - sj.stocknum
-      local stockstring = lang.more_restock_1 .. stocksleft .. lang.more_restock_2
+      local stockstring = formatstring(lang.more_restock, {stocksleft})
       if lang.needs_plural_s == true then
         if stocksleft > 1 then
           stockstring = stockstring .. lang.plural_s
@@ -59,30 +59,11 @@ function command.run(message, mt)
       end
       local minutesleft = math.ceil((26/24 - time:toDays() + sj.lastrefresh) * 24 * 60)
       
-      local durationtext = ""
-      if math.floor(minutesleft / 60) > 0 then
-        durationtext = math.floor(minutesleft / 60) .. lang.time_hour
-        if lang.needs_plural_s == true then
-          if math.floor(minutesleft / 60) ~= 1 then 
-            durationtext = durationtext .. lang.plural_s 
-          end
-        end
-      end
-      if minutesleft % 60 > 0 then
-        if durationtext ~= "" then
-          durationtext = durationtext .. lang.time_and
-        end
-        durationtext = durationtext .. minutesleft % 60 .. lang.time_minute
-        if lang.needs_plural_s == true then
-          if minutesleft % 60 ~= 1 then
-            durationtext = durationtext .. lang.plural_s 
-          end
-        end
-      end
+      local durationtext = formattime(minutesleft, uj.lang)
       if uj.lastrob + 3 == sj.stocknum then
-        message.channel:send(lang.blacklist_next_1 .. durationtext .. lang.blacklist_next_2)
+        message.channel:send(formatstring(lang.blacklist_next, {durationtext}))
       else
-        message.channel:send(lang.blacklist_1 .. stockstring .. lang.blacklist_2 .. durationtext .. lang.blacklist_3)
+        message.channel:send(formatstring(lang.blacklist, {stockstring, durationtext}))
       end
       return "blacklisted"
     else

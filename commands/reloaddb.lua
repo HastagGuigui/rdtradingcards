@@ -12,6 +12,7 @@ function command.run(message, mt, overwrite)
   if authcheck then
     print("authcheck passed")
     _G["privatestuff"] = dofile('privatestuff.lua')
+    
 
     -- Lua implementation of PHP scandir function
     _G['scandir'] = function (directory)
@@ -19,8 +20,15 @@ function command.run(message, mt, overwrite)
     end
     
     for i, v in ipairs(scandir("commands")) do
-      local filename = string.sub(v, 1, -5)
-      cmd[filename] = dofile('commands/' .. v)
+      if fs.existsSync("commands/"..v.."/") then
+        for _, vrec in ipairs(scandir("commands/"..v)) do
+          local filename = string.sub(vrec, 1, -5)
+          cmd[v.."_"..filename] = dofile('commands/' .. v.."/"..vrec)
+        end
+      else
+        local filename = string.sub(v, 1, -5)
+        cmd[filename] = dofile('commands/' .. v)
+      end
     end
     print("done loading commands")
 
@@ -974,6 +982,32 @@ function command.run(message, mt, overwrite)
 
 
       return output
+    end
+
+    _G['formattime'] = function (minutesleft, langcode)
+      -- i have unjankified it (lying)
+      local lang = dpf.loadjson("langs/" .. langcode .. "/pull.json", "")
+      local durationtext = ""
+      if math.floor(minutesleft / 60) > 0 then
+        durationtext = math.floor(minutesleft / 60) .. lang.time_hour
+          if lang.needs_plural_s == true then
+            if math.floor(minutesleft / 60) ~= 1 then 
+              durationtext = durationtext .. lang.time_plural_s 
+            end
+          end
+      end
+      if minutesleft % 60 > 0 then
+        if durationtext ~= "" then
+          durationtext = durationtext .. lang.time_and
+        end
+        durationtext = durationtext .. minutesleft % 60 .. lang.time_minute
+        if lang.needs_plural_s == true then
+          if minutesleft % 60 ~= 1 then
+            durationtext = durationtext .. lang.time_plural_s
+          end
+        end
+      end
+      return durationtext
     end
 
     _G['clearcache'] = function()
