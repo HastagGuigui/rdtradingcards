@@ -4,7 +4,7 @@ function reaction.run(message, interaction, data, response)
   local uj = dpf.loadjson(ujf, defaultjson)
   local lang = dpf.loadjson("langs/" .. uj.lang .. "/use/shop/buy.json","")
   local sj = dpf.loadjson("savedata/shop.json", defaultshopsave)
-  print("Loaded uj")
+  print("Loaded uj: it has ".. uj.tokens .. " tokens")
 
   if response == "yes" then
     print('user1 has accepted')
@@ -53,14 +53,16 @@ function reaction.run(message, interaction, data, response)
       else
         uj.inventory[data.srequest] = uj.inventory[data.srequest] + data.numrequest
       end
+      print("state:" .. uj.inventory[data.srequest])
     end 
     if data.itemtype == "item" then
       sj.itemstock = sj.itemstock - 1
       uj.items[data.srequest] = true
     end
     uj.tokens = uj.tokens - data.sprice
+    print("tokens now :" .. uj.tokens)
     
-    dpf.savejson(ujf,uj)
+    dpf.savejson("savedata/" .. message.author.id .. ".json",uj)
     dpf.savejson("savedata/shop.json", sj)
     interaction:reply(formatstring(lang.bought_message, {uj.id, data.sname}))
   end

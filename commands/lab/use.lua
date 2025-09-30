@@ -1,11 +1,14 @@
 local command = {}
-function command.run(message, mt, uj, wj)
-  local time = sw:getTime()
+function command.run(message, mt)
+	local uj = dpf.loadjson("savedata/" .. message.author.id .. ".json",defaultjson)
+	local wj = dpf.loadjson("savedata/worldsave.json", defaultworldsave)
+	local time = sw:getTime()
 	local lang = dpf.loadjson("langs/" .. uj.lang .. "/use/lab/lab.json", "")
+	local request = mt[1]
 
 	if request == "spider" or request == "spiderweb" or request == "web" or request == "spider web" or (uj.lang ~= "en" and request == lang.request_spider_1 or request == lang.request_spider_2) then
 		ynbuttons(message, lang.spider_alert, "spideruse", {}, uj.id, uj.lang)
-		return true, uj, wj
+		return true
 	elseif request == "table" or (uj.lang ~= "en" and request == lang.request_table) then
 		message.channel:send { embed = {
 			color = uj.embedc,
@@ -39,7 +42,7 @@ function command.run(message, mt, uj, wj)
 				title = lang.using_hole,
 				description = message.author.mentionString .. lang.use_hole_mouse,
 			}, "usemousehole", {}, uj.id, uj.lang)
-			return true, uj, wj
+			return true
 		else
 			message.channel:send { embed = {
 				color = uj.embedc,
@@ -57,7 +60,7 @@ function command.run(message, mt, uj, wj)
 			local minutesleft = math.ceil(uj.lastbox * 60 - time:toMinutes() + cooldown * 60)
 			local durationtext = formattime(minutesleft, uj.lang)
 			message.channel:send(formatstring(lang.wait_message, { durationtext }))
-			return true, uj, wj
+			return true
 		end
 
 		if not next(uj.inventory) then
@@ -66,7 +69,7 @@ function command.run(message, mt, uj, wj)
 				title = lang.embed_title,
 				description = lang.embed_no_card,
 			} }
-			return true, uj, wj
+			return true
 		end
 
 		if not uj.skipprompts then
@@ -75,7 +78,7 @@ function command.run(message, mt, uj, wj)
 				title = lang.embed_title,
 				description = message.author.mentionString .. lang.confirm_message,
 			}, "usebox", {}, uj.id, uj.lang)
-			return true, uj, wj
+			return true
 		else
 			local iptable = {}
 			for k, v in pairs(uj.inventory) do
@@ -315,7 +318,7 @@ o-''|\\_____/)
 							icon_url = message.author.avatarURL
 						}
 					}, "usehole", {}, uj.id, uj.lang)
-					return true, uj, wj
+					return true
 				else
 					if uj.tokens > 0 then
 						if not uj.skipprompts then
@@ -331,7 +334,7 @@ o-''|\\_____/)
 									icon_url = message.author.avatarURL
 								}
 							}, "usehole", {}, uj.id, uj.lang)
-							return true, uj, wj
+							return true
 						else
 							uj.tokens = uj.tokens - 1
 							uj.timesused = uj.timesused and uj.timesused + 1 or 1
@@ -439,8 +442,11 @@ o-''|\\_____/)
 			}
 		end
 	else
-		return false, uj, wj
+		return false
 	end
-	return true, uj, wj
+	
+	dpf.savejson("savedata/worldsave.json", wj)
+	dpf.savejson("savedata/" .. message.author.id .. ".json",uj)
+	return true
 end
 return command

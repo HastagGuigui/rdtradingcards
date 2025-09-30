@@ -5,7 +5,7 @@ function command.run(message, mt, uj, wj)
 	if (string.lower(mt[1]) == "lab" or string.lower(mt[1]) == "abandoned lab" or mt[1] == "" or (uj.lang ~= "en" and mt[1] == lang.request_lab_1 or mt[1] == lang.request_lab_2 or mt[1] == lang.request_lab_3)) and wj.labdiscovered then
 		local laburl = "https://cdn.discordapp.com/attachments/829197797789532181/862885457854726154/lab_scanner.png"
 		local labdesc = lang.looking_lab_post_901
-		if wj.ws <= 901 then
+		if wj.ws <= 9999 then
 			laburl = labimages[getletterindex(string.sub(wj.lablooktext, wj.lablookindex + 1, wj.lablookindex + 1))]
 			labdesc = lang.looking_lab
 		end

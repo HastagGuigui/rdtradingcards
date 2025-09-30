@@ -125,7 +125,7 @@
 	  "filename": "treetopgroup",
 	  "name": "The Treetop Group",
 	  "type": "Ultra Rare",
-	  "description": "(Art by Penny)",
+	  "description": "(Art by Derealitea)",
 	  "smell": "Sleepovers",
 	  "season": 8,
 	  "bonuses": {
@@ -177,7 +177,7 @@
 	  "filename": "guardiangroup",
 	  "name": "The Guardian Group",
 	  "type": "Ultra Rare",
-	  "description": "(Art by MokkaCat, Penny, and wheelnaxel)",
+	  "description": "(Art by MokkaCat, Derealitea, and wheelnaxel)",
 	  "smell": "Divinity",
 	  "season": 9,
 	  "bonuses": {
@@ -350,7 +350,7 @@
 	  "filename": "guardiangroupc",
 	  "name": "The Guardian Group (Collector's)",
 	  "type": "Collector's",
-	  "description": "Requires Overseer (Collector's), Charla Tan (Collector's), Sef (Collector's), and The Guardian Group (Art by Penny)",
+	  "description": "Requires Overseer (Collector's), Charla Tan (Collector's), Sef (Collector's), and The Guardian Group (Art by Derealitea)",
 	  "smell": "Divinity",
 	  "season": 9,
 	  "bonuses": {},

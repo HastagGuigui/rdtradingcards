@@ -1,8 +1,12 @@
 local command = {}
-function command.run(message, mt, uj, wj)
+function command.run(message, mt)
 	local time = sw:getTime()
+	local uj = dpf.loadjson("savedata/" .. message.author.id .. ".json",defaultjson)
 	local lang = dpf.loadjson("langs/" .. uj.lang .. "/use/shop/pet.json", "") -- fallback when request is not shop
+	local wj = dpf.loadjson("savedata/worldsave.json", defaultworldsave)
 	local sj = dpf.loadjson("savedata/shop.json", defaultshopsave)
+	local request = mt[1]
+
 	if uj.lastrob + 4 > sj.stocknum and uj.lastrob ~= 0 then
 		lang = dpf.loadjson("langs/" .. uj.lang .. "/rob.json")
 		local stocksleft = uj.lastrob + 4 - sj.stocknum
@@ -15,7 +19,7 @@ function command.run(message, mt, uj, wj)
 		else
 			message.channel:send(formatstring(lang.blacklist, { stockstring, durationtext }))
 		end
-		return true, uj, wj
+		return true
 	end
 	if request == "shop" or (uj.lang ~= "en" and request == lang.request_shop_1 or request == lang.request_shop_2 or request == lang.request_shop_3 or request == lang.request_shop_4) then
 		local lang = dpf.loadjson("langs/" .. uj.lang .. "/use/shop/buy.json", "")
@@ -36,7 +40,7 @@ function command.run(message, mt, uj, wj)
 		if (not mt[2]) or (mt[2] == "") then
 			cmd.look.run(message, mt)
 			mt[2] = ""
-			return true, uj, wj
+			return true
 		end
 
 		--error handling
@@ -95,24 +99,24 @@ function command.run(message, mt, uj, wj)
 
 			if not sindex then
 				sendshoperror["donthave"]()
-				return true, uj, wj
+				return true
 			end
 
 			stock = sj.consumables[sindex].stock
 			if stock <= 0 then
 				sendshoperror["outofstock"]()
-				return true, uj, wj
+				return true
 			end
 
 			if numrequest > stock then
 				sendshoperror["toomanyrequested"]()
-				return true, uj, wj
+				return true
 			end
 
 			sprice = sj.consumables[sindex].price * numrequest
 			if uj.tokens < sprice then
 				sendshoperror["notenough"]()
-				return true, uj, wj
+				return true
 			end
 
 			--can buy consumable
@@ -125,7 +129,7 @@ function command.run(message, mt, uj, wj)
 			}, "buy",
 				{ itemtype = "consumable", sname = sname, sprice = sprice, sindex = sindex, srequest = srequest, numrequest =
 				numrequest }, message.author.id, uj.lang)
-			return true, uj, wj
+			return true
 		end
 
 		if itemtexttofn(mt[2]) then
@@ -135,32 +139,32 @@ function command.run(message, mt, uj, wj)
 
 			if srequest ~= sj.item then
 				sendshoperror["donthave"]()
-				return true, uj, wj
+				return true
 			end
 
 			if uj.items[srequest] then
 				sendshoperror["alreadyhave"]()
-				return true, uj, wj
+				return true
 			end
 
 			if sj.item == "brokenmouse" and uj.items["fixedmouse"] then
 				sendshoperror["hasfixedmouse"]()
-				return true, uj, wj
+				return true
 			end
 
 			if sj.itemstock <= 0 then
 				sendshoperror["outofstock"]()
-				return true, uj, wj
+				return true
 			end
 
 			if numrequest > 1 then
 				sendshoperror["oneitemonly"]()
-				return true, uj, wj
+				return true
 			end
 
 			if uj.tokens < sprice then
 				sendshoperror["notenough"]()
-				return true, uj, wj
+				return true
 			end
 
 			--can buy item
@@ -172,7 +176,7 @@ function command.run(message, mt, uj, wj)
 				"`\n" .. formatstring(lang.item_buy, { message.author.id, sprice }),
 			}, "buy", { itemtype = "item", sname = sname, sprice = sprice, sindex = sindex, srequest = srequest, numrequest = 1 },
 				message.author.id, uj.lang)
-			return true, uj, wj
+			return true
 		end
 
 		if texttofn(mt[2]) then
@@ -189,24 +193,24 @@ function command.run(message, mt, uj, wj)
 
 			if not sindex then
 				sendshoperror["donthave"]()
-				return true, uj, wj
+				return true
 			end
 
 			stock = sj.cards[sindex].stock
 			if stock <= 0 then
 				sendshoperror["outofstock"]()
-				return true, uj, wj
+				return true
 			end
 
 			if numrequest > stock then
 				sendshoperror["toomanyrequested"]()
-				return true, uj, wj
+				return true
 			end
 
 			sprice = sj.cards[sindex].price * numrequest
 			if uj.tokens < sprice then
 				sendshoperror["notenough"]()
-				return true, uj, wj
+				return true
 			end
 
 			--can buy card
@@ -218,7 +222,7 @@ function command.run(message, mt, uj, wj)
 				),
 			}, "buy", { itemtype = "card", sname = sname, sprice = sprice, sindex = sindex, srequest = srequest, numrequest =
 			numrequest }, message.author.id, uj.lang)
-			return true, uj, wj
+			return true
 		end
 
 		-- for c!shop -s
@@ -229,7 +233,7 @@ function command.run(message, mt, uj, wj)
 		else
 			sendshoperror["unknownrequest"]()
 		end
-		return true, uj, wj
+		return true
 	elseif request == "wolf" or (uj.lang ~= "en" and request == lang.request_wolf) then
 		message.channel:send { embed = {
 			color = uj.embedc,
@@ -251,8 +255,8 @@ function command.run(message, mt, uj, wj)
 			image = { url = "https://cdn.discordapp.com/attachments/829197797789532181/882287705638203443/okamii_triangle_frame_4.png" }
 		} }
 	else
-		return false, uj, wj
+		return false
 	end
-	return true, uj, wj
+	return true
 end
 return command

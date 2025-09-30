@@ -1,6 +1,9 @@
 local command = {}
-function command.run(message, mt, uj, wj)
-  local request = string.lower(mt[1])
+function command.run(message, mt)
+	local uj = dpf.loadjson("savedata/" .. message.author.id .. ".json",defaultjson)
+	local lang = dpf.loadjson("langs/" .. uj.lang .. "/use/shop/pet.json", "") -- fallback when request is not shop
+	local wj = dpf.loadjson("savedata/worldsave.json", defaultworldsave)
+	local request = string.lower(mt[1])
 	local lang = dpf.loadjson("langs/" .. uj.lang .. "/use/pyrowmid/pyrowmid.json", "")
 	if request == "strange machine" or request == "machine" or (uj.lang ~= "en" and request == lang.request_machine_1 or request == lang.request_machine_2 or request == lang.request_machine_3) then
 		local lang = dpf.loadjson("langs/" .. uj.lang .. "/use/pyrowmid/machine.json", "")
@@ -21,11 +24,11 @@ function command.run(message, mt, uj, wj)
 			end
 			if #itempt == 0 then
 				message.channel:send(lang.allitems)
-				return true, uj, wj
+				return true
 			end
 			if uj.tokens < 3 then
 				message.channel:send(lang.notokens)
-				return true, uj, wj
+				return true
 			end
 			if not uj.skipprompts then
 				ynbuttons(message, {
@@ -33,7 +36,7 @@ function command.run(message, mt, uj, wj)
 					title = lang.using_machine,
 					description = formatstring(lang.use_machine, { uj.tokens }),
 				}, "usemachine", {}, uj.id, uj.lang)
-				return true, uj, wj
+				return true
 			else
 				local newitem = itempt[math.random(#itempt)]
 				uj.items[newitem] = true
@@ -50,8 +53,9 @@ function command.run(message, mt, uj, wj)
 				local csize = math.random(1, #size)
 				local action2 = lang.action2
 				local caction2 = math.random(1, #action2)
+				print("alright let's see: action2: n°"..caction2.." : "..action2[caction2])
 				message.channel:send(formatstring(lang.used_machine,
-					{ dep[cdep], truaction, size[csize], action[caction2], itemdb[newitem].name, speen[cspeen] }))
+					{ dep[cdep], truaction, size[csize], action2[caction2], itemdb[newitem].name, speen[cspeen] }))
 			end
 		else
 			if uj.tokens >= 4 then
@@ -60,7 +64,7 @@ function command.run(message, mt, uj, wj)
 					title = lang.using_machine,
 					description = formatstring(lang.use_machine_four, { uj.tokens }),
 				}, "getladder", {}, uj.id, uj.lang)
-				return true, uj, wj
+				return true
 			else
 				message.channel:send(lang.notokens_four)
 			end
@@ -69,7 +73,7 @@ function command.run(message, mt, uj, wj)
 		if uj.tokens == nil then uj.tokens = 0 end
 		if wj.ws >= 506 or wj.ws < 501 then
 			message.channel:send(lang.hole_nodonations)
-			return true, uj, wj
+			return true
 		end
 		if uj.tokens > 0 then
 			ynbuttons(message, {
@@ -77,7 +81,7 @@ function command.run(message, mt, uj, wj)
 				title = lang.using_hole,
 				description = formatstring(lang.use_hole, { uj.tokens }),
 			}, "usehole", {}, uj.id, uj.lang)
-			return true, uj, wj
+			return true
 		else
 			message.channel:send(lang.hole_notokens)
 		end
@@ -117,7 +121,7 @@ function command.run(message, mt, uj, wj)
 			uj.room = 1
 			dpf.savejson("savedata/worldsave.json", wj)
 			dpf.savejson("savedata/" .. message.author.id .. ".json", uj)
-			return true, uj, wj
+			return true
 		else
 			message.channel:send { embed = {
 				color = uj.embedc,
@@ -129,8 +133,9 @@ function command.run(message, mt, uj, wj)
 			} }
 		end
 	else
-		return false, uj, wj
+		return false
 	end
-	return true, uj, wj
+	dpf.savejson("savedata/" .. message.author.id .. ".json", uj)
+	return true
 end
 return command

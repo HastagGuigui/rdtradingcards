@@ -1,7 +1,10 @@
 local command = {}
-function command.run(message, mt, uj, wj)
-  local time = sw:getTime()
+function command.run(message, mt)
+	local time = sw:getTime()
+	local uj = dpf.loadjson("savedata/" .. message.author.id .. ".json",defaultjson)
+	local wj = dpf.loadjson("savedata/worldsave.json", defaultworldsave)
 	local lang = dpf.loadjson("langs/" .. uj.lang .. "/use/mountains.json")
+	local request = mt[1]
 	
 	if (request == "pyrowmid" or (uj.lang ~= "en" and request == lang.request_pyrowmid)) then
 		message.channel:send(lang.use_pyrowmid)
@@ -53,9 +56,10 @@ function command.run(message, mt, uj, wj)
 			description = lang.use_clouds,
 		} }
 	else
-		return false, uj, wj
+		return false
 	end
-	return true, uj, wj
+  	dpf.savejson("savedata/" .. message.author.id .. ".json",uj)
+	return true
 end
 
 return command

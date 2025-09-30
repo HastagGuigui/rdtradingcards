@@ -21,7 +21,7 @@
 	  "filename": "rabbitsr",
 	  "name": "Rabbit (Super Rare)",
 	  "type": "Super Rare",
-	  "description": "(Art by Penny)",
+	  "description": "(Art by Derealitea)",
 	  "smell": "x2",
 	  "season": 8,
 	  "bonuses": {
@@ -34,7 +34,7 @@
 	  "filename": "rabbitur",
 	  "name": "Rabbit (Ultra Rare)",
 	  "type": "Ultra Rare",
-	  "description": "(Art by Penny)",
+	  "description": "(Art by Derealitea)",
 	  "smell": "x2",
 	  "season": 8,
 	  "bonuses": {
@@ -47,7 +47,7 @@
 	  "filename": "rabbitc",
 	  "name": "Rabbit (Collector's)",
 	  "type": "Collector's",
-	  "description": "(Art by Penny)",
+	  "description": "(Art by Derealitea)",
 	  "smell": "x2",
 	  "season": 8,
 	  "bonuses": {

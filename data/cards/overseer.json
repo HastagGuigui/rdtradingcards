@@ -21,7 +21,7 @@
           "filename": "overseersr",
           "name": "Overseer (Super Rare)",
           "type": "Super Rare",
-          "description": "(Art by Penny)",
+          "description": "(Art by Derealitea)",
           "smell": "Order",
           "season": 9,
           "bonuses": {
@@ -47,7 +47,7 @@
           "filename": "overseerc",
           "name": "Overseer (Collector's)",
           "type": "Collector's",
-          "description": "Requires the Rare, Super Rare, and Ultra Rare variants of Overseer (Art by Penny)",
+          "description": "Requires the Rare, Super Rare, and Ultra Rare variants of Overseer (Art by Derealitea)",
           "smell": "Order",
           "season": 9,
           "bonuses": {

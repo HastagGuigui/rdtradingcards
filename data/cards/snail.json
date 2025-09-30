@@ -21,7 +21,7 @@
 	  "filename": "snailsr",
 	  "name": "Snail (Super Rare)",
 	  "type": "Super Rare",
-	  "description": "(Art by Penny)",
+	  "description": "(Art by Derealitea)",
 	  "smell": "x0.5",
 	  "season": 8,
 	  "bonuses": {
@@ -34,7 +34,7 @@
 	  "filename": "snailur",
 	  "name": "Snail (Ultra Rare)",
 	  "type": "Ultra Rare",
-	  "description": "(Art by Penny)",
+	  "description": "(Art by Derealitea)",
 	  "smell": "x0.5",
 	  "season": 8,
 	  "bonuses": {
@@ -47,7 +47,7 @@
 	  "filename": "snailc",
 	  "name": "Snail (Collector's)",
 	  "type": "Collector's",
-	  "description": "(Art by Penny)",
+	  "description": "(Art by Derealitea)",
 	  "smell": "x0.5",
 	  "season": 8,
 	  "bonuses": {

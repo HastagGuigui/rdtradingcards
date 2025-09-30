@@ -5,7 +5,7 @@
 	"time_plural_s": "s",
 	"time_and": " and ",
 	"time_minute": " minute",
-	"wait_message_1": "Please wait {1} before using the box again.",
+	"wait_message": "Please wait {1} before using the box again.",
 	
 	"embed_title": "Using Peculiar Box...",
 	"embed_no_card": "You do not have any cards to put into the **Peculiar Box**.",
