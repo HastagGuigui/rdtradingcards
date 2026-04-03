@@ -1,0 +1,87 @@
+{
+    "groupname": "1.0 update",
+    "basechance": 3,
+    "cards": [
+        {
+        "chance": 2,
+        "filename": "totellyou",
+        "name": "Something To Tell You",
+        "type": "Super Rare",
+        "description": "(Level by 7th Beat Games)",
+        "smell": "Nervousness",
+        "season": 11,
+        "bonuses": {},
+        "embed": "https://media.discordapp.net/attachments/829197797789532181/1489646626741162177/totellyou.png"
+        },
+        {
+        "chance": 2,
+        "filename": "welcomeback",
+        "name": "Welcome Back",
+        "type": "Super Rare",
+        "description": "(Level by 7th Beat Games)",
+        "smell": "Rotten Memories",
+        "season": 11,
+        "bonuses": {},
+        "embed": "https://media.discordapp.net/attachments/829197797789532181/1489646627248541726/welcomeback.png"
+        },
+        {
+        "chance": 2,
+        "filename": "bossfight",
+        "name": "Boss Fight",
+        "type": "Super Rare",
+        "description": "(Level by 7th Beat Games)",
+        "smell": "Reckoning",
+        "season": 11,
+        "bonuses": {},
+        "embed": "https://media.discordapp.net/attachments/829197797789532181/1489646626216612130/bossfight.png"
+        },
+        {
+        "chance": 2,
+        "filename": "blurred",
+        "name": "Blurred",
+        "type": "Super Rare",
+        "description": "(Level by 7th Beat Games)",
+        "smell": "Distant Memories",
+        "season": 11,
+        "bonuses": {},
+        "embed": "https://media.discordapp.net/attachments/829197797789532181/1489646625763758200/blurred.png"
+        },
+        {
+        "chance": 1,
+        "filename": "bittertimes",
+        "name": "Bitter Times",
+        "type": "Ultra Rare",
+        "description": "(Level by 7th Beat Games)",
+        "smell": "Distant Memories",
+        "season": 11,
+        "bonuses": {},
+        "embed": "https://media.discordapp.net/attachments/829197797789532181/1489646625289932921/bittertimes.png"
+        },
+        {
+        "chance": 1,
+        "filename": "miracled",
+        "name": "Miracle Defibllirator",
+        "type": "Ultra Rare",
+        "description": "(Level by 7th Beat Games)",
+        "smell": "Wires",
+        "season": 11,
+        "bonuses": {
+            "filmreel": true
+        },
+        "embed": "https://media.discordapp.net/attachments/829197797789532181/1489655044352770228/7-x.gif"
+        },
+        {
+        "chance": 1,
+        "filename": "colessong",
+        "name": "Miracle Defibllirator (Cole's Song)",
+        "type": "Ultra Rare",
+        "description": "(Level by 7th Beat Games)",
+        "smell": "an Antivirus",
+        "season": 11,
+        "bonuses": {
+            "filmreel": true
+        },
+        "embed": "https://media.discordapp.net/attachments/829197797789532181/1489655044352770228/7-x.gif"
+        }
+    ]
+}
