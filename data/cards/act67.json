@@ -52,7 +52,7 @@
         "name": "Bitter Times",
         "type": "Ultra Rare",
         "description": "(Level by 7th Beat Games)",
-        "smell": "Distant Memories",
+        "smell": "Coping Mechanisms",
         "season": 11,
         "bonuses": {},
         "embed": "https://media.discordapp.net/attachments/829197797789532181/1489646625289932921/bittertimes.png"
@@ -63,7 +63,7 @@
         "name": "Miracle Defibllirator",
         "type": "Ultra Rare",
         "description": "(Level by 7th Beat Games)",
-        "smell": "Wires",
+        "smell": "Reality",
         "season": 11,
         "bonuses": {
             "filmreel": true
@@ -76,12 +76,12 @@
         "name": "Miracle Defibllirator (Cole's Song)",
         "type": "Ultra Rare",
         "description": "(Level by 7th Beat Games)",
-        "smell": "an Antivirus",
+        "smell": "Wires",
         "season": 11,
         "bonuses": {
             "filmreel": true
         },
-        "embed": "https://media.discordapp.net/attachments/829197797789532181/1489655044352770228/7-x.gif"
+        "embed": "https://media.discordapp.net/attachments/1059208320864501841/1489661904598208603/7-x2.gif"
         }
     ]
 }
