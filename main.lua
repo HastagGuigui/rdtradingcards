@@ -3,7 +3,8 @@
 -- it works most of the time. most of the time.
 _G["discordia"] = require('discordia')
 require("discordia-components")
-_G["client"] = discordia.Client()
+_G["slash_tools"] = require('discordia-slash').util.tools()
+_G["client"] = discordia.Client():useApplicationCommands()
 _G["prefix"] = "h!"
 _G["json"] = require('libs/json')
 _G["fs"] = require('fs')
@@ -22,6 +23,7 @@ discordia.extensions()
 _G['cmd'] = {}
 -- import reaction commands
 _G['cmdre'] = {}
+_G["cmdslash"] = {}
 
 _G['cmdcons'] = {}
 
@@ -52,6 +54,10 @@ print("yay got past load ready")
 
 client:on('messageCreate', function(message)
   handlemessage(message)
+end)
+
+client:on("slashCommand", function(interaction, command, args)
+    handleslash(interaction, command, args)
 end)
 
 print("Resetting clocks")

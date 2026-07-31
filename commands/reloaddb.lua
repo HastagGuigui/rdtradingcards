@@ -7,17 +7,17 @@ function command.run(message, mt, overwrite)
   elseif message.guild then
     authcheck = isauthoradmin(message)
   end
-  
+
   if authcheck then
     print("authcheck passed")
     _G["privatestuff"] = dofile('privatestuff.lua')
-    
+
 
     -- Lua implementation of PHP scandir function
     _G['scandir'] = function (directory)
       return fs.readdirSync(directory)
     end
-    
+
     for i, v in ipairs(scandir("commands")) do
       if fs.existsSync("commands/"..v.."/") then
         for _, vrec in ipairs(scandir("commands/"..v)) do
@@ -129,7 +129,7 @@ function command.run(message, mt, overwrite)
     if config.prefix then
       _G["prefix"] = config.prefix
     end
-    
+
     _G['defaultworldsave'] = {
       tokensdonated = 0,
       boxpool = {"ssss45", "roomsdc_ur", "roomsdc_r", "underworld", "enchantedlove", "wallclockur", "dogtor", "moai", "coolbird", "beanshopper", "cardboardworld", "acofoi", "rollermobster", "inimaur", "fhottour", "superstrongcavity", "soundsr", "pancakefever", "nicoleur", "feedthemachine", "retrofunky", "heartchickalt"},
@@ -137,7 +137,7 @@ function command.run(message, mt, overwrite)
       lablooktext = "abcdefghijklmnopqrstuvwxyz",
       ws = 0,
     }
-    
+
     _G['defaultshopsave'] = {
       lastrefresh = 0,
       stocknum = 0,
@@ -184,7 +184,7 @@ function command.run(message, mt, overwrite)
       itemstock = 10,
       itemprice = 4
     }
-    
+
     _G["rarities"] = {
       r = "Rare",
       sr = "Super Rare",
@@ -215,7 +215,7 @@ function command.run(message, mt, overwrite)
     _G["rarities_invert"] = {}
     for k,v in pairs(rarities) do _G["rarities_invert"][v] = k end
 --  _G["starrating_invert"] = {}
---  for k,v in pairs(starrating) do 
+--  for k,v in pairs(starrating) do
 --    for _, v2 in ipairs(v) do
 --      _G["starrating_invert"][v2] = k
 --    end
@@ -236,18 +236,18 @@ function command.run(message, mt, overwrite)
       altalt = {8, 10},
       pico8 = 2,
     }
-    
+
     _G['amtable'] = {
       pyrowmid = {"strange machine", "machine", "panda"},
       lab = {"mouse hole", "mouse", "mousehole", "peculiar box", "box", "peculiarbox", "terminal"},
       shop = {"shop", "rob"}
     }
-    
+
     _G['amids'] = {}
     amids[0] = "pyrowmid"
     amids[1] = "lab"
     amids[3] = "shop"
-    
+
     _G['automove'] = function(cr,r,message)
       print("automove")
       local reqroom = "none"
@@ -267,16 +267,16 @@ function command.run(message, mt, overwrite)
     _G['botdebug'] = false
 
     _G['nopeeking'] = false
-    
+
     print("loading cards")
-	
-	
+
+
     --_G['cdata'] = dpf.loadjson("data/cards.json", defaultjson)
-	
+
     _G['cdata'] = {basemult = 4, groups = {}}
-	
+
     _G['jsonfiles']	= {}
-	
+
     for i, v in ipairs(scandir("data/cards")) do --TODO: replace with something that supports subdirectories
       if string.sub(v, -4, -1) == 'json' then
         --print('loading json '..v)
@@ -285,9 +285,9 @@ function command.run(message, mt, overwrite)
         jsonfiles[groupname] = groupdata
       end
     end
-  
+
     _G['jsongroups'] = {}
-    
+
     for k,v in pairs(jsonfiles) do
       if jsongroups[k] then
         print('adding existing')
@@ -299,18 +299,18 @@ function command.run(message, mt, overwrite)
         print('adding new')
       end
     end
-	
+
     for k,v in pairs(jsongroups) do
       print('added group '..k)
       table.insert(cdata.groups,v)
     end
-	
+
     --dpf.savejson('outcards.json',cdata)
-    
-    print('loading itemdb')    
+
+    print('loading itemdb')
     _G['itemdb'] = dpf.loadjson("data/items.json", defaultjson)
 
-    print('loading accessorydb')    
+    print('loading accessorydb')
     _G['accessorydb'] = dpf.loadjson("data/accessories.json", defaultjson)
 
     --generate pull table
@@ -370,7 +370,7 @@ function command.run(message, mt, overwrite)
       for w, x in ipairs(v.cards) do
         cdb[x.filename] = x
         cdb[x.filename]["basechance"] = v.basechance
-        if not seasontable[x.season] then 
+        if not seasontable[x.season] then
           print("making season "..x.season)
           seasontable[x.season] = {}
           weightedseasontable[x.season] = {}
@@ -384,7 +384,7 @@ function command.run(message, mt, overwrite)
             rarcardtable[rarity] = {}
             rarcardtablenc[rarity] = {}
           end
-          --if not starcardtable[rating] then 
+          --if not starcardtable[rating] then
           --  print("making rating "..rating)
           --  starcardtable[rating] = {}
           --end
@@ -444,10 +444,10 @@ function command.run(message, mt, overwrite)
     -- print(inspect(seasontable))
     -- print("here is ptable")
     -- print(inspect(ptable))
-    
-    print('loading consdb')    
+
+    print('loading consdb')
     _G['consdb'] = dpf.loadjson("data/consumables.json", defaultjson)
-    
+
     print("making conspt")
     _G['conspt'] = {}
     for k,v in pairs(consdb) do
@@ -458,16 +458,16 @@ function command.run(message, mt, overwrite)
 
     print("loading collector's info")
     _G['coll'] = dpf.loadjson("data/coll.json", defaultjson)
-    
+
     print("loading medaldb")
     _G['medaldb'] = dpf.loadjson("data/medals.json", defaultjson)
-    
-    print('loading itemdb')    
+
+    print('loading itemdb')
     _G['itemdb'] = dpf.loadjson("data/items.json", defaultjson)
-    
+
     print("loading medal requires")
     _G['medalrequires'] = dofile("data/medalrequires.lua")
-    
+
     _G['upgradeimages'] = {
       "https://cdn.discordapp.com/attachments/829197797789532181/838908505192661022/upgrade1.png",
       "https://cdn.discordapp.com/attachments/829197797789532181/838908506496958464/upgrade2.png",
@@ -560,9 +560,9 @@ function command.run(message, mt, overwrite)
       "y",
       "z"
     }
-    
+
     print("loading functions")
-    
+
     _G['trf'] = function (x,rep)
       if not rep then
         rep = {}
@@ -573,7 +573,7 @@ function command.run(message, mt, overwrite)
       end
       return t
     end
-    
+
     _G['getletterindex'] = function (x)
       print("finding letterindex of "..x)
       for i, v in ipairs(letters) do
@@ -626,7 +626,7 @@ function command.run(message, mt, overwrite)
         return medalnametofn(x) or string.lower(x)
       end
     end
-    
+
     _G['consnametofn'] = function (x)
       for k, v in pairs(consdb) do
         if string.lower(v.name) == string.lower(x) then
@@ -634,13 +634,13 @@ function command.run(message, mt, overwrite)
         end
       end
     end
-    
+
     _G['constexttofn'] = function (x)
       if consnametofn(x) or consdb[string.lower(x)] then
         return consnametofn(x) or string.lower(x)
       end
     end
-    
+
     _G['itemnametofn'] = function (x)
       for k, v in pairs(itemdb) do
         if string.lower(v.name) == string.lower(x) then
@@ -690,7 +690,7 @@ function command.run(message, mt, overwrite)
       label = langfile.button_yes,
       style = "success"
     }
-      
+
       print("making nobutton")
       local nobutton = discordia.Button {
         id = "no",
@@ -740,9 +740,9 @@ function command.run(message, mt, overwrite)
       end
 
     end
-    
+
     _G['commands'] = {}
-    
+
     _G['addcommand'] = function(trigger,commandfunction, expectedargs,force,usebypass)
       local newcommand = {}
       newcommand.trigger = prefix .. trigger
@@ -750,10 +750,10 @@ function command.run(message, mt, overwrite)
       newcommand.expectedargs = 0 or expectedargs
       newcommand.force = force
       newcommand.usebypass = usebypass
-      
+
       table.insert(commands, newcommand)
     end
-    
+
     addcommand("ping",cmd.ping)
     addcommand("help",cmd.help)
     addcommand("resetclock",cmd.resetclock)
@@ -772,9 +772,9 @@ function command.run(message, mt, overwrite)
     addcommand("crash",cmd.crash)
     addcommand("showmedal",cmd.showmedal)
     addcommand("runlua",cmd.runlua)
-    addcommand("generategive",cmd.generategive)  
-    addcommand("search",cmd.search)  
-    addcommand("tell",cmd.tell)  
+    addcommand("generategive",cmd.generategive)
+    addcommand("search",cmd.search)
+    addcommand("tell",cmd.tell)
     addcommand("beans",cmd.beans)
     addcommand("nickname",cmd.nickname)
     addcommand("checkmedals",cmd.checkmedals)
@@ -834,8 +834,9 @@ function command.run(message, mt, overwrite)
     addcommand("langlist",cmd.langlist)
     addcommand("rob",cmd.rob)
     addcommand("rtsitem",cmd.rtsitem)
-    addcommand("embed",cmd.embed)
-    
+    addcommand("embed", cmd.embed)
+    addcommand("reloadslash", cmd.reloadslash)
+
     _G['handlemessage'] = function (message, content)
 	  if message.author.id ~= client.user.id or content then
       local messagecontent = content or message.content
@@ -908,7 +909,7 @@ function command.run(message, mt, overwrite)
       end
     end
     end
-    
+
     _G['getitemthumb'] = function(item,cons)
       local cf = io.open("vips_out/cache/items/"..item..".png", "r")
       if not cf then --check if file exists
@@ -925,7 +926,7 @@ function command.run(message, mt, overwrite)
       end
       return "vips_out/cache/items/"..item..".png"
     end
-    
+
     _G['getcardthumb'] = function(card)
       local cf = io.open("vips_out/cache/cards/"..card..".png", "r")
       if not cf then --check if file exists
@@ -944,11 +945,11 @@ function command.run(message, mt, overwrite)
     -- getitemthumb("decaf",true)
     -- getitemthumb("stainedgloves")
     -- getcardthumb("knowyou")
-    
+
     _G['getshopimage'] = function()
       local sj = dpf.loadjson("savedata/shop.json", defaultshopsave)
       local osj = dpf.loadjson("vips_out/cache/shop/lastshop.json", {})
-      
+
       if json.encode(sj) ~= json.encode(osj) then--holy shit why
         local darkener = vips.Image.new_from_file("assets/darkener.png")
         print("remaking shop")
@@ -967,7 +968,7 @@ function command.run(message, mt, overwrite)
           end
           base = base:composite2(item,"over",{x=260 + (i-1)*213 ,y=420})
           i = i + 1
-        end 
+        end
         local x = 0
         local y = 0
         for i,v in ipairs(sj.cards) do
@@ -980,7 +981,7 @@ function command.run(message, mt, overwrite)
           elseif i == 4 then
             x,y = 330,293
           end
-          
+
           local card = vips.Image.new_from_file(getcardthumb(v.name))
           if v.stock == 0 then
             card = card:Colourspace('b-w')
@@ -988,7 +989,7 @@ function command.run(message, mt, overwrite)
           end
           base = base:composite2(card,"over",{x=x,y=y})
         end
-            
+
         base:write_to_file("vips_out/shop.png")
         dpf.savejson("vips_out/cache/shop/lastshop.json", sj)
       else
@@ -1050,7 +1051,7 @@ function command.run(message, mt, overwrite)
         uj.currentoffer = themes_not_unlocked[math.random(#themes_not_unlocked)]
       end
     end
-		
+
     _G['setup_theme_offers'] = function(uj)
       -- Get all the themes you don't have
       local themes_not_unlocked = {}
@@ -1086,7 +1087,7 @@ function command.run(message, mt, overwrite)
       local output = baseString or "[NO STRING PLEASE REPORT]"
 
       -- print(output)
-      
+
       for key, value in pairs(objectsToAdd) do
         output = output:gsub("{"..tostring(key).."}",tostring(value))
       end
@@ -1114,8 +1115,8 @@ function command.run(message, mt, overwrite)
       if math.floor(minutesleft / 60) > 0 then
         durationtext = math.floor(minutesleft / 60) .. lang.time_hour
           if lang.needs_plural_s == true then
-            if math.floor(minutesleft / 60) ~= 1 then 
-              durationtext = durationtext .. lang.time_plural_s 
+            if math.floor(minutesleft / 60) ~= 1 then
+              durationtext = durationtext .. lang.time_plural_s
             end
           end
       end
@@ -1132,7 +1133,7 @@ function command.run(message, mt, overwrite)
       end
       return durationtext
     end
-    
+
 
     _G['clearcache'] = function()
       os.remove("test.txt")
@@ -1152,7 +1153,7 @@ function command.run(message, mt, overwrite)
         end
       end
     end
-    
+
     _G['checkforreload'] = function(days)
       local cooldown = config.shop.restock_delay
       print(days .. "days")
@@ -1164,7 +1165,7 @@ function command.run(message, mt, overwrite)
         dpf.savejson("savedata/shop.json", sj)
       end
     end
-    
+
     _G['stockshop'] = function()
       local sj = dpf.loadjson("savedata/shop.json", defaultshopsave)
       if not sj.stocknum then
@@ -1209,7 +1210,7 @@ function command.run(message, mt, overwrite)
         sj.cards = newcards
       end
       ---------------------------------------------item
-      
+
       local itempt = {}
       for k in pairs(itemdb) do
         if k ~= "fixedmouse" and k ~= "nothing" then
@@ -1222,7 +1223,7 @@ function command.run(message, mt, overwrite)
       -----------------------consumables
       local newconsumables = {{name="",stock=0,price=0},{name="",stock=0,price=0},{name="",stock=0,price=0}}
       for i,v in ipairs(sj.consumables) do
-        
+
         local finding = true
         local nc = ""
         while finding do
@@ -1239,15 +1240,15 @@ function command.run(message, mt, overwrite)
         end
 
         newconsumables[i] = {name = nc,stock = consdb[nc].basestock + math.random(0, 4), price = consdb[nc].baseprice + math.random(-1,1)}
-        
+
       end
       sj.consumables = newconsumables
-      
+
       sj.stocknum = sj.stocknum + 1
-      
+
       dpf.savejson("savedata/shop.json", sj)
     end
-    
+
     _G['shophas'] = function (x)
       local sj = dpf.loadjson("savedata/shop.json", defaultshopsave)
       local found = false
@@ -1266,7 +1267,7 @@ function command.run(message, mt, overwrite)
       end
       return found
     end
-    
+
     _G['tablelength'] = function(T)
       local count = 0
       for _ in pairs(T) do count = count + 1 end
@@ -1296,7 +1297,7 @@ function command.run(message, mt, overwrite)
 
       local cscleracolor = uj.chickstats.scleracolor
       chicksclerae = chicksclerae * { cscleracolor[1] / 255, cscleracolor[2]/255, cscleracolor[3] / 255, 1 }
-      
+
       local cbeakcolor = uj.chickstats.beakcolor
       chickbeak = chickbeak * { cbeakcolor[1] / 255, cbeakcolor[2]/255, cbeakcolor[3] / 255, 1 }
 
@@ -1308,8 +1309,8 @@ function command.run(message, mt, overwrite)
       chickimg = chickimg:composite2(chicksclerae, "over")
       chickimg = chickimg:composite2(chickbeak, "over")
       chickimg = chickimg:composite2(chickfeet, "over")
-      
-      
+
+
       --adding others (middle layer)
       if uj.chickstats.others and uj.chickstats.others ~= {} then
         for i,v in ipairs(uj.chickstats.others) do
@@ -1378,7 +1379,7 @@ function command.run(message, mt, overwrite)
         local neckimg = vips.Image.new_from_file("chick/accessories/" .. uj.chickstats.neckwear .. ".png")
         chickimg = chickimg:composite2(neckimg, "over")
       end
-      
+
       --adding clothes
       if (uj.chickstats.clothes and uj.chickstats.clothes ~= "nothing") then
         local clothesimg = vips.Image.new_from_file("chick/accessories/" .. uj.chickstats.clothes .. ".png")
@@ -1390,7 +1391,7 @@ function command.run(message, mt, overwrite)
         local shoeimg = vips.Image.new_from_file("chick/accessories/" .. uj.chickstats.shoes .. ".png")
         chickimg = chickimg:composite2(shoeimg, "over")
       end
-      
+
       --adding others (top layer)
       if uj.chickstats.others and uj.chickstats.others ~= {} then
         for i,v in ipairs(uj.chickstats.others) do
@@ -1412,13 +1413,13 @@ function command.run(message, mt, overwrite)
       end
       return chickimg
     end
-    
+
     print("done loading")
-    
+
     if not overwrite then
       message.channel:send('All commands have been reloaded.')
     end
-    
+
   else
     message.channel:send('Sorry, but only moderators can use this command!')
   end
