@@ -3,11 +3,11 @@ function command.run(message, mt)
   print(message.author.name .. " did !language")
   local uj = dpf.loadjson("savedata/" .. message.author.id .. ".json", defaultjson)
   local lang = dpf.loadjson("langs/" .. uj.lang .. "/lang.json", "")
-  
+
   if not uj.lang then
     uj.lang = "en"
   end
-  
+
   local request = string.lower(mt[1] or "")
   local change_successful = false
   if request == "english" or request == "en" or request == "eng" or request == "영어" or request == "anglais" then
@@ -16,7 +16,7 @@ function command.run(message, mt)
   elseif request == "한국어" or request == "korean" or request == "ko" or request == "kr" or request == "kor" or request =="coréen" then
     change_successful = true
     uj.lang = "ko"
-  
+
     -- @wolfplay uncomment this when you're ready to unleash hell upon this world
   -- elseif uj.hasengwish and (request == "engwish" or request == "owo") then
   --   change_successful = true
@@ -33,9 +33,9 @@ function command.run(message, mt)
     -- if uj.lang == "fr" then
     --   langname = "Français"
     -- end
-    message.channel:send(formatstring(lang.no_value, {langname}))
+    message:reply(formatstring(lang.no_value, {langname}))
   else
-    message.channel:send(formatstring(lang.no_database, {mt[1]}))
+    message:reply(formatstring(lang.no_database, {mt[1]}))
   end
   if change_successful then
     local lang = dpf.loadjson("langs/" .. uj.lang .. "/lang.json", "")
@@ -46,7 +46,7 @@ function command.run(message, mt)
     uj.pronouns["their"] = lang_p[uj.pronouns["selection"].."_their"]
     uj.pronouns["theirs"] = lang_p[uj.pronouns["selection"].."_theirs"]
     uj.pronouns["theirself"] = lang_p[uj.pronouns["selection"].."_theirself"]
-    message.channel:send(lang.lang_changed)
+    message:reply(lang.lang_changed)
   end
 
   dpf.savejson("savedata/" .. message.author.id .. ".json", uj)

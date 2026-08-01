@@ -15,12 +15,12 @@ function item.run(uj, ujf, message, mt, interaction)
 
     if interaction then interaction:updateDeferred() end
     if not item1 then
-      message.channel:send(formatstring(lang.ddd_no_item, { mt[2] }))
+      message:reply(formatstring(lang.ddd_no_item, { mt[2] }))
       return
     end
 
     if not uj.storage[item1] then
-      message.channel:send(formatstring(lang.ddd_dont_have, { cdb[item1].name }))
+      message:reply(formatstring(lang.ddd_dont_have, { cdb[item1].name }))
       return
     end
 
@@ -32,12 +32,12 @@ function item.run(uj, ujf, message, mt, interaction)
 
     if uj.equipped == 'aceofhearts' then
       if uj.acepulls ~= 0 then
-        message.channel:send('The pulls stored in your **Ace of Hearts** disappear...')
+        message:reply('The pulls stored in your **Ace of Hearts** disappear...')
         uj.acepulls = 0
       end
     end
 
-    message.channel:send(formatstring(lang.ddd_use, { uj.id, cdb[item1].name, uj.pronouns["their"] }))
+    message:reply(formatstring(lang.ddd_use, { uj.id, cdb[item1].name, uj.pronouns["their"] }))
     dpf.savejson(ujf, uj)
     cmd.checkcollectors.run(message, mt)
     cmd.checkmedals.run(message, mt)

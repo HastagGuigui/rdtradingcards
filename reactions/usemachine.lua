@@ -1,7 +1,7 @@
 local reaction = {}
 function reaction.run(message, interaction, data, response)
   local function send(text)
-    if interaction then interaction:reply(text) else message.channel:send(text) end
+    if interaction then interaction:reply(text) else message:reply(text) end
   end
   local ujf = "savedata/" .. message.author.id .. ".json"
   local uj = dpf.loadjson(ujf, defaultjson)

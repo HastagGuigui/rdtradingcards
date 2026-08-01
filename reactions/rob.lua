@@ -11,7 +11,7 @@ function reaction.run(message, interaction, data, response)
     if interaction ~= nil then
       interaction:reply(string)
     elseif message ~= nil then
-      message.channel:send(string)
+      message:reply(string)
     end
   end
 
@@ -64,7 +64,7 @@ function reaction.run(message, interaction, data, response)
             local conslist = {}
             for i,v in ipairs(sj.consumables) do
               if v.stock > 0 then
-                conslist[#conslist+1] = v.name 
+                conslist[#conslist+1] = v.name
               end
             end
             data.srequest = conslist[math.random(1,#conslist)]
@@ -83,7 +83,7 @@ function reaction.run(message, interaction, data, response)
             local cardlist = {}
             for i,v in ipairs(sj.cards) do
               if v.stock > 0 then
-                cardlist[#cardlist+1] = v.name 
+                cardlist[#cardlist+1] = v.name
               end
             end
             data.srequest = cardlist[math.random(1,#cardlist)]
@@ -101,8 +101,8 @@ function reaction.run(message, interaction, data, response)
           --print("shoprobtime")
         end
       end
-    
-    
+
+
 
       if data.itemtype == "consumable" then
         local robchance = math.random(1,2*(data.sprice+data.numrequest))
@@ -110,13 +110,13 @@ function reaction.run(message, interaction, data, response)
         if robchance == robchance then
           robsucceed = true
         end
-        
+
         if (not robsucceed) and data.random then
           if math.random(1,1) == 1 then
             robsucceed = true
           end
         end
-      
+
         if robsucceed then
           print("rob succeeded")
           sj.consumables[data.sindex].stock = sj.consumables[data.sindex].stock - data.numrequest
@@ -136,7 +136,7 @@ function reaction.run(message, interaction, data, response)
           else
             finalpm = 0
           end
-          send_robmessage(interaction, message, 
+          send_robmessage(interaction, message,
             formatstring(lang.rob_gun .. {data.numrequest, data.sname, 6 + finalpm})
           )
           uj.robconspt = "none"
@@ -189,13 +189,13 @@ function reaction.run(message, interaction, data, response)
             robsucceed = true
           end
         end
-      
+
         if (not robsucceed) and data.random then
           if math.random(1,1) == 1 then
             robsucceed = true
           end
         end
-      
+
         if robsucceed == true then
           print("rob succeeded")
           sj.cards[data.sindex].stock = sj.cards[data.sindex].stock - data.numrequest
@@ -217,7 +217,7 @@ function reaction.run(message, interaction, data, response)
           else
             finalpm = 0
           end
-          send_robmessage(interaction, message, 
+          send_robmessage(interaction, message,
             formatstring(lang.rob_gun, {data.numrequest, data.sname, 6 + finalpm})
           )
           if not uj.timesrobsucceeded then uj.timesrobsucceeded = 1 else uj.timesrobsucceeded = uj.timesrobsucceeded + 1 end
@@ -232,13 +232,13 @@ function reaction.run(message, interaction, data, response)
         if robchance == robchance then
           robsucceed = true
         end
-        
+
         if (not robsucceed) and data.random then
           if math.random(1,1) == 1 then
             robsucceed = true
           end
         end
-        
+
         if robsucceed then
           print("rob succeeded")
           sj.itemstock = sj.itemstock - 1
@@ -259,7 +259,7 @@ function reaction.run(message, interaction, data, response)
         end
       end
       end
-      
+
       if uj.skipprompts and not wj.skiprob then
         send_robmessage(nil, message, lang.rob_skipenabled)
         wj.skiprob = true
@@ -304,7 +304,7 @@ function reaction.run(message, interaction, data, response)
             local conslist = {}
             for i,v in ipairs(sj.consumables) do
               if v.stock > 0 then
-                conslist[#conslist+1] = v.name 
+                conslist[#conslist+1] = v.name
               end
             end
             data.srequest = conslist[math.random(1,#conslist)]
@@ -323,7 +323,7 @@ function reaction.run(message, interaction, data, response)
             local cardlist = {}
             for i,v in ipairs(sj.cards) do
               if v.stock > 0 then
-                cardlist[#cardlist+1] = v.name 
+                cardlist[#cardlist+1] = v.name
               end
             end
             data.srequest = cardlist[math.random(1,#cardlist)]
@@ -341,8 +341,8 @@ function reaction.run(message, interaction, data, response)
           --print("shoprobtime")
         end
       end
-    
-    
+
+
 
       if data.itemtype == "consumable" then
         local robchance = math.random(1,2*(data.sprice+data.numrequest))
@@ -350,13 +350,13 @@ function reaction.run(message, interaction, data, response)
         if robchance < 4 then
           robsucceed = true
         end
-        
+
         if (not robsucceed) and data.random then
           if math.random(1,3) == 1 then
             robsucceed = true
           end
         end
-      
+
         if robsucceed then
           print("rob succeeded")
           sj.consumables[data.sindex].stock = sj.consumables[data.sindex].stock - data.numrequest
@@ -371,7 +371,7 @@ function reaction.run(message, interaction, data, response)
           if not uj.timesrobsucceeded then uj.timesrobsucceeded = 1 else uj.timesrobsucceeded = uj.timesrobsucceeded + 1 end
         else
           print("rob failed")
-          
+
           local finalpm = 0
           if data.sprice <= 2 then
             finalpm = -3
@@ -381,8 +381,8 @@ function reaction.run(message, interaction, data, response)
           else
             finalpm = 0
           end
-          
-          send_robmessage(interaction, message, 
+
+          send_robmessage(interaction, message,
             formatstring(lang.rob_failed, {data.numrequest, data.sname, 4 + finalpm})
           )
 
@@ -433,13 +433,13 @@ function reaction.run(message, interaction, data, response)
             robsucceed = true
           end
         end
-      
+
         if (not robsucceed) and data.random then
           if math.random(1,3) == 1 then
             robsucceed = true
           end
         end
-      
+
         if robsucceed == true then
           print("rob succeeded")
           sj.cards[data.sindex].stock = sj.cards[data.sindex].stock - data.numrequest
@@ -455,7 +455,7 @@ function reaction.run(message, interaction, data, response)
           if not uj.timesrobsucceeded then uj.timesrobsucceeded = 1 else uj.timesrobsucceeded = uj.timesrobsucceeded + 1 end
         else
           print("rob failed")
-          
+
           local finalpm = 0
           if data.random then
             if blackpm ~= nil then
@@ -468,11 +468,11 @@ function reaction.run(message, interaction, data, response)
           else
             finalpm = 0
           end
-          
-          send_robmessage(interaction, message, 
+
+          send_robmessage(interaction, message,
             formatstring(lang.rob_failed, {data.numrequest, data.sname, 4 + finalpm})
           )
-          
+
           uj.lastrob = sj.stocknum + finalpm
           uj.room = 2
           if not uj.timesrobfailed then uj.timesrobfailed = 1 else uj.timesrobfailed = uj.timesrobfailed + 1 end
@@ -484,13 +484,13 @@ function reaction.run(message, interaction, data, response)
         if robchance <= 3 then
           robsucceed = true
         end
-        
+
         if (not robsucceed) and data.random then
           if math.random(1,3) == 1 then
             robsucceed = true
           end
         end
-        
+
         if robsucceed then
           print("rob succeeded")
           sj.itemstock = sj.itemstock - 1
@@ -499,7 +499,7 @@ function reaction.run(message, interaction, data, response)
           if not uj.timesrobsucceeded then uj.timesrobsucceeded = 1 else uj.timesrobsucceeded = uj.timesrobsucceeded + 1 end
         else
           print("rob failed")
-          
+
           local finalpm = 0
           if data.sprice <= 2 then
             finalpm = -3
@@ -508,14 +508,14 @@ function reaction.run(message, interaction, data, response)
           else
             finalpm = 0
           end
-          
+
           send_robmessage(interaction, message, formatstring(lang.rob_failed_item, {data.sname, 4 + finalpm}))
           uj.lastrob = sj.stocknum + finalpm
           uj.room = 2
           if not uj.timesrobfailed then uj.timesrobfailed = 1 else uj.timesrobfailed = uj.timesrobfailed + 1 end
         end
       end
-      
+
       if uj.skipprompts and not wj.skiprob then
         send_robmessage(nil, message, lang.rob_skipenabled)
         wj.skiprob = true

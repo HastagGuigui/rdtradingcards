@@ -5,12 +5,12 @@ function command.run(message, mt)
   local uj = dpf.loadjson(ujf, defaultjson)
   local lang = dpf.loadjson("langs/" .. uj.lang .. "/trade.json", "")
   if not message.guild then
-    message.channel:send(lang.dm_message)
+    message:reply(lang.dm_message)
     return
   end
 
   if #mt ~= 3 then
-    message.channel:send(lang.no_arguments)
+    message:reply(lang.no_arguments)
     return
   end
 
@@ -18,13 +18,13 @@ function command.run(message, mt)
 
   print("checking if user 2 exists")
   if not uj2f then
-    message.channel:send(formatstring(lang.no_user, {mt[2]}))
+    message:reply(formatstring(lang.no_user, {mt[2]}))
     return
   end
 
   print("checking if users are different people")
   if uj2f == ujf then
-    message.channel:send(lang.same_user)
+    message:reply(lang.same_user)
     return
   end
 
@@ -32,9 +32,9 @@ function command.run(message, mt)
   local item1 = texttofn(mt[1])
   if not item1 then
     if nopeeking then
-      message.channel:send(formatstring(lang.no_item_nopeeking, {mt[1]}) .. lang.no_item1_nopeeking)
+      message:reply(formatstring(lang.no_item_nopeeking, {mt[1]}) .. lang.no_item1_nopeeking)
     else
-      message.channel:send(formatstring(lang.no_item, {mt[1]}))
+      message:reply(formatstring(lang.no_item, {mt[1]}))
     end
     return
   end
@@ -43,27 +43,27 @@ function command.run(message, mt)
   local item2 = texttofn(mt[3])
   if not item2 then
     if nopeeking then
-      message.channel:send(formatstring(lang.no_item_nopeeking, {mt[1]}) .. formatstring(lang.no_item1_nopeeking, {mt[2]}))
+      message:reply(formatstring(lang.no_item_nopeeking, {mt[1]}) .. formatstring(lang.no_item1_nopeeking, {mt[2]}))
     else
-      message.channel:send(formatstring(lang.no_item, {mt[1]}))
+      message:reply(formatstring(lang.no_item, {mt[1]}))
     end
     return
   end
 
   local uj2 = dpf.loadjson(uj2f, defaultjson)
-  
+
   if not uj2.lang then
 	uj2.lang = "en"
   end
-  
+
   local lang2 = dpf.loadjson("langs/" .. uj2.lang .. "/trade.json", "")
-  
+
   print("checking if u1 has i1")
   if not uj.inventory[item1] then
     if nopeeking then
-      message.channel:send(formatstring(lang.no_item_nopeeking, {mt[1]}) .. lang.no_item1_nopeeking)
+      message:reply(formatstring(lang.no_item_nopeeking, {mt[1]}) .. lang.no_item1_nopeeking)
     else
-      message.channel:send(formatstring(lang.dont_have_user1, {cdb[item1].name}))
+      message:reply(formatstring(lang.dont_have_user1, {cdb[item1].name}))
     end
     return
   end
@@ -71,9 +71,9 @@ function command.run(message, mt)
   print("checking if u2 has i2")
   if not uj2.inventory[item2] then
     if nopeeking then
-      message.channel:send(formatstring(lang.no_item_nopeeking, {mt[1]}) .. formatstring(lang.no_item1_nopeeking, {mt[2]}))
+      message:reply(formatstring(lang.no_item_nopeeking, {mt[1]}) .. formatstring(lang.no_item1_nopeeking, {mt[2]}))
     else
-      message.channel:send(formatstring(lang.dont_have_user2, {mt[2], cdb[item2].name, prosel.getPronoun(uj.lang, uj2.pronouns["selection"], "their")}))
+      message:reply(formatstring(lang.dont_have_user2, {mt[2], cdb[item2].name, prosel.getPronoun(uj.lang, uj2.pronouns["selection"], "their")}))
 	end
     return
   end

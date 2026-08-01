@@ -18,7 +18,7 @@ function command.run(message, mt)
   end
   if not uj.consumables then uj.consumables = {} end
   dpf.savejson("savedata/" .. message.author.id .. ".json", uj)
-  
+
   for k in pairs(uj.items) do numitems = numitems + 1 end
   for k in pairs(uj.consumables) do numitems = numitems + 1 end
   local maxpn = math.ceil(numitems / 10)
@@ -45,7 +45,7 @@ function command.run(message, mt)
   invstring = invstring .. "\n" .. formatstring(lang.embed_token, {uj.tokens}, lang.plural_s)
 
 
-  message.channel:send{
+  message:reply{
     content = formatstring(lang.embed_contains, {message.author.mentionString}),
     embed = {
       color = uj.embedc,

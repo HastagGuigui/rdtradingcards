@@ -1,7 +1,6 @@
 local command = {
     name = "pull",
     description = "Lets you pull a card.",
-    arguments = {}
 }
 
 function rand_from_table(tab)
@@ -10,12 +9,9 @@ end
 
 function command.run(message, mt)
     local time = sw:getTime()
-    local author = message.author
-    if not author then
-        author = message.user
-    end
+    local author = message.author ~= nil and message.author or message.user
     print(author.name .. " did !pull")
-    local uj = dpf.loadjson("savedata/" .. author.id .. ".json", defaultjson)
+    local uj = db.get_user(author.id)
     local lang = dpf.loadjson("langs/" .. uj.lang .. "/pull.json", "")
 
     if not message.guild then
@@ -92,11 +88,7 @@ function command.run(message, mt)
         if uj.sodapt == {} then uj.sodapt = nil end
     end
 
-    dpf.savejson("savedata/" .. author.id .. ".json", uj)
-
     message:reply(lang.pulling_card)
-
-    uj = dpf.loadjson("savedata/" .. author.id .. ".json", defaultjson)
 
     local pulledcards = {}
     if uj.disablecommunity then
@@ -197,8 +189,6 @@ function command.run(message, mt)
     else
         uj.has_seen_tutorials.pull = true
     end
-
-    dpf.savejson("savedata/" .. author.id .. ".json", uj)
 
     if doinfodeskpull then
         pulledcards = { 'rdcards' }

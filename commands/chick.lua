@@ -34,7 +34,7 @@ function command.run(message, mt)
     local chickimg = getchickimage(mt[2])
     chickimg:write_to_file("vips_out/chick.png")
 
-    message.channel:send{
+    message:reply{
       content = "Chick",
       file = "vips_out/chick.png"
     }

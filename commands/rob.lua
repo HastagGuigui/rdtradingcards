@@ -7,12 +7,12 @@ function command.run(message, mt)
   local sj = dpf.loadjson("savedata/shop.json", defaultshopsave)
   local wj = dpf.loadjson("savedata/worldsave.json", defaultworldsave)
   local lang = dpf.loadjson("langs/" .. uj.lang .. "/rob.json", "")
-  
+
   if not message.guild then
-    message.channel:send(lang.dm_message)
+    message:reply(lang.dm_message)
     return
   end
-  
+
   local srequest
   local sname
   local stock
@@ -24,7 +24,7 @@ function command.run(message, mt)
       numrequest = math.floor(mt[2])
     end
   end
-  
+
   if not uj.lastrob then
     uj.lastrob = 0
     dpf.savejson("savedata/" .. message.author.id .. ".json",uj)
@@ -44,12 +44,12 @@ function command.run(message, mt)
       end
     end
     local minutesleft = math.ceil((26/24 - time:toDays() + sj.lastrefresh) * 24 * 60)
-    
+
     local durationtext = formattime(minutesleft, uj.lang)
     if uj.lastrob + 3 == sj.stocknum then
-      message.channel:send(formatstring(lang.blacklist_next, {durationtext}))
+      message:reply(formatstring(lang.blacklist_next, {durationtext}))
     else
-      message.channel:send(formatstring(lang.blacklist, {stockstring, durationtext}))
+      message:reply(formatstring(lang.blacklist, {stockstring, durationtext}))
     end
     return
   end
@@ -62,38 +62,38 @@ function command.run(message, mt)
   --error handling
   local sendshoperror = {
     outofstock = function()
-      message.channel:send(formatstring(lang.out_of_stock, {sname}))
+      message:reply(formatstring(lang.out_of_stock, {sname}))
     end,
 
     toomanyrequested = function()
-      message.channel:send(formatstring(lang.too_many_requested, {stock, sname}))
+      message:reply(formatstring(lang.too_many_requested, {stock, sname}))
     end,
 
     donthave = function()
       if nopeeking then
-        message.channel:send(formatstring(lang.nopeeking_error, {mt[1]}))
+        message:reply(formatstring(lang.nopeeking_error, {mt[1]}))
       else
-        message.channel:send(formatstring(lang.donthave, {sname}))
+        message:reply(formatstring(lang.donthave, {sname}))
       end
     end,
 
     alreadyhave = function()
-      message.channel:send(formatstring(lang.alreadyhave, {sname}))
+      message:reply(formatstring(lang.alreadyhave, {sname}))
     end,
-      
+
     hasfixedmouse = function()
-      message.channel:send(lang.hasfixedmouse)
+      message:reply(lang.hasfixedmouse)
     end,
 
     oneitemonly = function()
-      message.channel:send(lang.oneitemonly)
+      message:reply(lang.oneitemonly)
     end,
 
     unknownrequest = function()
       if nopeeking then
-        message.channel:send(formatstring(lang.nopeeking_error, {mt[1]}))
+        message:reply(formatstring(lang.nopeeking_error, {mt[1]}))
       else
-        message.channel:send(formatstring(lang.unknownrequest, {mt[1]}))
+        message:reply(formatstring(lang.unknownrequest, {mt[1]}))
       end
     end
   }
@@ -119,7 +119,7 @@ function command.run(message, mt)
     end
 
     if #itemtypes == 0 then
-      message.channel:send(lang.rob_random_nothing)
+      message:reply(lang.rob_random_nothing)
       return
     end
     if uj.skipprompts and wj.skiprob then
@@ -160,7 +160,7 @@ function command.run(message, mt)
         sendshoperror["toomanyrequested"]()
         return
       end
-    
+
       -- can rob consumable
       if uj.skipprompts and wj.skiprob then
         cmdre["rob"].run(message, nil, {itemtype = "consumable",sname=sname,sindex=sindex,srequest=srequest,sprice=sprice,numrequest=numrequest, random=false}, "yes")

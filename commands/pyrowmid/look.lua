@@ -4,7 +4,7 @@ function command.run(message, mt, uj, wj)
 
 	if string.lower(mt[1]) == "pyrowmid" or mt[1] == "" or mt[1] == lang.request_pyrowmid then
 		if wj.ws < 501 then
-			message.channel:send { embed = {
+			message:reply { embed = {
 				color = uj.embedc,
 				title = lang.looking_at_pyrowmid,
 				description = lang.looking_pre_501,
@@ -13,7 +13,7 @@ function command.run(message, mt, uj, wj)
 				}
 			} }
 		elseif wj.ws == 501 then
-			message.channel:send { embed = {
+			message:reply { embed = {
 				color = uj.embedc,
 				title = lang.looking_at_pyrowmid,
 				description = lang.looking_501,
@@ -22,7 +22,7 @@ function command.run(message, mt, uj, wj)
 				}
 			} }
 		elseif wj.ws == 502 then
-			message.channel:send { embed = {
+			message:reply { embed = {
 				color = uj.embedc,
 				title = lang.looking_at_pyrowmid,
 				description = lang.looking_502,
@@ -31,7 +31,7 @@ function command.run(message, mt, uj, wj)
 				}
 			} }
 		elseif wj.ws == 503 then
-			message.channel:send { embed = {
+			message:reply { embed = {
 				color = uj.embedc,
 				title = lang.looking_at_pyrowmid,
 				description = lang.looking_503,
@@ -40,7 +40,7 @@ function command.run(message, mt, uj, wj)
 				}
 			} }
 		elseif wj.ws == 504 then
-			message.channel:send { embed = {
+			message:reply { embed = {
 				color = uj.embedc,
 				title = lang.looking_at_pyrowmid,
 				description = lang.looking_504,
@@ -49,7 +49,7 @@ function command.run(message, mt, uj, wj)
 				}
 			} }
 		elseif wj.ws == 505 then
-			message.channel:send { embed = {
+			message:reply { embed = {
 				color = uj.embedc,
 				title = lang.looking_at_pyrowmid,
 				description = lang.looking_505,
@@ -58,7 +58,7 @@ function command.run(message, mt, uj, wj)
 				}
 			} }
 		elseif wj.ws == 506 then
-			message.channel:send { embed = {
+			message:reply { embed = {
 				color = uj.embedc,
 				title = lang.looking_at_pyrowmid,
 				description = lang.looking_506,
@@ -67,7 +67,7 @@ function command.run(message, mt, uj, wj)
 				}
 			} }
 		else
-			message.channel:send { embed = {
+			message:reply { embed = {
 				color = uj.embedc,
 				title = lang.looking_at_pyrowmid,
 				description = lang.looking_507,
@@ -77,26 +77,26 @@ function command.run(message, mt, uj, wj)
 			} }
 		end
 	elseif string.lower(mt[1]) == "panda" or string.lower(mt[1]) == "het" or (uj.lang ~= "en" and mt[1] == lang.request_panda) then
-		message.channel:send { embed = {
+		message:reply { embed = {
 			color = uj.embedc,
 			title = lang.looking_at_panda,
 			description = lang.looking_panda,
 		} }
 	elseif string.lower(mt[1]) == "throne" or (uj.lang ~= "en" and mt[1] == lang.request_throne) then
-		message.channel:send { embed = {
+		message:reply { embed = {
 			color = uj.embedc,
 			title = lang.looking_at_throne,
 			description = lang.looking_throne,
 		} }
 	elseif string.lower(mt[1]) == "strange machine" or string.lower(mt[1]) == "machine" or (uj.lang ~= "en" and mt[1] == lang.request_machine_1 or mt[1] == lang.request_machine_2 or mt[1] == lang.request_machine_3) then
 		if wj.ws == 506 then
-			message.channel:send { embed = {
+			message:reply { embed = {
 				color = uj.embedc,
 				title = lang.looking_at_machine,
 				description = lang.looking_machine_506,
 			} }
 		else
-			message.channel:send { embed = {
+			message:reply { embed = {
 				color = uj.embedc,
 				title = lang.looking_at_machine,
 				description = lang.looking_machine,
@@ -104,13 +104,13 @@ function command.run(message, mt, uj, wj)
 		end
 	elseif string.lower(mt[1]) == "hole" or (uj.lang ~= "en" and mt[1] == lang.request_hole) then
 		if wj.ws < 501 then
-			message.channel:send { embed = {
+			message:reply { embed = {
 				color = uj.embedc,
 				title = lang.looking_at_hole,
 				description = lang.looking_hole_pre_501,
 			} }
 		elseif wj.ws == 501 then
-			message.channel:send { embed = {
+			message:reply { embed = {
 				color = uj.embedc,
 				title = lang.looking_at_hole,
 				description = lang.looking_hole_501,
@@ -119,7 +119,7 @@ function command.run(message, mt, uj, wj)
 				}
 			} }
 		elseif wj.ws == 502 then
-			message.channel:send { embed = {
+			message:reply { embed = {
 				color = uj.embedc,
 				title = lang.looking_at_hole,
 				description = lang.looking_hole_502,
@@ -128,7 +128,7 @@ function command.run(message, mt, uj, wj)
 				}
 			} }
 		elseif wj.ws == 503 then
-			message.channel:send { embed = {
+			message:reply { embed = {
 				color = uj.embedc,
 				title = lang.looking_at_hole,
 				description = lang.looking_hole_503,
@@ -137,7 +137,7 @@ function command.run(message, mt, uj, wj)
 				}
 			} }
 		elseif wj.ws == 504 then
-			message.channel:send { embed = {
+			message:reply { embed = {
 				color = uj.embedc,
 				title = lang.looking_at_hole,
 				description = lang.looking_hole_504,
@@ -146,7 +146,7 @@ function command.run(message, mt, uj, wj)
 				}
 			} }
 		elseif wj.ws == 505 then
-			message.channel:send { embed = {
+			message:reply { embed = {
 				color = uj.embedc,
 				title = lang.looking_at_hole,
 				description = lang.looking_hole_505,
@@ -155,7 +155,7 @@ function command.run(message, mt, uj, wj)
 				}
 			} }
 		elseif wj.ws == 506 then
-			message.channel:send { embed = {
+			message:reply { embed = {
 				color = uj.embedc,
 				title = lang.looking_at_hole,
 				description = lang.looking_hole_506,
@@ -164,7 +164,7 @@ function command.run(message, mt, uj, wj)
 				}
 			} }
 		else
-			message.channel:send { embed = {
+			message:reply { embed = {
 				color = uj.embedc,
 				title = lang.looking_at_hole,
 				description = lang.looking_hole_507,
@@ -174,7 +174,7 @@ function command.run(message, mt, uj, wj)
 			} }
 		end
 	elseif (string.lower(mt[1]) == "ladder" or (uj.lang ~= "en" and mt[1] == lang.request_ladder)) and wj.labdiscovered then
-		message.channel:send { embed = {
+		message:reply { embed = {
 			color = uj.embedc,
 			title = lang.looking_at_ladder,
 			description = lang.looking_ladder,

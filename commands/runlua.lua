@@ -3,7 +3,7 @@ function command.run(message, mt,asdf,content)
   print("c!runlua!!!!!")
   print(mt[1])
   if isauthoradmin(message) and (not content) then
-    message.channel:send('Ok, running!')
+    message:reply('Ok, running!')
     local request = table.concat(mt, "/")
 
     local status, err = pcall(function()
@@ -12,13 +12,12 @@ function command.run(message, mt,asdf,content)
     end)
 
     if not status then
-      message.channel:send('Oops! An error has occured. Error message: ```' .. err .. '```')
+      message:reply('Oops! An error has occured. Error message: ```' .. err .. '```')
     else
-      message.channel:send('Success!')
+      message:reply('Success!')
     end
   else
-    message.channel:send('Sorry, but only moderators can use this command!')
+    message:reply('Sorry, but only moderators can use this command!')
   end
 end
 return command
-  

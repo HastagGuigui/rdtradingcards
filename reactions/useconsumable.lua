@@ -13,7 +13,7 @@ function reaction.run(message, interaction, data, response)
       interaction:reply(lang.no_item)
       return
     end
-	
+
 
     local fn = request
     if consdb[request].command then
@@ -24,12 +24,12 @@ function reaction.run(message, interaction, data, response)
     if request ~= "ddd" then
       if uj.equipped == 'aceofhearts' then
         if uj.acepulls ~= 0 then
-            message.channel:send('The pulls stored in your **Ace of Hearts** disappear...')
+            message:reply('The pulls stored in your **Ace of Hearts** disappear...')
             uj.acepulls = 0
-          end    
+          end
       end
     end
-    
+
     cmdcons[request].run(uj, ujf, message, data.mt, interaction, fn)
   end
 

@@ -9,7 +9,7 @@ function command.run(message)
 	cmd.checkmedals.run(message, mt)
 
   if not message.guild then
-    message.channel:send(lang.dm_message) -- You could probably add some flair to these error messages lol
+    message:reply(lang.dm_message) -- You could probably add some flair to these error messages lol
     return
   end
 
@@ -22,7 +22,7 @@ function command.run(message)
         missingcount = missingcount + 1
       end
     end
-    message.channel:send(formatstring(lang.missingcards, {missingcount}))
+    message:reply(formatstring(lang.missingcards, {missingcount}))
     return
   end
 

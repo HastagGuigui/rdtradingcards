@@ -1,16 +1,28 @@
-local command = {}
+local command = {
+    name = "catch",
+    description = "Catch a thrown card",
+    options = {
+        {
+            name = "card_name",
+            description = "Shorthand name of card",
+            type = 3, -- STRING
+            required = true
+        }
+    }
+}
 function command.run(message, mt)
-  print(message.author.name .. " did !catch")
-  local uj = dpf.loadjson("savedata/" .. message.author.id .. ".json", defaultjson)
+    local author = message.author ~= nil and message.author or message.user
+  print(author.name .. " did !catch")
+  local uj = db.get_user(author.id)
   local lang = dpf.loadjson("langs/" .. uj.lang .. "/catch.json", "")
 
   if not message.guild then
-    message.channel:send(lang.dm_message)
+    message:reply(lang.dm_message)
     return
   end
 
   if not (#mt == 1) then
-    message.channel:send(lang.no_arguments)
+    message:reply(lang.no_arguments)
     return
   end
 
@@ -22,9 +34,9 @@ function command.run(message, mt)
 
   if not curfilename then
     if nopeeking then
-      message.channel:send(formatstring(lang.nopeeking, {mt[1]}))
+      message:reply(formatstring(lang.nopeeking, {mt[1]}))
     else
-      message.channel:send(formatstring(lang.nodatabase, {mt[1]}))
+      message:reply(formatstring(lang.nodatabase, {mt[1]}))
     end
     return
   end
@@ -34,9 +46,9 @@ function command.run(message, mt)
   if not (tj[curfilename]) then
     print("user doesnt have item")
     if nopeeking then
-      message.channel:send(formatstring(lang.nopeeking, {mt[1]}))
+      message:reply(formatstring(lang.nopeeking, {mt[1]}))
     else
-      message.channel:send(formatstring(lang.notthrown, {mt[1]}))
+      message:reply(formatstring(lang.notthrown, {mt[1]}))
     end
     return
   end
@@ -51,17 +63,16 @@ function command.run(message, mt)
   table.remove(tj[curfilename], 1)
   if not next(tj[curfilename]) then tj[curfilename] = nil end
 
-  dpf.savejson("savedata/" .. message.author.id .. ".json",uj)
   dpf.savejson("savedata/thrown.json", tj)
 
   local item = cardfilename and lang.card or lang.item
   local eul_leul = (uj.lang == "ko" and (item == "카드" and "를" or "을") or "")
   local eul_leul_2 = (uj.lang == "ko" and (item == "카드" and "가 " or "이 ") or "")
-  message.channel:send(formatstring(lang.caught, {message.author.mentionString, caughtname, item, uj.pronouns["their"], eul_leul, eul_leul_2}))
+  message:reply(formatstring(lang.caught, {message.author.mentionString, caughtname, item, uj.pronouns["their"], eul_leul, eul_leul_2}))
   if not uj.togglecheckcard then
     if item == "card" or item == "카드" then
       if not uj.storage[cardfilename] then
-        message.channel:send(formatstring(lang.not_in_storage, {caughtname}))
+        message:reply(formatstring(lang.not_in_storage, {caughtname}))
       end
     end
   end

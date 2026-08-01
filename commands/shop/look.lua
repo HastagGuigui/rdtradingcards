@@ -13,12 +13,12 @@ function command.run(message, mt, uj, wj)
         end
       end
       local minutesleft = math.ceil((26/24 - time:toDays() + sj.lastrefresh) * 24 * 60)
-      
+
       local durationtext = formattime(minutesleft, uj.lang)
       if uj.lastrob + 3 == sj.stocknum then
-        message.channel:send(formatstring(lang.blacklist_next, {durationtext}))
+        message:reply(formatstring(lang.blacklist_next, {durationtext}))
       else
-        message.channel:send(formatstring(lang.blacklist, {stockstring, durationtext}))
+        message:reply(formatstring(lang.blacklist, {stockstring, durationtext}))
       end
       return
     end
@@ -26,13 +26,13 @@ function command.run(message, mt, uj, wj)
     for substring in mt[1]:gmatch("%S+") do
       table.insert(args, substring)
     end
-      
+
     if args[1] == nil or args[1] == "-s" or args[1] == "-season" then
 	  _G["request"] = ""
     else
 	  _G["request"] = string.lower(args[1]) --why tf didint i do this for all the other ones?????????????????
     end
-    
+
     if (request == "shop" or request == "quaintshop" or request == "quaint shop" or request == "" or (uj.lang ~= "en" and request == lang.request_shop_1 or request == lang.request_shop_2 or mt[1] == lang.request_shop_3 or mt[1] == lang.request_shop_4))  then
       local time = sw:getTime()
       checkforreload(time:toDays())
@@ -92,7 +92,7 @@ function command.run(message, mt, uj, wj)
         shopstr = shopstr .. "\n**"..itemdb[sj.item].name.."** (" .. tokentext ..") x"..sj.itemstock
       end
 
-      message.channel:send{embed = {
+      message:reply{embed = {
         color = uj.embedc,
         title = lang.looking_at_shop,
         description = lang.looking_shop,
@@ -104,9 +104,9 @@ function command.run(message, mt, uj, wj)
         image = {url = "attachment://shop.png"}},
         files = {getshopimage()}}
       if not uj.togglechecktoken then
-        message.channel:send(lang.checktoken_1 .. uj.tokens .. lang.checktoken_2 .. (uj.tokens ~= 1 and lang.needs_plural_s == true and lang.plural_s or "") .. lang.checktoken_3)
+        message:reply(lang.checktoken_1 .. uj.tokens .. lang.checktoken_2 .. (uj.tokens ~= 1 and lang.needs_plural_s == true and lang.plural_s or "") .. lang.checktoken_3)
       end
-      
+
     elseif (request == "wolf" or (uj.lang ~= "en" and request == lang.request_wolf))  then
       local sj = dpf.loadjson("savedata/shop.json", defaultshopsave)
       local time = sw:getTime()
@@ -114,19 +114,19 @@ function command.run(message, mt, uj, wj)
       --extremely jank implementation, please make this cleaner if possible
       local minutesleft = math.ceil((26/24 - time:toDays() + sj.lastrefresh) * 24 * 60)
       local durationtext = formattime(minutesleft, uj.lang)
-      message.channel:send{embed = {
+      message:reply{embed = {
         color = uj.embedc,
         title = lang.looking_at_wolf,
         description = lang.looking_wolf_1 .. durationtext .. lang.looking_wolf_2,
       }}
-      
-    elseif (request == "ghost" or (uj.lang ~= "en" and request == lang.request_ghost))  then 
-      message.channel:send{embed = {
+
+    elseif (request == "ghost" or (uj.lang ~= "en" and request == lang.request_ghost))  then
+      message:reply{embed = {
         color = uj.embedc,
         title = lang.looking_at_ghost,
         description = lang.looking_ghost,
       }}
-      
+
     elseif (request == "photo" or request == "framed photo" or (uj.lang ~= "en" and request == lang.request_photo)) then
       local randomimages = {
         "https://cdn.discordapp.com/attachments/829197797789532181/880110700989673472/okamii_triangle_frame.png",
@@ -134,13 +134,13 @@ function command.run(message, mt, uj, wj)
         "https://cdn.discordapp.com/attachments/829197797789532181/880302252278034442/okamii_triangle_frame_3.png"
       }
       local imageindex = (uj.equipped == "okamiiscollar" and math.random(#randomimages) or 1)
-      message.channel:send{embed = {
+      message:reply{embed = {
         color = uj.embedc,
         title = lang.looking_at_photo,
         description = lang.looking_photo .. (imageindex ~= 1 and lang.looking_photo_ookami or ""),
         image = {url = randomimages[imageindex]}
       }}
-      
+
     else
       return false
     end

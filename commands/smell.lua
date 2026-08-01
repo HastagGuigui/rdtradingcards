@@ -149,7 +149,7 @@ function command.run(message, mt)
     elseif uj.lang ~= "en" and request == lang.request_photo then
       request = "photo"
     end
-    
+
     print(curfilename)
     if curfilename ~= nil then
       if uj.inventory[curfilename] or uj.storage[curfilename] or shophas(curfilename) then
@@ -164,49 +164,49 @@ function command.run(message, mt)
           local desc2 = {"을(를) 떠올리게 한다.", " 냄새가 난다.",  " 같다.", "에 대해 말하고 있다.", "에 대한 그리운 기억이 당신을 스쳐 지나간다.", "에 대한 극심한 갈망을 느낀다.", "을(를) 떠올리게 하는 강렬한 향취를 내뿜는다."}
           local cdesc = math.random(1, #desc)
           local trfstring = "당신은 **" .. cdb[curfilename].name .. "** 카드를 " .. take[ctake] .. " 뒤 " .. action[caction] .. "\n" .. desc[cdesc] .. "**" .. smell .. "**" .. desc2[cdesc]
-          message.channel:send(trfstring)
+          message:reply(trfstring)
         else
-          message.channel:send(trf("smell", {card = cdb[curfilename].name, smell = smell}))
+          message:reply(trf("smell", {card = cdb[curfilename].name, smell = smell}))
         end
       else
         print("user doesnt have card")
         if nopeeking then
-          message.channel:send(formatstring(lang.error_nopeeking, {request}))
+          message:reply(formatstring(lang.error_nopeeking, {request}))
         else
-          message.channel:send(formatstring(lang.dont_have_card, {cdb[curfilename].name}))
+          message:reply(formatstring(lang.dont_have_card, {cdb[curfilename].name}))
         end
       end
-	
+
     elseif (request == "spiderweb" or request == "spider web" or request == "web" or (uj.lang ~= "en" and request == lang.request_spider_1 or request == lang.request_spider_2)) and wj.smellable then
       ynbuttons(message, lang.spider_alert,"spidersmell",{},uj.id,uj.lang)
     elseif hcsmells[request] then
-      message.channel:send(hcsmells[request])
+      message:reply(hcsmells[request])
     elseif itemtexttofn(request) then
       print("smelling")
       request = itemtexttofn(request)
       if uj.items[request] or shophas(request) then
-        message.channel:send(itemsmells[request])
+        message:reply(itemsmells[request])
       else
-        message.channel:send(formatstring(lang.dont_have_item, {itemdb[request].name}))
+        message:reply(formatstring(lang.dont_have_item, {itemdb[request].name}))
       end
     elseif constexttofn(request) then
       print("smelling consumable")
       request = constexttofn(request)
       if uj.consumables[request] or shophas(request) then
-        message.channel:send(consumablesmells[request])
+        message:reply(consumablesmells[request])
       else
-        message.channel:send(formatstring(lang.dont_have_cons, {consdb[request].name}))
+        message:reply(formatstring(lang.dont_have_cons, {consdb[request].name}))
       end
     else
       if nopeeking then
-        message.channel:send(formatstring(lang.error_nopeeking, {request}))
+        message:reply(formatstring(lang.error_nopeeking, {request}))
       else
-        message.channel:send(formatstring(lang.no_card, {request}))
+        message:reply(formatstring(lang.no_card, {request}))
       end
     end
 
   else
-    message.channel:send(lang.no_arguments)
+    message:reply(lang.no_arguments)
   end
 end
 return command

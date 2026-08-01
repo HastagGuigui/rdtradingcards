@@ -10,14 +10,14 @@ function command.run(message, mt)
 		ynbuttons(message, lang.spider_alert, "spideruse", {}, uj.id, uj.lang)
 		return true
 	elseif request == "table" or (uj.lang ~= "en" and request == lang.request_table) then
-		message.channel:send { embed = {
+		message:reply { embed = {
 			color = uj.embedc,
 			title = lang.using_table,
 			description = lang.use_table,
 		} }
 	elseif request == "poster" or request == "catposter" or request == "cat poster" or (uj.lang ~= "en" and request == lang.request_poster_1 or request == lang.request_poster_2 or request == lang.request_poster_3) then
 		if wj.ws ~= 901 then
-			message.channel:send { embed = {
+			message:reply { embed = {
 				color = uj.embedc,
 				title = lang.using_poster_before801,
 				image = {
@@ -25,7 +25,7 @@ function command.run(message, mt)
 				}
 			} }
 		else
-			message.channel:send { embed = {
+			message:reply { embed = {
 				color = uj.embedc,
 				title = lang.using_poster,
 				description = lang.use_poster,
@@ -44,7 +44,7 @@ function command.run(message, mt)
 			}, "usemousehole", {}, uj.id, uj.lang)
 			return true
 		else
-			message.channel:send { embed = {
+			message:reply { embed = {
 				color = uj.embedc,
 				title = lang.using_hole,
 				description = lang.use_hole,
@@ -59,12 +59,12 @@ function command.run(message, mt)
 		if uj.lastbox + cooldown > time:toHours() then
 			local minutesleft = math.ceil(uj.lastbox * 60 - time:toMinutes() + cooldown * 60)
 			local durationtext = formattime(minutesleft, uj.lang)
-			message.channel:send(formatstring(lang.wait_message, { durationtext }))
+			message:reply(formatstring(lang.wait_message, { durationtext }))
 			return true
 		end
 
 		if not next(uj.inventory) then
-			message.channel:send { embed = {
+			message:reply { embed = {
 				color = uj.embedc,
 				title = lang.embed_title,
 				description = lang.embed_no_card,
@@ -309,16 +309,16 @@ o-''|\\_____/)
 				embed["description"] = formatstring(lang.unknown, { mt[2] })
 			end
 		end
-		message.channel:send { embed = embed, files = embedfiles }
+		message:reply { embed = embed, files = embedfiles }
 		if filename then
-			message.channel:send {
+			message:reply {
 				file = filename
 			}
 		end
 	else
 		return false
 	end
-	
+
 	dpf.savejson("savedata/worldsave.json", wj)
 	dpf.savejson("savedata/" .. message.author.id .. ".json",uj)
 	return true

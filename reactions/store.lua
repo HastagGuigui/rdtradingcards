@@ -1,7 +1,7 @@
 local reaction = {}
 function reaction.run(message, interaction, data, response)
   local function send(text)
-    if interaction then interaction:reply(text) else message.channel:send(text) end
+    if interaction then interaction:reply(text) else message:reply(text) end
   end
   local item1 = data.item1
   local numcards = data.numcards

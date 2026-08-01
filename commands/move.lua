@@ -12,14 +12,14 @@ function command.run(message, mt)
   local success = false
   local request = string.lower(mt[1])
   local newroom = 0
-  
+
   --0: pyrowmid
   --1: lab
   --2: mountain
   --3: shop
   --4: hallway
   --5: casino
-  
+
   if request == "pyrowmid" or request == "the pyrowmid" or (uj.lang ~= "en" and request == lang.locations_pyrowmid) then
     success = true
     newroom = 0
@@ -39,13 +39,13 @@ function command.run(message, mt)
   --   success = true
   --   newroom = 5
   end
-  
-  
+
+
   if success then
     print("newroom is ".. newroom)
     local sj = dpf.loadjson("savedata/shop.json", defaultshopsave)
     if newroom == uj.room then
-      message.channel:send(formatstring(lang.already_in, {locations[newroom+1]}))
+      message:reply(formatstring(lang.already_in, {locations[newroom+1]}))
       return
     elseif newroom == 3 and uj.lastrob + 4 > sj.stocknum and uj.lastrob ~= 0 then
       lang = dpf.loadjson("langs/" .. uj.lang .. "/rob.json")
@@ -58,23 +58,23 @@ function command.run(message, mt)
         end
       end
       local minutesleft = math.ceil((26/24 - time:toDays() + sj.lastrefresh) * 24 * 60)
-      
+
       local durationtext = formattime(minutesleft, uj.lang)
       if uj.lastrob + 3 == sj.stocknum then
-        message.channel:send(formatstring(lang.blacklist_next, {durationtext}))
+        message:reply(formatstring(lang.blacklist_next, {durationtext}))
       else
-        message.channel:send(formatstring(lang.blacklist, {stockstring, durationtext}))
+        message:reply(formatstring(lang.blacklist, {stockstring, durationtext}))
       end
       return "blacklisted"
     else
       uj.room = newroom
       local eu = uj.lang == "ko" and lang.eu or ""
-      message.channel:send(formatstring(lang.room_changed, {locations[newroom+1], eu}))
+      message:reply(formatstring(lang.room_changed, {locations[newroom+1], eu}))
       dpf.savejson("savedata/" .. message.author.id .. ".json",uj)
       return uj
     end
   else
-    message.channel:send(formatstring(lang.no_room, {mt[1]}))
+    message:reply(formatstring(lang.no_room, {mt[1]}))
   end
 
 end

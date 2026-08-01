@@ -7,7 +7,7 @@ function command.run(message, mt)
   local uj = dpf.loadjson("savedata/" .. message.author.id .. ".json", defaultjson)
   local lang = dpf.loadjson("langs/" .. uj.lang .. "/embed.json", "")
 
-  message.channel:send("Nope, no hints here!")
+  message:reply("Nope, no hints here!")
   -- or are there?
 
   -- if mt[1] == "" then
@@ -24,7 +24,7 @@ function command.run(message, mt)
 
   --     if (mt[1] == v.shortname or mt[1] == v.fullname or mt[1] == lang[k] or mt[1] == lang[k.."2"]) then
   --       uj.embedc = v.colorcode
-  --       message.channel:send{embed = {
+  --       message:reply{embed = {
   --         color = uj.embedc,
   --         description = "Successfully changed color to **"..lang[k].."**!",
   --       }}
@@ -35,14 +35,14 @@ function command.run(message, mt)
   -- --   local new_value = tonumber(string.sub(mt[1],2,7), 16)
   -- --   if new_value and #mt[1] == 7 then
   -- --     uj.embedc = new_value
-  -- --     message.channel:send("Successfully changed color to RGB color **#"..string.sub(mt[1],2,7).."**!")
+  -- --     message:reply("Successfully changed color to RGB color **#"..string.sub(mt[1],2,7).."**!")
   -- --   else
-  -- --     message.channel:send("Invalid RGB color: **#"..string.sub(mt[1],2,7).."**")
+  -- --     message:reply("Invalid RGB color: **#"..string.sub(mt[1],2,7).."**")
   -- --   end
   -- -- end
 
   -- if mt[1] == "list" then
-  --   message.channel:send{embed = {
+  --   message:reply{embed = {
   --         color = uj.embedc,
   --         title = lang.allcolors,
   --         description = colorDescText,
@@ -51,4 +51,3 @@ function command.run(message, mt)
   -- dpf.savejson("savedata/" .. message.author.id .. ".json",uj)
 end
 return command
-

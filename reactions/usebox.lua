@@ -1,7 +1,7 @@
 local reaction = {}
 function reaction.run(message, interaction, data, response)
   local function send(text)
-    if interaction then interaction:reply(text) else message.channel:send(text) end
+    if interaction then interaction:reply(text) else message:reply(text) end
   end
   local ujf = "savedata/" .. message.author.id .. ".json"
   local uj = dpf.loadjson(ujf, defaultjson)
@@ -34,24 +34,24 @@ function reaction.run(message, interaction, data, response)
     local boxpoolindex = math.random(#wj.boxpool)
     local getcard = wj.boxpool[boxpoolindex]
     print("user giving " .. givecard.." and getting ".. getcard)
-    
+
     uj.inventory[getcard] = uj.inventory[getcard] and uj.inventory[getcard] + 1 or 1
     uj.inventory[givecard] = uj.inventory[givecard] - 1
     if uj.inventory[givecard] == 0 then uj.inventory[givecard] = nil end
-    
+
     wj.boxpool[boxpoolindex] = givecard
-    
+
     print(interaction)
     send(formatstring(lang.boxed_message, {uj.id, cdb[givecard].name, uj.pronouns["their"], cdb[getcard].name, getcard}))
 
 	if not uj.togglecheckcard then
             if not uj.storage[getcard] then
-                message.channel:send(formatstring(lang.not_in_storage, {cdb[getcard].name}))
+                message:reply(formatstring(lang.not_in_storage, {cdb[getcard].name}))
             end
         end
     uj.timesusedbox = uj.timesusedbox and uj.timesusedbox + 1 or 1
     uj.lastbox = time:toHours()
-    
+
     if uj.sodapt then
       if uj.sodapt.box then
         uj.lastbox = uj.lastbox + uj.sodapt.box

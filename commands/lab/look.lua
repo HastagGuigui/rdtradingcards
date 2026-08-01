@@ -9,7 +9,7 @@ function command.run(message, mt, uj, wj)
 			laburl = labimages[getletterindex(string.sub(wj.lablooktext, wj.lablookindex + 1, wj.lablookindex + 1))]
 			labdesc = lang.looking_lab
 		end
-		message.channel:send { embed = {
+		message:reply { embed = {
 			color = uj.embedc,
 			title = lang.looking_at_lab,
 			description = labdesc,
@@ -24,7 +24,7 @@ function command.run(message, mt, uj, wj)
 		local newmessage = ynbuttons(message, lang.spider_alert, "spiderlook", {}, uj.id, uj.lang)
 	elseif (string.lower(mt[1]) == "terminal" or (uj.lang ~= "en" and mt[1] == lang.request_terminal)) and wj.labdiscovered then    --FONT IS MS GOTHIC AT 24PX, 8PX FOR SMALL FONT
 		if wj.ws < 508 then
-			message.channel:send { embed = {
+			message:reply { embed = {
 				color = uj.embedc,
 				title = lang.looking_at_terminal,
 				description = lang.looking_terminal_pre_508,
@@ -33,7 +33,7 @@ function command.run(message, mt, uj, wj)
 				}
 			} }
 		else
-			message.channel:send { embed = {
+			message:reply { embed = {
 				color = uj.embedc,
 				title = lang.looking_at_terminal,
 				description = lang.looking_terminal,
@@ -43,7 +43,7 @@ function command.run(message, mt, uj, wj)
 			} }
 		end
 	elseif (string.lower(mt[1]) == "database" or (uj.lang ~= "en" and mt[1] == lang.request_database)) and wj.labdiscovered then
-		message.channel:send { embed = {
+		message:reply { embed = {
 			color = uj.embedc,
 			title = lang.looking_at_database,
 			description = lang.looking_database,
@@ -56,7 +56,7 @@ function command.run(message, mt, uj, wj)
 		wj.lablookindex = wj.lablookindex % string.len(wj.lablooktext)
 		dpf.savejson("savedata/worldsave.json", wj)
 	elseif (string.lower(mt[1]) == "table" or (uj.lang ~= "en" and mt[1] == lang.request_table)) and wj.labdiscovered then
-		message.channel:send { embed = {
+		message:reply { embed = {
 			color = uj.embedc,
 			title = lang.looking_at_table,
 			description = lang.looking_table,
@@ -78,7 +78,7 @@ function command.run(message, mt, uj, wj)
 				"https://cdn.discordapp.com/attachments/829197797789532181/839214999884398612/poster12.png",
 				"https://cdn.discordapp.com/attachments/829197797789532181/839215023662039060/poster13.png" }
 			local cposter = math.random(1, #postermessage)
-			message.channel:send { embed = {
+			message:reply { embed = {
 				color = uj.embedc,
 				title = lang.looking_at_poster,
 				description = postermessage[cposter],
@@ -87,7 +87,7 @@ function command.run(message, mt, uj, wj)
 				}
 			} }
 		else   -- pull away cat poster
-			message.channel:send { embed = {
+			message:reply { embed = {
 				color = uj.embedc,
 				title = lang.looking_at_poster,
 				description = lang.looking_poster_901,
@@ -97,19 +97,19 @@ function command.run(message, mt, uj, wj)
 			} }
 		end
 	elseif (string.lower(mt[1]) == "mouse hole" or string.lower(mt[1]) == "mouse" or string.lower(mt[1]) == "mousehole" or (uj.lang ~= "en" and mt[1] == lang.request_mousehole_1 or mt[1] == lang.request_mousehole_2 or mt[1] == lang.request_mousehole_3)) and wj.labdiscovered then
-		message.channel:send { embed = {
+		message:reply { embed = {
 			color = uj.embedc,
 			title = lang.looking_at_mousehole,
 			description = lang.looking_mousehole,
 		} }
 	elseif (string.lower(mt[1]) == "peculiar box" or string.lower(mt[1]) == "box" or string.lower(mt[1]) == "peculiarbox" or (uj.lang ~= "en" and mt[1] == lang.request_box_1 or mt[1] == lang.request_box_2 or mt[1] == lang.request_box_3)) and wj.labdiscovered then
-		message.channel:send { embed = {
+		message:reply { embed = {
 			color = uj.embedc,
 			title = lang.looking_at_box,
 			description = lang.looking_box,
 		} }
 	elseif (string.lower(mt[1]) == "scanner") and wj.ws >= 902 then
-		message.channel:send { embed = {
+		message:reply { embed = {
 			color = uj.embedc,
 			title = "Looking at scanner...",
 			description = 'TODO: scanner look text',

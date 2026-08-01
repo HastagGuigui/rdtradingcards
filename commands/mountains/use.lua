@@ -5,15 +5,15 @@ function command.run(message, mt)
 	local wj = dpf.loadjson("savedata/worldsave.json", defaultworldsave)
 	local lang = dpf.loadjson("langs/" .. uj.lang .. "/use/mountains.json")
 	local request = mt[1]
-	
+
 	if (request == "pyrowmid" or (uj.lang ~= "en" and request == lang.request_pyrowmid)) then
-		message.channel:send(lang.use_pyrowmid)
+		message:reply(lang.use_pyrowmid)
 		uj.room = 0
 		dpf.savejson("savedata/" .. message.author.id .. ".json", uj)
 		cmd.look.run(message, { "pyrowmid" })
 		--TODO: find a way to show a location's main c!look?
 	elseif (request == "bridge" or (uj.lang ~= "en" and request == lang.request_bridge)) then
-		message.channel:send { embed = {
+		message:reply { embed = {
 			color = uj.embedc,
 			title = lang.using_bridge,
 			description = lang.use_bridge,
@@ -33,24 +33,24 @@ function command.run(message, mt)
 
 			local durationtext = formattime(minutesleft, uj.lang)
 			if uj.lastrob + 3 == sj.stocknum then
-				message.channel:send(formatstring(lang.blacklist_next, { durationtext }))
+				message:reply(formatstring(lang.blacklist_next, { durationtext }))
 			else
-				message.channel:send(formatstring(lang.blacklist, { stockstring, durationtext }))
+				message:reply(formatstring(lang.blacklist, { stockstring, durationtext }))
 			end
 			return true, uj, wj
 		else
-			message.channel:send(lang.use_shop)
+			message:reply(lang.use_shop)
 			uj.room = 3
 			dpf.savejson("savedata/" .. message.author.id .. ".json", uj)
 		end
 	elseif (request == "barrels" or (uj.lang ~= "en" and request == lang.request_barrels)) then
-		message.channel:send { embed = {
+		message:reply { embed = {
 			color = uj.embedc,
 			title = lang.using_barrels,
 			description = lang.use_barrels,
 		} }
 	elseif (request == "clouds" or (uj.lang ~= "en" and request == lang.request_clouds)) then
-		message.channel:send { embed = {
+		message:reply { embed = {
 			color = uj.embedc,
 			title = lang.using_clouds,
 			description = lang.use_clouds,

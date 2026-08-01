@@ -6,7 +6,7 @@ function command.run(message, mt, bypass)
   local request = string.lower(mt[1])
 
   if not (message.guild or bypass or constexttofn(request)) then
-    message.channel:send(lang.dm_message)
+    message:reply(lang.dm_message)
     return
   end
   local wj = dpf.loadjson("savedata/worldsave.json", defaultworldsave)
@@ -52,9 +52,9 @@ function command.run(message, mt, bypass)
     local lang = dpf.loadjson("langs/" .. uj.lang .. "/use/nonroom.json", "")
     if request == "token" or (uj.lang ~= "en" and request == lang.request_token) then
       if uj.tokens > 0 then
-        message.channel:send(formatstring(lang.tokenflip, { math.random(2) == 1 and lang.token_heads or lang.token_tails }))
+        message:reply(formatstring(lang.tokenflip, { math.random(2) == 1 and lang.token_heads or lang.token_tails }))
       else
-        message.channel:send(lang.no_tokens)
+        message:reply(lang.no_tokens)
       end
       uj.timesused = uj.timesused and uj.timesused + 1 or 1
     elseif constexttofn(request) then
@@ -77,7 +77,7 @@ function command.run(message, mt, bypass)
             if request ~= "ddd" then
               if uj.equipped == 'aceofhearts' then
                 if uj.acepulls ~= 0 then
-                  message.channel:send('The pulls stored in your **Ace of Hearts** disappear...')
+                  message:reply('The pulls stored in your **Ace of Hearts** disappear...')
                   uj.acepulls = 0
                 end
               end
@@ -90,13 +90,13 @@ function command.run(message, mt, bypass)
             return
           end
         else
-          message.channel:send('You cannot use this item!')
+          message:reply('You cannot use this item!')
         end
       else
-        message.channel:send(formatstring(lang.donthave, { consdb[request].name }))
+        message:reply(formatstring(lang.donthave, { consdb[request].name }))
       end
     else
-      message.channel:send(formatstring(lang.unknown, { mt[1] }))
+      message:reply(formatstring(lang.unknown, { mt[1] }))
     end
   end
   print("that's worrying if this is a room")

@@ -4,7 +4,7 @@ function command.run(message, mt)
   local lang = dpf.loadjson("langs/" .. uj.lang .. "/nickname.json","")
   print(message.author.name .. " did !nickname")
   local maxnicknames = 4
-  
+
   if not uj.names then
     uj.names = {}
     uj.names[message.author.name .. "#" .. message.author.discriminator] = true
@@ -20,61 +20,61 @@ function command.run(message, mt)
     mt[1] = "check"
     mt[2] = uj.id
   end
-  
+
   if mt[1] == "add" then
     if not mt[2] then
-      message.channel:send(lang.add_nothing)
+      message:reply(lang.add_nothing)
       return
     end
 
     if mt[2] == uj.id then
-      message.channel:send(lang.add_id)
+      message:reply(lang.add_id)
       return
     end
 
     if usernametojson(mt[2]) then
       if string.find(usernametojson(mt[2]), uj.id, 10) then
-        message.channel:send(formatstring(lang.add_already, {mt[2]}))
+        message:reply(formatstring(lang.add_already, {mt[2]}))
       else
-        message.channel:send(lang.add_other_user)
+        message:reply(lang.add_other_user)
       end
       return
     end
 
     if string.sub(mt[2], 1, 1) == "<" and string.sub(mt[2], #mt[2], #mt[2]) == ">" then
-      message.channel:send(lang.add_invalid)
+      message:reply(lang.add_invalid)
       return
     end
 
     if numnames >= maxnicknames then
-      message.channel:send(formatstring(lang.add_too_many, {maxnicknames}))
+      message:reply(formatstring(lang.add_too_many, {maxnicknames}))
       return
     end
 
     uj.names[mt[2]] = true
-    message.channel:send(formatstring(lang.add_success, {mt[2]}))
+    message:reply(formatstring(lang.add_success, {mt[2]}))
   elseif mt[1] == "remove" then
     if not mt[2] then
-      message.channel:send(lang.remove_nothing)
+      message:reply(lang.remove_nothing)
       return
     end
 
     if numnames == 1 then
-      message.channel:send(lang.remove_least_one)
+      message:reply(lang.remove_least_one)
       return
     end
 
     if not uj.names[mt[2]] then
-      message.channel:send(formatstring(lang.remove_no_such, {mt[2]}))
+      message:reply(formatstring(lang.remove_no_such, {mt[2]}))
       return
     end
 
     uj.names[mt[2]] = nil
-    message.channel:send(formatstring(lang.remove_success, {mt[2]}))
+    message:reply(formatstring(lang.remove_success, {mt[2]}))
   elseif mt[1] == "reset" then
     uj.names = {}
     uj.names[message.author.name .. "#" .. message.author.discriminator] = true
-    message.channel:send(formatstring(lang.reset_success, {message.author.name .. "#" .. message.author.discriminator}))
+    message:reply(formatstring(lang.reset_success, {message.author.name .. "#" .. message.author.discriminator}))
   elseif mt[1] == "check" then
     local nicknamestring = ""
     if not mt[2] then
@@ -83,7 +83,7 @@ function command.run(message, mt)
 
     local uj2f = usernametojson(mt[2])
     if not uj2f then
-      message.channel:send(formatstring(lang.check_no_user, {mt[2]}))
+      message:reply(formatstring(lang.check_no_user, {mt[2]}))
       return
     end
 
@@ -95,21 +95,21 @@ function command.run(message, mt)
 
     if string.find(uj2f, uj.id, 10) then
       if numnames == 1 then
-        message.channel:send(lang.check_yourself_singular .. nicknamestring)
+        message:reply(lang.check_yourself_singular .. nicknamestring)
       else
-        message.channel:send(lang.check_yourself_plural .. nicknamestring)
+        message:reply(lang.check_yourself_plural .. nicknamestring)
       end
     else
       local numnames2 = 0
       for k in pairs(uj2.names) do numnames2 = numnames2 + 1 end
       if numnames2 == 1 then
-        message.channel:send(formatstring(lang.check_other_singular, {nicknamestring, (uj.lang ~= "ko" and uj2.pronouns["their"])}))
+        message:reply(formatstring(lang.check_other_singular, {nicknamestring, (uj.lang ~= "ko" and uj2.pronouns["their"])}))
       else
-        message.channel:send(formatstring(lang.check_other_plural, {mt[2], nicknamestring}))
+        message:reply(formatstring(lang.check_other_plural, {mt[2], nicknamestring}))
       end
     end
   else
-    message.channel:send(formatstring(lang.invalid_command, {mt[1]}))
+    message:reply(formatstring(lang.invalid_command, {mt[1]}))
   end
 
   dpf.savejson("savedata/" .. message.author.id .. ".json",uj)

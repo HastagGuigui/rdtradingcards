@@ -4,7 +4,7 @@ function command.run(message, mt)
   local uj = dpf.loadjson("savedata/" .. message.author.id .. ".json",defaultjson)
   local lang = dpf.loadjson("langs/" .. uj.lang .. "/search.json","")
   if #mt ~= 1 then
-    message.channel:send(lang.no_arguments)
+    message:reply(lang.no_arguments)
     return
   end
 
@@ -13,9 +13,9 @@ function command.run(message, mt)
 
   if not curfilename then
     if nopeeking then
-      message.channel:send(formatstring(lang.error_nopeeking, {request}))
+      message:reply(formatstring(lang.error_nopeeking, {request}))
     else
-      message.channel:send(formatstring(lang.no_item, {request}))
+      message:reply(formatstring(lang.no_item, {request}))
     end
     return
   end
@@ -23,9 +23,9 @@ function command.run(message, mt)
   local invnum = uj.inventory[curfilename] or 0
   local stornum = uj.storage[curfilename] or 0
   if nopeeking and invnum + stornum == 0 then
-    message.channel:send(formatstring(lang.error_nopeeking, {request}))
+    message:reply(formatstring(lang.error_nopeeking, {request}))
   else
-    message.channel:send(formatstring(lang.search_message, {cdb[curfilename].name, invnum, stornum}))
+    message:reply(formatstring(lang.search_message, {cdb[curfilename].name, invnum, stornum}))
   end
 end
 return command

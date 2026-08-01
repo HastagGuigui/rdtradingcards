@@ -14,8 +14,7 @@ function command.run(message, mt)
     end
     handlemessage(newmessage, table.concat(mt, "/", 2))
   else
-    message.channel:send("haha no, nice try")
+    message:reply("haha no, nice try")
   end
 end
 return command
-  

@@ -655,23 +655,27 @@ function command.run(message, mt, overwrite)
       end
     end
 
-    _G['usernametojson'] = function (x)
-      print(x)
-      for i,v in ipairs(scandir("savedata")) do
-        local cuj = dpf.loadjson("savedata/"..v,defaultjson)
-        if cuj.id then
-          if cuj.id == x or ("<@!" .. cuj.id .. ">") == x or ("<@" .. cuj.id .. ">") == x then --prioritize id and mentions over nickname
-            return "savedata/"..v
-          end
+    _G['usernametoid'] = function (x)
+    for i,v in ipairs(scandir("savedata")) do
+      local cuj = dpf.loadjson("savedata/"..v,defaultjson)
+      if cuj.id then
+        if cuj.id == x or ("<@!" .. cuj.id .. ">") == x or ("<@" .. cuj.id .. ">") == x then --prioritize id and mentions over nickname
+          return cuj.id
         end
-        if cuj.names then
-          for j,w in pairs(cuj.names) do
-            if string.lower(j) == string.lower(x) then
-              return "savedata/"..v
-            end
+      end
+      if cuj.names then
+        for j,w in pairs(cuj.names) do
+          if string.lower(j) == string.lower(x) then
+            return cuj.id
           end
         end
       end
+    end
+    end
+
+    _G['usernametojson'] = function (x)
+      print(x)
+      return "savedata/" .. usernametoid(x) .. ".json"
     end
 
     _G['ynbuttons'] = function(message, content, etype, data, userid, lang)
@@ -699,7 +703,7 @@ function command.run(message, mt, overwrite)
       }
 
       print("writing message")
-      local newmessage = message.channel:sendComponents {
+      local newmessage = message:replyComponents {
         embed = messageembed,
         content = messagecontent,
         components = discordia.Components {yesbutton, nobutton}
@@ -733,9 +737,9 @@ function command.run(message, mt, overwrite)
       if not status then
         print("uh oh")
         if errorping then
-          message.channel:send("Oops! An error has occured! Error message: ```" .. err .. "``` (" .. config.errorping .. " please fix this thanks)")
+          message:reply("Oops! An error has occured! Error message: ```" .. err .. "``` (" .. config.errorping .. " please fix this thanks)")
         else
-          message.channel:send("Oops! An error has occured! Error message: ```" .. err .. "``` (please fix this thanks)")
+          message:reply("Oops! An error has occured! Error message: ```" .. err .. "``` (please fix this thanks)")
         end
       end
 
@@ -836,79 +840,6 @@ function command.run(message, mt, overwrite)
     addcommand("rtsitem",cmd.rtsitem)
     addcommand("embed", cmd.embed)
     addcommand("reloadslash", cmd.reloadslash)
-
-    _G['handlemessage'] = function (message, content)
-	  if message.author.id ~= client.user.id or content then
-      local messagecontent = content or message.content
-      for i,v in ipairs(commands) do
-        if string.trim(string.lower(string.sub(messagecontent, 0, #v.trigger+1))) == v.trigger then
-          if not (message.author.bot == true) then
-          local uj = dpf.loadjson("savedata/" .. message.author.id .. ".json", defaultjson)
-          local sj = dpf.loadjson("savedata/shop.json",defaultshopsave)
-          if not uj.embedc then
-            uj.embedc = embed_colors["default"].colorcode
-          end
-          if not uj.has_seen_tutorials then
-            uj.has_seen_tutorials = {}
-          end
-          -- if not uj.unlocked_colors then
-          --   uj.unlocked_colors = {default = true}
-          -- end
-          -- if not uj.themeoffers then
-          --   setup_theme_offers(uj)
-          -- end
-          if not sj.stocknum then
-            sj.stocknum = 1
-            dpf.savejson("savedata/shop.json",sj)
-          end
-          if not uj.lang then
-            uj.lang = "en"
-          end
-          if not uj.pronouns["selection"] then
-            uj.pronouns["selection"] = uj.pronouns["they"]
-          end
-          if not uj.lastrob then
-            uj.lastrob = 0
-          end
-          dpf.savejson("savedata/" .. message.author.id .. ".json",uj)
-          end
-          print("found ".. v.trigger)
-          local mt = {}
-          local nmt = {}
-          if v.expectedargs == 0 then
-            mt = string.split(string.sub(messagecontent, #v.trigger+1),"/")
-            for a,b in ipairs(mt) do
-              b = string.trim(b)
-              nmt[a]=b
-            end
-            if nmt[#mt] == "" then
-              nmt[#mt] = nil
-            end
-          elseif v.expectedargs == 1 then
-            nmt = {string.trim(string.sub(messagecontent, #v.trigger+1))}
-          end --might have to expand later?
-          if v.force then
-            for c,d in ipairs(v.force) do
-              table.insert(nmt,c,d)
-            end
-          end
-          print("nmt: " .. inspect(nmt))
-          local status, err = xpcall(function ()
-            v.commandfunction.run(message,nmt,v.usebypass,content)
-          end, debug.traceback)
-          if not status then
-            print("uh oh")
-            if errorping then
-              message.channel:send("Oops! An error has occured! Error message: ```" .. err .. "``` (" .. config.errorping .. " please fix this thanks)")
-            else
-              message.channel:send("Oops! An error has occured! Error message: ```" .. err .. "``` (please fix this thanks)")
-            end
-          end
-          break
-        end
-      end
-    end
-    end
 
     _G['getitemthumb'] = function(item,cons)
       local cf = io.open("vips_out/cache/items/"..item..".png", "r")
@@ -1417,11 +1348,11 @@ function command.run(message, mt, overwrite)
     print("done loading")
 
     if not overwrite then
-      message.channel:send('All commands have been reloaded.')
+      message:reply('All commands have been reloaded.')
     end
 
   else
-    message.channel:send('Sorry, but only moderators can use this command!')
+    message:reply('Sorry, but only moderators can use this command!')
   end
   --print(message.author.name .. " did !reloaddb")
 end

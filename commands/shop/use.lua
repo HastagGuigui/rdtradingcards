@@ -15,9 +15,9 @@ function command.run(message, mt)
 
 		local durationtext = formattime(minutesleft, uj.lang)
 		if uj.lastrob + 3 == sj.stocknum then
-			message.channel:send(formatstring(lang.blacklist_next, { durationtext }))
+			message:reply(formatstring(lang.blacklist_next, { durationtext }))
 		else
-			message.channel:send(formatstring(lang.blacklist, { stockstring, durationtext }))
+			message:reply(formatstring(lang.blacklist, { stockstring, durationtext }))
 		end
 		return true
 	end
@@ -46,42 +46,42 @@ function command.run(message, mt)
 		--error handling
 		local sendshoperror = {
 			notenough = function()
-				message.channel:send(formatstring(lang.no_tokens, { sprice, sname }))
+				message:reply(formatstring(lang.no_tokens, { sprice, sname }))
 			end,
 
 			outofstock = function()
-				message.channel:send(formatstring(lang.out_of_stock, { sname }))
+				message:reply(formatstring(lang.out_of_stock, { sname }))
 			end,
 
 			toomanyrequested = function()
-				message.channel:send(formatstring(lang.too_many_requested, { stock, sname }))
+				message:reply(formatstring(lang.too_many_requested, { stock, sname }))
 			end,
 
 			donthave = function()
 				if nopeeking then
-					message.channel:send(formatstring(lang.nopeeking_error, { mt[2] }))
+					message:reply(formatstring(lang.nopeeking_error, { mt[2] }))
 				else
-					message.channel:send(formatstring(lang.donthave_1, { sname }))
+					message:reply(formatstring(lang.donthave_1, { sname }))
 				end
 			end,
 
 			alreadyhave = function()
-				message.channel:send(formatstring(lang.alreadyhave, { sname }))
+				message:reply(formatstring(lang.alreadyhave, { sname }))
 			end,
 
 			hasfixedmouse = function()
-				message.channel:send(lang.hasfixedmouse)
+				message:reply(lang.hasfixedmouse)
 			end,
 
 			oneitemonly = function()
-				message.channel:send(lang.oneitemonly)
+				message:reply(lang.oneitemonly)
 			end,
 
 			unknownrequest = function()
 				if nopeeking then
-					message.channel:send(formatstring(lang.nopeeking_error, { mt[2] }))
+					message:reply(formatstring(lang.nopeeking_error, { mt[2] }))
 				else
-					message.channel:send(formatstring(lang.unknownrequest, { mt[2] }))
+					message:reply(formatstring(lang.unknownrequest, { mt[2] }))
 				end
 			end
 		}
@@ -235,20 +235,20 @@ function command.run(message, mt)
 		end
 		return true
 	elseif request == "wolf" or (uj.lang ~= "en" and request == lang.request_wolf) then
-		message.channel:send { embed = {
+		message:reply { embed = {
 			color = uj.embedc,
 			title = lang.petting_wolf,
 			description = lang.petted_wolf,
 			image = { url = "https://cdn.discordapp.com/attachments/829197797789532181/882289357128618034/petwolf.gif" }
 		} }
 	elseif request == "ghost" or (uj.lang ~= "en" and request == lang.request_ghost) then
-		message.channel:send { embed = {
+		message:reply { embed = {
 			color = uj.embedc,
 			title = lang.petting_ghost,
 			description = lang.petted_ghost
 		} }
 	elseif request == "photo" or request == "dog" or (uj.lang ~= "en" and request == lang.request_photo or request == lang.request_dog) then
-		message.channel:send { embed = {
+		message:reply { embed = {
 			color = uj.embedc,
 			title = lang.petting_dog,
 			description = lang.petted_dog,

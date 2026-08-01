@@ -29,7 +29,7 @@ _G['cmdcons'] = {}
 
 _G['tr'] = {}
 _G['isauthoradmin'] = function(message)
-  local cmember = message.guild:getMember(message.author)
+  local cmember = message.guild:getMember(message.author ~= nil and message.author or message.user)
   if cmember:hasRole(privatestuff.modroleid) then return true end
   for _, id in ipairs(config.admins) do
     print(""..cmember.id.." = "..id)
@@ -58,6 +58,14 @@ end)
 
 client:on("slashCommand", function(interaction, command, args)
     handleslash(interaction, command, args)
+end)
+
+-- for autocompletion
+-- focused_option - option where focused = true
+
+-- cmd.focused returns value directly
+client:on("slashCommandAutocomplete", function(interaction, command, focused_option, args)
+    handle_autocomplete(interaction, command, focused_option, args)
 end)
 
 print("Resetting clocks")

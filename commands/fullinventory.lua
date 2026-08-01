@@ -1,16 +1,49 @@
-local command = {}
+local command = {
+    name = "fullinventory",
+    description = "Sends your entire inventory in DMs.",
+    options = {
+        {
+            name = "show-season",
+            type = 5, -- BOOLEAN
+            description = "Shows seasons on cards. (Default: false)",
+            required = false
+        },
+        {
+            name = "unstored-only",
+            type = 5, -- BOOLEAN
+            description = "Shows only cards that aren't present in storage. (Default: false)",
+            required = false
+        },
+        {
+            name = "season-filter",
+            type = 3, -- STRING
+            description = "In format \"1,2,3\". Also accepts 'maestro' as a shorthand for seasons 1 to 8.",
+            required = false
+        },
+        {
+            name = "rarity-filter",
+            type = 3, -- STRING
+            description =
+            "In format \"sr,ur\". Rarity names are the ones used in card shorthands.",
+            required = false
+        }
+    }
+}
 function command.run(message, mt)
-  print(message.author.name .. " did !fullinventory")
-  local filename = "savedata/" .. message.author.id .. ".json"
-  local uj = dpf.loadjson(filename, defaultjson)
+    local author = message.author ~= nil and message.author or message.user
+    print(author.name .. " did !fullinventory")
+  if message.replyDeferred then
+    message:replyDeferred(true)
+  end
+  local uj = db.get_user(author.id)
   local lang = dpf.loadjson("langs/" .. uj.lang .. "/fullinventory.json", "")
   local placeholder = dpf.loadjson("langs/" .. uj.lang .. "/look/missingcard.json", "")
 
   local enableShortNames = true
   local enableSeason = false
-  
+
   local filterUnstored = false
-  
+
   local filterSeasons = {}
   local filterSeasonsCount = 0
   local filterRarities = {}
@@ -21,7 +54,20 @@ function command.run(message, mt)
     for substring in mt[1]:gmatch("%S+") do
       table.insert(args, substring)
     end
-  end
+    elseif not next(mt) == nil then
+        if mt["show-season"] ~= nil then enableSeason = mt["show-season"] end
+        if mt["unstored-only"] ~= nil then filterUnstored = mt["unstored-only"] end
+        if mt["season-filter"] ~= nil then
+            for substring in mt["season-filter"]:gmatch('([^,]+)') do
+                table.insert(args, "-season"..substring)
+            end
+        end
+        if mt["rarity-filter"] ~= nil then
+            for substring in mt["rarity-filter"]:gmatch('([^,]+)') do
+                table.insert(args, "-rarity"..substring)
+            end
+        end
+    end
 
   for index, value in ipairs(args) do
     if value == "-s" then
@@ -51,8 +97,8 @@ function command.run(message, mt)
       filterUnstored = true
 		else
 			if value[0] ~= '-' and (tonumber(value) > 11 or not tonumber(value)) then
-				filename = usernametojson(value)
-        uj = dpf.loadjson(filename, defaultjson)
+				local filename = usernametojson(value)
+				uj = db.get_user(author.id)
 			end
 		end
   end
@@ -60,7 +106,7 @@ function command.run(message, mt)
   local invtable = {}
   local invstring = ''
   local invfilter = uj.inventory
-  
+
   if filterSeasonsCount > 0 then
     for k,v in pairs(invfilter) do
 	    if not filterSeasons[cdb[k] and cdb[k].season or -1] then
@@ -77,7 +123,7 @@ function command.run(message, mt)
 			end
 		end
 	end
-	
+
 	if filterUnstored then
 	  for k,v in pairs(invfilter) do
 	    if uj.storage[k] and uj.storage[k] > 0 then
@@ -85,16 +131,16 @@ function command.run(message, mt)
 	    end
 	  end
 	end
-	
+
   local numkey = tablelength(invfilter)
 
-  
-  
+
+
   local seasonnum = ""
 	local raritytext = ""
   local multipleSeasons = filterSeasonsCount > 1
 	local multipleRarities = filterRaritiesCount > 1
-  
+
   for season,_ in pairs(filterSeasons) do
     if #seasonnum > 0 then seasonnum = seasonnum..", " end
     seasonnum = seasonnum .. tostring(season)
@@ -104,7 +150,7 @@ function command.run(message, mt)
     if #raritytext > 0 then raritytext = raritytext..", " end
     raritytext = raritytext .. rarities[rarity_short]
   end
-	
+
   local embedtitle = lang.embed_title
   if filterSeason then
 		local filtertitle = ""
@@ -117,19 +163,19 @@ function command.run(message, mt)
 		else
 			filtertitle = " " .. seasonnum
 		end
-		
+
 	embedtitle = formatstring(lang.embed_title_season, {filtertitle})
   end
 
 	if filterRarity then embedtitle = embedtitle .. formatstring(lang.rarity, {raritytext}) end
 	if filterUnstored then embedtitle = embedtitle .. " (unstored)" end
-  
-  local contentstring = (uj.id == message.author.id and lang.embed_your or formatstring(lang.embed_s, {"<@" .. uj.id .. ">"})) .. lang.embed_contains
+
+  local contentstring = (uj.id == author.id and lang.embed_your or formatstring(lang.embed_s, {"<@" .. uj.id .. ">"})) .. lang.embed_contains
   local previnvstring = ''
 	for k,v in pairs(invfilter) do
 		table.insert(invtable,
 			"**" .. (cdb[k] and cdb[k].name or placeholder.card) .. "** x" .. v ..
-			(enableShortNames and (" ("..k..") ") or "") ..
+			(enableShortNames and (" `"..k.."` ") or "") ..
 			(enableSeason and formatstring(lang.season, {cdb[k] and cdb[k].season or -1}) or "")
 			.."\n"
 		)
@@ -138,7 +184,7 @@ function command.run(message, mt)
   for i = 1, numkey do
     invstring = invstring .. invtable[i]
     if #invstring > 4096 then
-      message.author:send{
+      author:send{
         content = contentstring,
         embed = {
           color = uj.embedc,

@@ -9,23 +9,23 @@ function command.run(message, mt)
   local time = sw:getTime()
   local timeout = 20
   if not message.guild then
-    message.channel:send(lang.dm_message)
+    message:reply(lang.dm_message)
     return
   end
 
   if not (#mt == 1) then
-    message.channel:send(lang.no_arguments)
+    message:reply(lang.no_arguments)
     return
   end
 
   local cardfilename, consfilename = texttofn(mt[1]), constexttofn(mt[1])
   local curfilename = cardfilename or consfilename
-  
+
   if not (curfilename) then
     if nopeeking then
-      message.channel:send(lang.error_nopeeking_1 .. mt[1] .. lang.error_nopeeking_2)
+      message:reply(lang.error_nopeeking_1 .. mt[1] .. lang.error_nopeeking_2)
     else
-      message.channel:send(lang.no_item_1 .. mt[1] .. lang.no_item_2)
+      message:reply(lang.no_item_1 .. mt[1] .. lang.no_item_2)
     end
     return
   end
@@ -35,13 +35,13 @@ function command.run(message, mt)
   if not (cardfilename and uj.inventory[cardfilename] or uj.consumables[consfilename]) then
     print("user doesnt have item")
     if nopeeking then
-      message.channel:send(lang.error_nopeeking_1 .. mt[1] .. lang.error_nopeeking_2)
+      message:reply(lang.error_nopeeking_1 .. mt[1] .. lang.error_nopeeking_2)
     else
-      message.channel:send(lang.dont_have_1 .. thrownname .. lang.dont_have_2)
+      message:reply(lang.dont_have_1 .. thrownname .. lang.dont_have_2)
     end
     return
   end
-  
+
   local thrownstring = ""
   local koaction = {"던졌습니다", "발사했습니다", "날렸습니다", "퍼부었습니다", "상승시켰습니다", "뿅시켰습니다"}
   local kocaction = math.random(1,#koaction)
@@ -49,7 +49,7 @@ function command.run(message, mt)
   local kocplace = math.random(1,#koplace)
   local koitem = cardfilename and kolang.card_thrown or kolang.item_thrown
   local kotrfstring = message.author.mentionString .. "님이 " .. koplace[kocplace] .. " **" .. thrownname .. "** " .. koitem .. koaction[kocaction] .. "!"
-  
+
   if uj.lang ~= "en" then
     if uj.lang == "ko" then
 		thrownstring = kotrfstring .. lang.thrown_message_1 .. timeout .. lang.thrown_message_2
@@ -62,8 +62,8 @@ function command.run(message, mt)
   end
   thrownstring = thrownstring .. lang.thrown_command_1 .. (curfilename) .. lang.thrown_command_2
 
-  message.channel:send(thrownstring)
-  
+  message:reply(thrownstring)
+
   uj = dpf.loadjson("savedata/" .. message.author.id .. ".json", defaultjson)
   if cardfilename then
     uj.inventory[cardfilename] = uj.inventory[cardfilename] - 1
@@ -95,7 +95,7 @@ function command.run(message, mt)
 
     if cardfilename then
       uj.inventory[cardfilename] = uj.inventory[cardfilename] and uj.inventory[cardfilename] + 1 or 1
-    else 
+    else
       uj.consumables[consfilename] = uj.consumables[consfilename] and uj.consumables[consfilename] + 1 or 1
     end
 
@@ -120,8 +120,8 @@ function command.run(message, mt)
 	else
 		fallstring = trf("fall",{name = thrownname, item = cardfilename and enlang.card_fall or lang.item_fall}) .. message.author.mentionString .. enlang.fall_message_1 .. prosel.getPronoun("en", uj.pronouns["selection"], "their") .. enlang.fall_message_2
 	end
-	message.channel:send(fallstring)
-	  
+	message:reply(fallstring)
+
   end
 end
 return command

@@ -37,10 +37,7 @@ local command = {
     }
 }
 function command.run(message, mt)
-    local author = message.author
-    if not author then
-        author = message.user
-    end
+    local author = message.author ~= nil and message.author or message.user
     print(author.name .. " did !inventory")
     local uj = dpf.loadjson("savedata/" .. author.id .. ".json", defaultjson)
     local lang = dpf.loadjson("langs/" .. uj.lang .. "/inventory.json", "")

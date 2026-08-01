@@ -5,7 +5,7 @@ function command.run(message, mt)
   local sj = dpf.loadjson("savedata/shop.json", defaultshopsave)
   local lang = dpf.loadjson("langs/" .. uj.lang .. "/show.json","")
   if #mt ~= 1 then
-    message.channel:send(lang.no_arguments)
+    message:reply(lang.no_arguments)
     return
   end
 
@@ -13,9 +13,9 @@ function command.run(message, mt)
 
   if not curfilename then
     if nopeeking then
-      message.channel:send(formatstring(lang.error_nopeeking, {mt[1]}))
+      message:reply(formatstring(lang.error_nopeeking, {mt[1]}))
     else
-      message.channel:send(formatstring(lang.no_item, {mt[1]}))
+      message:reply(formatstring(lang.no_item, {mt[1]}))
     end
     return
   end
@@ -23,9 +23,9 @@ function command.run(message, mt)
   if not ((uj.inventory[curfilename] or uj.storage[curfilename])) and not (shophas(curfilename) and not (uj.lastrob + 3 > sj.stocknum and uj.lastrob ~= 0)) then
     print("user doesnt have card")
     if nopeeking then
-      message.channel:send(formatstring(lang.error_nopeeking, {mt[1]}))
+      message:reply(formatstring(lang.error_nopeeking, {mt[1]}))
     else
-      message.channel:send(formatstring(lang.dont_have, {cdb[curfilename].name}))
+      message:reply(formatstring(lang.dont_have, {cdb[curfilename].name}))
     end
     return
   end
@@ -46,7 +46,7 @@ function command.run(message, mt)
     if card_data.description then
       embeddescription = "\n\n*" .. lang.embeddescription .. "*\n> " .. card_data.description
     end
-    message.channel:send{embed = {
+    message:reply{embed = {
       color = uj.embedc,
       title = lang.showing_card,
       description = formatstring(lang.show_card, {card_data.name, curfilename, embeddescription}),
@@ -57,14 +57,13 @@ function command.run(message, mt)
     }}
   else
     print("spiderrrrrrr")
-    message.channel:send{
+    message:reply{
       content = formatstring(lang.show_card, {card_data.name, curfilename, ""}),
       file = "card_images/SPOILER_" .. curfilename .. ".png"
     }
     if card_data.description then
-      message.channel:send(lang.embeddescription .. "\n> " .. card_data.description .. "\n-# Season " .. card_data.season)
+      message:reply(lang.embeddescription .. "\n> " .. card_data.description .. "\n-# Season " .. card_data.season)
     end
   end
 end
 return command
-  

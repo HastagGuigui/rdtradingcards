@@ -5,7 +5,7 @@ function command.run(message, mt)
   local sj = dpf.loadjson("savedata/shop.json", defaultshopsave)
   local lang = dpf.loadjson("langs/" .. uj.lang .. "/showitem.json","")
   if #mt ~= 1 then
-    message.channel:send(lang.no_arguments)
+    message:reply(lang.no_arguments)
     return
   end
 
@@ -14,9 +14,9 @@ function command.run(message, mt)
 
   if not curfilename then
     if nopeeking then
-      message.channel:send(formatstring(lang.error_nopeeking, {mt[1]}))
+      message:reply(formatstring(lang.error_nopeeking, {mt[1]}))
     else
-      message.channel:send(formatstring(lang.no_item, {mt[1]}))
+      message:reply(formatstring(lang.no_item, {mt[1]}))
     end
     return
   end
@@ -28,16 +28,16 @@ function command.run(message, mt)
   if not (uj.items[curfilename] or uj.consumables[curfilename] or (shophas(curfilename) and not (uj.lastrob + 3 > sj.stocknum and uj.lastrob ~= 0))) then
     print("user doesnt have item")
     if nopeeking then
-      message.channel:send(formatstring(lang.error_nopeeking, {mt[1]}))
+      message:reply(formatstring(lang.error_nopeeking, {mt[1]}))
     else
-      message.channel:send(formatstring(lang.dont_have, {name}))
+      message:reply(formatstring(lang.dont_have, {name}))
     end
     return
   end
 
   print("user has item or consumable")
 
-  message.channel:send{embed = {
+  message:reply{embed = {
     color = uj.embedc,
     title = lang.showing_item,
     description = formatstring(lang.show_item, {name, curfilename, description}),

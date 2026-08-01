@@ -28,8 +28,8 @@ function command.run(message, mt)
     print(i)
     if medaltable[i] then medalstring = medalstring .. medaltable[i] end
   end
-  
-  message.channel:send{
+
+  message:reply{
     content = formatstring(lang.embed_contains, {message.author.mentionString}),
     embed = {
       color = uj.embedc,

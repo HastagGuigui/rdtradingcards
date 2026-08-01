@@ -13,17 +13,17 @@ function reaction.run(message, interaction, data, response)
       interaction:reply(lang.reaction_not_cooldown)
       return
     end
-	
+
 	if uj.equipped == 'aceofhearts' then
 		if uj.acepulls ~= 0 then
-			message.channel:send('The pulls stored in your **Ace of Hearts** disappear...')
+			message:reply('The pulls stored in your **Ace of Hearts** disappear...')
 			uj.acepulls = 0
 		end
 	end
-	
+
     uj.equipped = newequip
-    message.channel:send(formatstring(lang.equipped, {"<@" .. uj.id .. "> ", itemdb[newequip].name, uj.pronouns["their"]}))
-    
+    message:reply(formatstring(lang.equipped, {"<@" .. uj.id .. "> ", itemdb[newequip].name, uj.pronouns["their"]}))
+
 	uj.lastequip = time:toHours()
 
     if uj.sodapt and uj.sodapt.equip then
@@ -31,7 +31,7 @@ function reaction.run(message, interaction, data, response)
       uj.sodapt.equip = nil
       if uj.sodapt == {} then uj.sodapt = nil end
     end
-    
+
     dpf.savejson(ujf, uj)
   end
 

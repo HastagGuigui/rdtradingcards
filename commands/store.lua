@@ -5,27 +5,27 @@ function command.run(message, mt)
   local uj = dpf.loadjson(ujf, defaultjson)
   local lang = dpf.loadjson("langs/" .. uj.lang .. "/store.json", "")
   if not (#mt == 1 or #mt == 2) then
-    message.channel:send(formatstring(lang.no_arguments, {prefix}))
+    message:reply(formatstring(lang.no_arguments, {prefix}))
     return
   end
 
   print(string.sub(message.content, 0, 8))
-  
+
   local item1 = texttofn(mt[1])
   if not item1 then
     if nopeeking then
-      message.channel:send(formatstring(lang.no_item_nopeeking, {mt[1]}))
+      message:reply(formatstring(lang.no_item_nopeeking, {mt[1]}))
     else
-      message.channel:send(formatstring(lang.no_item, {mt[1]}))
+      message:reply(formatstring(lang.no_item, {mt[1]}))
     end
     return
   end
 
   if not uj.inventory[item1] then
     if nopeeking then
-      message.channel:send(formatstring(lang.no_item_nopeeking, {mt[1]}))
+      message:reply(formatstring(lang.no_item_nopeeking, {mt[1]}))
     else
-      message.channel:send(formatstring(lang.dont_have, {cdb[item1].name}))
+      message:reply(formatstring(lang.dont_have, {cdb[item1].name}))
     end
     return
   end
@@ -43,7 +43,7 @@ function command.run(message, mt)
   end
 
   if uj.inventory[item1] < numcards then
-    message.channel:send(formatstring(lang.not_enough, {cdb[item1].name}))
+    message:reply(formatstring(lang.not_enough, {cdb[item1].name}))
       return
   end
 
