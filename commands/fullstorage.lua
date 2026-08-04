@@ -47,6 +47,12 @@ function command.run(message, mt)
         if mt["show-season"] ~= nil then enableSeason = mt["show-season"] end
         if mt["season-filter"] ~= nil then
             for substring in mt["season-filter"]:gmatch('([^,]+)') do
+				if substring == "maestro" then
+					for i = 1, 8, 1 do
+						filterSeasons[i] = true
+						filterSeasonsCount = filterSeasonsCount + 1
+					end
+				end
                 table.insert(args, "-season"..substring)
             end
         end

@@ -1,89 +1,54 @@
-local command = {}
+local command = {
+  name = "pronoun",
+  description = "Set your pronouns",
+  pronoun_list = { "they", "he", "she", "it", "xe", "sta", "ze", "vee" },
+  options = {
+    {
+      name = "pronoun",
+      type = 3, -- STRING
+      description = "The pronoun you want to set for you",
+      required = true,
+      choices = {}
+    },
+  }
+}
+
+for _, pronoun in ipairs(command.pronoun_list) do
+  command.options[1].choices[_] = {
+    name = pronoun, value = pronoun
+  }
+end
+
+function command.set_pronoun(uj, group)
+  uj.pronouns = group
+end
+
 function command.run(message, mt)
-  print(message.author.name .. " did !pronoun")
-  local uj = dpf.loadjson("savedata/" .. message.author.id .. ".json", defaultjson)
+  local author = message.author and message.author or message.user
+  print(author.name .. " did !pronoun")
+  local uj = db.get_user(author.id)
   local lang = dpf.loadjson("langs/" .. uj.lang .. "/pronoun.json", "")
 
   if not uj.pronouns then
-    uj.pronouns = {}
-    uj.pronouns["selection"] = "they"
-    uj.pronouns["they"] = lang.they_they
-    uj.pronouns["them"] = lang.they_them
-    uj.pronouns["their"] = lang.they_their
-    uj.pronouns["theirs"] = lang.they_theirs
-    uj.pronouns["theirself"] = lang.they_theirself
+    command.set_pronoun(uj, lang["they"])
   end
 
-  if mt[1] == "they" then
-    uj.pronouns["selection"] = "they"
-    uj.pronouns["they"] = lang.they_they
-    uj.pronouns["them"] = lang.they_them
-    uj.pronouns["their"] = lang.they_their
-    uj.pronouns["theirs"] = lang.they_theirs
-    uj.pronouns["theirself"] = lang.they_theirself
-    message:reply(lang.they_changed)
-  elseif mt[1] == "he" then
-    uj.pronouns["selection"] = "he"
-    uj.pronouns["they"] = lang.he_they
-    uj.pronouns["them"] = lang.he_them
-    uj.pronouns["their"] = lang.he_their
-    uj.pronouns["theirs"] = lang.he_theirs
-    uj.pronouns["theirself"] = lang.he_theirself
-    message:reply(lang.he_changed)
-  elseif mt[1] == "she" then
-    uj.pronouns["selection"] = "she"
-    uj.pronouns["they"] = lang.she_they
-    uj.pronouns["them"] = lang.she_them
-    uj.pronouns["their"] = lang.she_their
-    uj.pronouns["theirs"] = lang.she_theirs
-    uj.pronouns["theirself"] = lang.she_theirself
-    message:reply(lang.she_changed)
-  elseif mt[1] == "it" then
-    uj.pronouns["selection"] = "it"
-    uj.pronouns["they"] = lang.it_they
-    uj.pronouns["them"] = lang.it_them
-    uj.pronouns["their"] = lang.it_their
-    uj.pronouns["theirs"] = lang.it_theirs
-    uj.pronouns["theirself"] = lang.it_theirself
-    message:reply(lang.it_changed)
-  elseif mt[1] == "xe" then
-    uj.pronouns["selection"] = "xe"
-    uj.pronouns["they"] = lang.xe_they
-    uj.pronouns["them"] = lang.xe_them
-    uj.pronouns["their"] = lang.xe_their
-    uj.pronouns["theirs"] = lang.xe_theirs
-    uj.pronouns["theirself"] = lang.xe_theirself
-    message:reply(lang.xe_changed)
-  elseif mt[1] == "sta" then
-    uj.pronouns["selection"] = "sta"
-    uj.pronouns["they"] = lang.sta_they
-    uj.pronouns["them"] = lang.sta_them
-    uj.pronouns["their"] = lang.sta_their
-    uj.pronouns["theirs"] = lang.sta_theirs
-    uj.pronouns["theirself"] = lang.sta_theirself
-    message:reply(lang.sta_changed)
-  elseif mt[1] == "ze" then
-    uj.pronouns["selection"] = "ze"
-    uj.pronouns["they"] = lang.ze_they
-    uj.pronouns["them"] = lang.ze_them
-    uj.pronouns["their"] = lang.ze_their
-    uj.pronouns["theirs"] = lang.ze_theirs
-    uj.pronouns["theirself"] = lang.ze_theirself
-    message:reply(lang.ze_changed)
-  elseif mt[1] == "vee" then
-    uj.pronouns["selection"] = "vee"
-    uj.pronouns["they"] = lang.vee_they
-    uj.pronouns["them"] = lang.vee_them
-    uj.pronouns["their"] = lang.vee_their
-    uj.pronouns["theirs"] = lang.vee_theirs
-    uj.pronouns["theirself"] = lang.vee_theirself
-    message:reply(lang.vee_changed)
-  elseif not mt[1] or mt[1] == "" then
-    message:reply(lang.no_value)
-  else
-    message:reply(formatstring(lang.no_database, {mt[1]}))
+  local pronoun_exists = false
+  for _, pronoun in ipairs(command.pronoun_list) do
+    if pronoun == mt[1] or pronoun == mt.pronoun then
+      command.set_pronoun(uj, lang[pronoun])
+      pronoun_exists = true
+      break
+    end
   end
 
-  dpf.savejson("savedata/" .. message.author.id .. ".json", uj)
+  if not pronoun_exists then
+    if not mt[1] or mt[1] == "" then
+      message:reply(lang.no_value)
+      else
+      message:reply(formatstring(lang.no_database, { mt[1] }))
+    end
+  end
 end
+
 return command

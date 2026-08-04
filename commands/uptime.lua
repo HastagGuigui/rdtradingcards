@@ -1,9 +1,13 @@
-local command = {}
+local command = {
+    name = "uptime",
+description = "Tells you how long this bot has been up for."
+}
 function command.run(message, mt)
-  local uj = dpf.loadjson("savedata/" .. message.author.id .. ".json", defaultjson)
+local author = message.author or message.user
+  local uj = db.get_user(author.id)
   local lang = dpf.loadjson("langs/" .. uj.lang .. "/uptime.json", "")
   local time = sw:getTime()
-  message:reply(lang.uptime_message_1 .. math.floor(time:toMinutes()) .. lang.uptime_message_2)
-  print(message.author.name .. " did !uptime")
+  message:reply(formatstring(lang.uptime_message, {math.floor(time:toMinutes())}))
+  print(author.name .. " did !uptime")
 end
 return command

@@ -57,6 +57,7 @@ client:on('messageCreate', function(message)
 end)
 
 client:on("slashCommand", function(interaction, command, args)
+	print("slash command", interaction, command, args, handleslash)
     handleslash(interaction, command, args)
 end)
 
@@ -65,6 +66,7 @@ end)
 
 -- cmd.focused returns value directly
 client:on("slashCommandAutocomplete", function(interaction, command, focused_option, args)
+	print("autocomplete", interaction, command, focused_option, args, handle_autocomplete)
     handle_autocomplete(interaction, command, focused_option, args)
 end)
 

@@ -841,6 +841,8 @@ function command.run(message, mt, overwrite)
     addcommand("embed", cmd.embed)
     addcommand("reloadslash", cmd.reloadslash)
 
+    cmd.reloadslash.setup()
+
     _G['getitemthumb'] = function(item,cons)
       local cf = io.open("vips_out/cache/items/"..item..".png", "r")
       if not cf then --check if file exists

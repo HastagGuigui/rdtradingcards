@@ -1,4 +1,13 @@
-local command = {}
+local command = {
+	points_of_interest = {
+		"mountains",
+		"pyrowmid",
+		"bridge",
+		"shop",
+		"barrels",
+		"clouds"
+	}
+}
 function command.run(message, mt, uj, wj)
 	local lang = dpf.loadjson("langs/" .. uj.lang .. "/look/mountains.json", "")
 	local request = string.lower(mt[1]) --why tf didint i do this for all the other ones?????????????????
@@ -46,4 +55,5 @@ function command.run(message, mt, uj, wj)
 	end
 	return true
 end
+
 return command

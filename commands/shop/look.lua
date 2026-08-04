@@ -1,4 +1,11 @@
-local command = {}
+local command = {
+    points_of_interest = {
+        "shop",
+        "wolf",
+        "ghost",
+    "photo"
+	}
+}
 function command.run(message, mt, uj, wj)
     local lang = dpf.loadjson("langs/" .. uj.lang .. "/look/shop.json")
     local sj = dpf.loadjson("savedata/shop.json", defaultshopsave)

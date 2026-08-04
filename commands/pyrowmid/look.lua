@@ -1,4 +1,13 @@
-local command = {}
+local command = {
+	points_of_interest = {
+		"pyrowmid",
+		"panda",
+		"throne",
+		"strange machine",
+		"hole",
+		"ladder"
+	}
+}
 function command.run(message, mt, uj, wj)
 	local lang = dpf.loadjson("langs/" .. uj.lang .. "/look/pyrowmid.json", "")
 

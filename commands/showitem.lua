@@ -1,7 +1,8 @@
 local command = {}
 function command.run(message, mt)
-  print(message.author.name .. " did !showitem")
-  local uj = dpf.loadjson("savedata/" .. message.author.id .. ".json", defaultjson)
+local author = message.author or message.user
+  print(author.name .. " did !showitem")
+  local uj = db.get_user(author.id)
   local sj = dpf.loadjson("savedata/shop.json", defaultshopsave)
   local lang = dpf.loadjson("langs/" .. uj.lang .. "/showitem.json","")
   if #mt ~= 1 then

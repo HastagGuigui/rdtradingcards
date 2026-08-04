@@ -1,4 +1,15 @@
-local command = {}
+local command = {
+	points_of_interest = {
+		"lab",
+		"spider",
+		"terminal",
+		"database",
+		"table",
+		"poster",
+		"mouse hole",
+		"peculiar box",
+	}
+}
 function command.run(message, mt, uj, wj)
 	local lang = dpf.loadjson("langs/" .. uj.lang .. "/look/lab.json", "")
 
@@ -22,7 +33,7 @@ function command.run(message, mt, uj, wj)
 		dpf.savejson("savedata/worldsave.json", wj)
 	elseif (string.lower(mt[1]) == "spider" or string.lower(mt[1]) == "spiderweb" or string.lower(mt[1]) == "web" or string.lower(mt[1]) == "spider web" or (uj.lang ~= "en" and mt[1] == lang.request_spider_1 or mt[1] == lang.request_spider_2)) and wj.labdiscovered then
 		local newmessage = ynbuttons(message, lang.spider_alert, "spiderlook", {}, uj.id, uj.lang)
-	elseif (string.lower(mt[1]) == "terminal" or (uj.lang ~= "en" and mt[1] == lang.request_terminal)) and wj.labdiscovered then    --FONT IS MS GOTHIC AT 24PX, 8PX FOR SMALL FONT
+	elseif (string.lower(mt[1]) == "terminal" or (uj.lang ~= "en" and mt[1] == lang.request_terminal)) and wj.labdiscovered then --FONT IS MS GOTHIC AT 24PX, 8PX FOR SMALL FONT
 		if wj.ws < 508 then
 			message:reply { embed = {
 				color = uj.embedc,
@@ -62,7 +73,7 @@ function command.run(message, mt, uj, wj)
 			description = lang.looking_table,
 		} }
 	elseif (string.lower(mt[1]) == "poster" or string.lower(mt[1]) == "catposter" or string.lower(mt[1]) == "cat poster" or (uj.lang ~= "en" and mt[1] == lang.request_poster_1 or mt[1] == lang.request_poster_2 or mt[1] == lang.request_poster_3)) and wj.labdiscovered then
-		if tonumber(wj.ws) ~= 901 then   --normal cat poster
+		if tonumber(wj.ws) ~= 901 then --normal cat poster
 			local postermessage = { lang.looking_poster_1, lang.looking_poster_2, lang.looking_poster_3, lang.looking_poster_4,
 				lang.looking_poster_5, lang.looking_poster_6, lang.looking_poster_7, lang.looking_poster_8, lang
 					.looking_poster_9, lang.looking_poster_10, lang.looking_poster_11 }
@@ -86,7 +97,7 @@ function command.run(message, mt, uj, wj)
 					url = posterimage[cposter]
 				}
 			} }
-		else   -- pull away cat poster
+		else -- pull away cat poster
 			message:reply { embed = {
 				color = uj.embedc,
 				title = lang.looking_at_poster,

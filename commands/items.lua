@@ -1,12 +1,28 @@
-local command = {}
+local command = {
+  name = "items",
+  description = "Shows your items and consumables.",
+  options = {
+    {
+            name = "page",
+      description = "Item page",
+      type = 4,
+      min_value = 1,
+      required = false
+    }
+  }
+}
 function command.run(message, mt)
-  print(message.author.name .. " did !items")
-  local uj = dpf.loadjson("savedata/" .. message.author.id .. ".json",defaultjson)
+  local author = message.author or message.user
+  print(author.name .. " did !items")
+  local uj = db.get_user(author.id)
   local lang = dpf.loadjson("langs/" .. uj.lang .. "/items.json", "")
 
   local pagenumber = 1
   if mt[1] and tonumber(mt[1]) then
-    pagenumber = math.floor(mt[1])
+      pagenumber = math.floor(mt[1])
+  end
+  if mt.page then
+    pagenumber = math.floor(mt.page)
   end
   pagenumber = math.max(1, pagenumber)
 
@@ -17,7 +33,6 @@ function command.run(message, mt)
     uj.equipped = "nothing"
   end
   if not uj.consumables then uj.consumables = {} end
-  dpf.savejson("savedata/" .. message.author.id .. ".json", uj)
 
   for k in pairs(uj.items) do numitems = numitems + 1 end
   for k in pairs(uj.consumables) do numitems = numitems + 1 end
@@ -28,11 +43,11 @@ function command.run(message, mt)
   local invtable = {}
   local invstring = ''
 
-  for k,v in pairs(uj.items) do
+  for k, v in pairs(uj.items) do
     if v then table.insert(invtable, "**" .. itemdb[k].name .. "**" .. (uj.equipped == k and " (equipped)" or "") .. "\n") end
   end
-  for k,v in pairs(uj.consumables) do
-    table.insert(invtable,"**".. consdb[k].name  .. "** x" .. v .. "\n")
+  for k, v in pairs(uj.consumables) do
+    table.insert(invtable, "**" .. consdb[k].name .. "** x" .. v .. "\n")
   end
   table.sort(invtable)
 
@@ -42,20 +57,21 @@ function command.run(message, mt)
   end
 
   if not uj.tokens then uj.tokens = 0 end
-  invstring = invstring .. "\n" .. formatstring(lang.embed_token, {uj.tokens}, lang.plural_s)
+  invstring = invstring .. "\n" .. formatstring(lang.embed_token, { uj.tokens }, lang.plural_s)
 
 
-  message:reply{
-    content = formatstring(lang.embed_contains, {message.author.mentionString}),
+  message:reply {
+    content = formatstring(lang.embed_contains, { author.mentionString }),
     embed = {
       color = uj.embedc,
-      title = formatstring(lang.embed_title, {message.author.name}),
+      title = formatstring(lang.embed_title, { author.name }),
       description = invstring,
       footer = {
-        text = formatstring(lang.embed_page, {pagenumber, maxpn}),
-        icon_url = message.author.avatarURL
+        text = formatstring(lang.embed_page, { pagenumber, maxpn }),
+        icon_url = author.avatarURL
       }
     }
   }
 end
+
 return command
