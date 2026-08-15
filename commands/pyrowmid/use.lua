@@ -14,49 +14,6 @@ function command.run(message, mt)
 			uj.items = { nothing = true }
 		end
 		if wj.ws ~= 506 then
-			--[[local itempt = {}
-			for k in pairs(itemdb) do
-				if uj.items["fixedmouse"] then
-					if not uj.items[k] and k ~= "brokenmouse" then table.insert(itempt, k) end
-				else
-					if not uj.items[k] and k ~= "fixedmouse" then table.insert(itempt, k) end
-				end
-			end
-			if #itempt == 0 then
-				message:reply(lang.error_allitems)
-				return true
-			end
-			if uj.tokens < 3 then
-				message:reply(lang.error_no_tokens)
-				return true
-			end
-			if not uj.skipprompts then
-				ynbuttons(message, {
-					color = uj.embedc,
-					title = lang.using_machine,
-					description = formatstring(lang.use_machine, { uj.tokens }),
-				}, "usemachine", {}, uj.id, uj.lang)
-				return true
-			else
-				local newitem = itempt[math.random(#itempt)]
-				uj.items[newitem] = true
-				uj.tokens = uj.tokens - 3
-				uj.timesused = uj.timesused and uj.timesused + 1 or 1
-				local dep = lang.dep
-				local cdep = math.random(1, #dep)
-				local speen = lang.speen
-				local cspeen = math.random(1, #speen)
-				local action = lang.action
-				local caction = math.random(1, #action)
-				local truaction = formatstring(action[caction], { speen[cspeen] })
-				local size = lang.size
-				local csize = math.random(1, #size)
-				local action2 = lang.action2
-				local caction2 = math.random(1, #action2)
-				print("alright let's see: action2: n°"..caction2.." : "..action2[caction2])
-				message:reply(formatstring(lang.used_machine,
-					{ dep[cdep], truaction, size[csize], action2[caction2], itemdb[newitem].name, speen[cspeen] }))
-			end]]
 			if not uj.skipprompts then
 				ynbuttons(message, {
 					color = uj.embedc,

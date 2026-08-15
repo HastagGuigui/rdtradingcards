@@ -1,13 +1,16 @@
 {
 	"needs_plural_s": true,
 	"plural_s": "s",
-	
+
+	"empty_inventory_title": "You don't have anything in your inventory!",
+	"empty_inventory_desc": "Use `{1}pull` to pull a card to add to your inventory.",
+
 	"embed_title": "{1}'s Inventory",
 	"embed_title_season": "{1}'s Inventory (Season {2})",
 	"embed_contains": "{1}, your inventory contains:",
 	"season": " (Season {1})",
 	"rarity": " ({1} Cards)",
-	
+
 	"embed_page": "(Page {1} of {2})"
-	
+
 }

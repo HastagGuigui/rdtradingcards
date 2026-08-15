@@ -1,6 +1,6 @@
 local command = {}
 function command.run(message)
-  local author = message.author ~= nil and message.author or message.user
+    local author = message._author
   print("checking medals for " .. author.name)
 
   local uj = db.get_user(author.id)
@@ -40,7 +40,6 @@ function command.run(message)
     ::continue::
   end
 
-  dpf.savejson(ujf, uj)
 end
 
 return command

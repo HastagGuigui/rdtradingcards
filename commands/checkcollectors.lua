@@ -1,12 +1,11 @@
 local command = {}
 function command.run(message, mt, mc)
-    local author = message.author ~= nil and message.author or message.user
+    local author = message._author
   if not mc then
     mc = message.channel
   end
   print("checking collector's drops for ".. author.name)
-  local ujf = ("savedata/" .. author.id .. ".json")
-  local uj = dpf.loadjson(ujf, defaultjson)
+  local uj = db.get_user(author.id)
   local lang = dpf.loadjson("langs/" .. uj.lang .. "/checkcollectors.json", "")
   for i,v in ipairs(coll) do
     print("checking for " .. v.receive)
@@ -48,6 +47,5 @@ function command.run(message, mt, mc)
       print("user already has " .. v.receive)
     end
   end
-  dpf.savejson(ujf,uj)
 end
 return command

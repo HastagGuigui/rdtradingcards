@@ -1,14 +1,22 @@
 {
+	"request": {
+		"pyrowmid": ["pyrowmid", "the pyrowmid"],
+		"lab": ["lab", "abandonedlab", "the abandoned lab"],
+		"mountains": ["mountain", "windymountains", "the windy mountains", "windy mountains"],
+		"shop": ["shop", "quaintshop", "quaint shop", "the quaint shop"],
+		"hallway": "hallway",
+		"casino": "casino"
+	},
 	"locations_pyrowmid": "Pyrowmid",
 	"locations_lab": "Abandoned Lab",
 	"locations_mountains": "Windy Mountains",
 	"locations_shop": "Quaint Shop",
 	"locations_hallway": "Dark Hallway",
 	"locations_casino": "Shady Casino",
-	
+
 	"already_in": "You are already in the **{1}**!",
-	
+
 	"room_changed": "Your location is now the **{1}**.",
-	
-	"no_room": "Sorry, but I could not find {1}. Make sure that you spelled it right!",
+
+	"no_room": "Sorry, but I could not find {1}. Make sure that you spelled it right!"
 }

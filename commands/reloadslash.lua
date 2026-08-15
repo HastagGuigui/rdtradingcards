@@ -12,7 +12,7 @@ function command.create_option(option)
     end
     if option.options then
         for _, subopt in ipairs(option.options) do
-            local newopt = opt:addOption(subopt)
+            local newopt = command.create_option(subopt)
             opt:addOption(newopt)
         end
     end
@@ -37,25 +37,31 @@ function command.run(message, mt)
 	if is_interaction then
 		message:replyDeferred()
 	end
-	if mt[1] == "delete_existing" then
-		-- gets a list of registered application commands from discord bot
-		local commands = client:getGuildApplicationCommands(message.guild.id)
-		-- deletes any existing application command from the bot's commands list
-		for commandId in pairs(commands) do
-			client:deleteGuildApplicationCommand(message.guild.id, commandId)
-		end
+    if mt[1] == "delete_existing" then
+        -- gets a list of registered application commands from discord bot
+        local commands = client:getGuildApplicationCommands(message.guild.id)
+        -- deletes any existing application command from the bot's commands list
+        for commandId in pairs(commands) do
+            client:deleteGuildApplicationCommand(message.guild.id, commandId)
+        end
+    end
+
+    local command_list = cmd
+	if cmd[mt[1]] then
+		command_list = {[mt[1]] = cmd[mt[1]]}
 	end
 
-	for _, cmd_command in pairs(cmd) do
+	for _, cmd_command in pairs(command_list) do
 		if cmd_command.name then
 			print(cmd_command.name)
 			local slash_object = slash_tools.slashCommand(cmd_command.name, cmd_command.description)
-			if cmd_command.options then
-				for i, option in ipairs(cmd_command.options) do
-					local opt = command.create_option(option)
-					slash_object:addOption(opt)
-				end
-			end
+            if cmd_command.options then
+                for i, option in ipairs(cmd_command.options) do
+                    local opt = command.create_option(option)
+                    slash_object:addOption(opt)
+                end
+            end
+			print("object: " .. inspect(slash_object))
 			client:createGuildApplicationCommand(message.guild.id, slash_object)
 		end
 	end

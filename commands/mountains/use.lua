@@ -1,7 +1,7 @@
 local command = {}
 function command.run(message, mt)
 	local time = sw:getTime()
-	local uj = dpf.loadjson("savedata/" .. message.author.id .. ".json",defaultjson)
+	local uj = db.get_user(message.author.id)
 	local wj = dpf.loadjson("savedata/worldsave.json", defaultworldsave)
 	local lang = dpf.loadjson("langs/" .. uj.lang .. "/use/mountains.json")
 	local request = mt[1]
@@ -9,7 +9,6 @@ function command.run(message, mt)
 	if (request == "pyrowmid" or (uj.lang ~= "en" and request == lang.request_pyrowmid)) then
 		message:reply(lang.use_pyrowmid)
 		uj.room = 0
-		dpf.savejson("savedata/" .. message.author.id .. ".json", uj)
 		cmd.look.run(message, { "pyrowmid" })
 		--TODO: find a way to show a location's main c!look?
 	elseif (request == "bridge" or (uj.lang ~= "en" and request == lang.request_bridge)) then
@@ -58,7 +57,6 @@ function command.run(message, mt)
 	else
 		return false
 	end
-  	dpf.savejson("savedata/" .. message.author.id .. ".json",uj)
 	return true
 end
 

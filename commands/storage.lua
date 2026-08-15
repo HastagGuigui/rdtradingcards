@@ -27,13 +27,25 @@ local command = {
 			description =
 			"In format \"sr,ur\". Rarity names are the ones used in card shorthands.",
 			required = false
+		},
+		{
+			name = "sorting",
+			type = 3,
+			description = "How cards should be ordered",
+			required = false,
+			choices = {
+				{ name = "shorthand", value = "shorthand" },
+				{ name = "name",      value = "name" },
+				{ name = "count",     value = "count" }
+			}
 		}
 	}
 }
+
 function command.run(message, mt)
-	local author = message.author or message.user
+	local author = message._author
     print(author.name .. " did !storage")
-	local uj = db.get_user(author)
+	local uj = db.get_user(author.id)
 	local lang = dpf.loadjson("langs/" .. uj.lang .. "/storage.json", "")
 	local placeholder = dpf.loadjson("langs/" .. uj.lang .. "/look/missingcard.json", "")
 
@@ -46,6 +58,7 @@ function command.run(message, mt)
 	local filterRaritiesCount = 0
 
 	local pagenumber = 1
+	local sort_type = "name"
 
 	local args = {}
 	if mt[1] then
@@ -70,6 +83,9 @@ function command.run(message, mt)
 			for substring in mt["rarity-filter"]:gmatch('([^,]+)') do
 				table.insert(args, "-rarity" .. substring)
 			end
+		end
+		if mt["sorting"] and command.sort[mt.sorting] then
+			sort_type = mt.sorting
 		end
 	end
 
@@ -97,6 +113,11 @@ function command.run(message, mt)
 				filterRaritiesCount = filterRaritiesCount + 1
 				print("filtering for rarity " .. rarity)
 			end
+		elseif string.find(value, "-sort-") then
+			local sorting_method = string.gsub(value, "-sort-", "")
+			if command.sort[sorting_method] then
+				sort_type = sorting_method
+			end
 		else
 			local filename = usernametojson(value)
 			if filename then
@@ -105,9 +126,19 @@ function command.run(message, mt)
 		end
 	end
 
-	local invtable = {}
 	local storagestring = ''
 	local invfilter = uj.storage
+
+	if not next(invfilter) then
+		message:reply({
+			embed = {
+				color = uj.embedc,
+				title = formatstring(lang.empty_storage_title, {}),
+				description = formatstring(lang.empty_storage_desc, { prefix }),
+			}
+		})
+		return
+	end
 
 	if filterSeasonsCount > 0 then
 		for k, v in pairs(invfilter) do
@@ -129,26 +160,19 @@ function command.run(message, mt)
 
 	pagenumber = math.max(1, pagenumber)
 
-	local numcards = tablelength(invfilter)
+	local sorted_inv = {}
+	for k, v in pairs(invfilter) do
+		sorted_inv[#sorted_inv + 1] = { k, v }
+	end
+
+	local numcards = #sorted_inv
+	table.sort(sorted_inv, sort_types[sort_type])
 
 	local maxpn = math.ceil(numcards / 10)
 	pagenumber = math.min(pagenumber, maxpn)
 	print("Page number is " .. pagenumber)
 
-	for k, v in pairs(invfilter) do
-		table.insert(invtable,
-			"**" .. (cdb[k] and cdb[k].name or placeholder.card) .. "** x" .. v ..
-			(enableShortNames and (" (" .. k .. ") ") or "") ..
-			(enableSeason and formatstring(lang.season, { cdb[k] and cdb[k].season or -1 }) or "")
-			.. "\n"
-		)
-	end
-	table.sort(invtable)
-
-	for i = (pagenumber - 1) * 10 + 1, (pagenumber) * 10 do
-		print(i)
-		if invtable[i] then storagestring = storagestring .. invtable[i] end
-	end
+	storagestring = format_inventory_page(sorted_inv, pagenumber, 10, enableSeason, lang, placeholder)
 
 	local seasonnum = ""
 	local raritytext = ""

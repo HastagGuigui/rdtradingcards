@@ -1,41 +1,43 @@
 {
 	"needs_plural_s": true,
 	"no_tokens": "The **Wolf** frowns. You don't have the {1} **Tokens** required to buy the **{2}**!",
-	
+
 	"out_of_stock": "The **Wolf** frowns. It is currently out of stock of **{1}**.",
-	
+
 	"too_many_requested": "The **Wolf** frowns. You can only buy {1} **{2}** at most.",
-	
+
 	"nopeeking_error": "The **Wolf** looks at you with confusion. It might not be selling {1}, or it might have misunderstood your request.",
-	
+
 	"donthave": "The **Wolf** looks at you with confusion. It doesn't seem to be selling **{1}**.",
-	
+
 	"alreadyhave": "The **Wolf** looks at you with confusion. You already have the **{1}** item.",
-	
+
 	"hasfixedmouse": "The **Wolf** frowns. You already own a Mouse.",
-	
+
 	"oneitemonly": "The **Wolf** frowns. You can only own one of each equippable item.",
-	
+
 	"unknownrequest": "The **Wolf** looks at you with confusion. It does not appear to know what {1} is.",
-	
+
 	"buying_item": "Buying {1}...",
-	
+
 	"consumable_desc": "The description for this item reads: ",
 	"consumable_buy": "<@{1}>, will you buy {2} of them for {3} **Token{3s}**?",
 	"plural_s": "s",
-	
+
 	"item_desc": "The description for this item reads: ",
 	"item_buy": "<@{1}>, will you buy it for {2} **Token{2s}**?",
 
 	"buying_card": "Buying {1}...",
-	
+
 	"card_desc": "The description for this card reads: ",
 	"card_buy": "<@{1}>, will you buy {2} of them for {3} **Token{3s}**?",
-	
+
 	"error_not_in_stock": "An error has occured. Please make sure that the thing you want is still in stock!",
 	"error_not_enough_tokens": "An error has occured. Please make sure that you have enough tokens!",
-	
+
 	"bought_message": "<@{1}> successfully bought **{2}** from the shop.",
-	
+
 	"denied_message": "You decide to not buy the **{1}**.",
+
+	"shorthand_unlocked": "The Wolf **smiles** and gives you a receipt that reads \"Come back again anytime!\".\nYou can now use {1}shop and {1}buy directly."
 }

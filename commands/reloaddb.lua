@@ -119,12 +119,7 @@ function command.run(message, mt, overwrite)
       -- }
     }
 
-    local errorping
-    if config.errorping then
-      errorping = true
-    else
-      errorping = false
-    end
+    _G["errorping"] = (config.errorping ~= nil)
 
     if config.prefix then
       _G["prefix"] = config.prefix
@@ -200,6 +195,7 @@ function command.run(message, mt, overwrite)
       dcalt = "Discontinued Alternate",
       altalt = "Alternate Alternate",
       pico8 = "PICO-8",
+      c = "Collector's"
     }
     _G["rarities_alternate"] = {"alt", "dcalt", "altalt", "altr", "altsr", "altur"}
     _G["starrating"] = {
@@ -250,12 +246,23 @@ function command.run(message, mt, overwrite)
 
     _G['automove'] = function(cr,r,message)
       print("automove")
+      local uj = db.get_user(message._author.id)
       local reqroom = "none"
       for k,v in pairs(amtable) do
         for a,b in ipairs(v) do
           if b == r then
             print("trying to use something in " .. k)
-            reqroom = k
+            local has_already_been_there = false
+            for amk, amv in pairs(amids) do
+              if amv == k and uj.discovered_rooms[amk] then
+                has_already_been_there = true
+              end
+            end
+            if has_already_been_there then
+              reqroom = k
+            else
+              return "undiscovered"
+            end
           end
         end
       end
@@ -586,6 +593,10 @@ function command.run(message, mt, overwrite)
     _G['resetclocks'] = function ()
       for i,v in ipairs(scandir("savedata")) do
         local cuj = dpf.loadjson("savedata/" .. v, defaultjson)
+        if cuj.id and db.cache[cuj.id] then
+    		db.save_user(cuj.id)
+     		db.uncache_user(cuj.id)
+        end
         if cuj.lastpull then
           cuj.lastpull = -24
           cuj.lastprayer = -24
@@ -678,72 +689,6 @@ function command.run(message, mt, overwrite)
       return "savedata/" .. usernametoid(x) .. ".json"
     end
 
-    _G['ynbuttons'] = function(message, content, etype, data, userid, lang)
-    local messagecontent, messageembed
-	  local langfile = dpf.loadjson("langs/" .. lang .. "/ynbuttons.json", "")
-
-    if type(content) == "table" then
-      messageembed = content
-    else
-      messagecontent = content
-    end
-
-    print('making yesbutton')
-    local yesbutton = discordia.Button {
-      id = "yes",
-      label = langfile.button_yes,
-      style = "success"
-    }
-
-      print("making nobutton")
-      local nobutton = discordia.Button {
-        id = "no",
-        label = langfile.button_no,
-        style = "danger"
-      }
-
-      print("writing message")
-      local newmessage = message:replyComponents {
-        embed = messageembed,
-        content = messagecontent,
-        components = discordia.Components {yesbutton, nobutton}
-      }
-
-      local pressed, interaction = newmessage:waitComponent("button", nil, 1000 * 1800, function(interaction)
-        local reactionid = userid or message.author.id
-
-        if interaction.user.id ~= reactionid then
-		  local uj2 = dpf.loadjson("savedata/" .. interaction.user.id .. ".json", defaultjson)
-		  local langfile2 = dpf.loadjson("langs/" .. uj2.lang .. "/ynbuttons.json", "")
-          interaction:reply(langfile2.cannot_interact, true)
-        end
-
-        return interaction.user.id == reactionid
-      end)
-
-      newmessage:update{components = discordia.Components {yesbutton:disable(), nobutton:disable()}}
-
-      if not pressed then
-        print("Button timed out")
-        return
-      end
-
-      print("Button pressed, running " .. etype)
-
-      local status, err = xpcall(function ()
-        cmdre[etype].run(message, interaction, data, interaction.data.custom_id)
-      end, debug.traceback)
-
-      if not status then
-        print("uh oh")
-        if errorping then
-          message:reply("Oops! An error has occured! Error message: ```" .. err .. "``` (" .. config.errorping .. " please fix this thanks)")
-        else
-          message:reply("Oops! An error has occured! Error message: ```" .. err .. "``` (please fix this thanks)")
-        end
-      end
-
-    end
 
     _G['commands'] = {}
 

@@ -1,6 +1,6 @@
 local command = {}
 function command.run(message, mt)
-  local cmember = message.guild:getMember(message.author)
+  local cmember = message.guild:getMember(message._author)
   if cmember:hasRole(privatestuff.modroleid) then
     local newmessage = nil
     if message.attachment then

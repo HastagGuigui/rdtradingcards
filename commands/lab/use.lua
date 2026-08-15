@@ -1,6 +1,6 @@
 local command = {}
 function command.run(message, mt)
-	local uj = dpf.loadjson("savedata/" .. message.author.id .. ".json",defaultjson)
+	local uj = db.get_user(message.author.id)
 	local wj = dpf.loadjson("savedata/worldsave.json", defaultworldsave)
 	local time = sw:getTime()
 	local lang = dpf.loadjson("langs/" .. uj.lang .. "/use/lab/lab.json", "")
@@ -320,7 +320,6 @@ o-''|\\_____/)
 	end
 
 	dpf.savejson("savedata/worldsave.json", wj)
-	dpf.savejson("savedata/" .. message.author.id .. ".json",uj)
 	return true
 end
 return command

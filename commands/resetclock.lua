@@ -1,7 +1,7 @@
 local command = {}
 function command.run(message, mt)
   print("loading the resetclock command!")
-  local cmember = message.guild:getMember(message.author)
+  local cmember = message.guild:getMember(message._author)
   if cmember:hasRole(privatestuff.modroleid) then
     resetclocks()
     message:reply('All user cooldowns have been reset.')

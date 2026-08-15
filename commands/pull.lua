@@ -190,10 +190,6 @@ function command.run(message, mt)
         uj.has_seen_tutorials.pull = true
     end
 
-    if doinfodeskpull then
-        pulledcards = { 'rdcards' }
-    end
-
     for i, v in ipairs(pulledcards) do
         local cardname = cdb[v].name
 
@@ -204,12 +200,12 @@ function command.run(message, mt)
         if i == 3 then title = lang.pulled_tripleclick end
         if v == "samarrrai" then title = "Ahoy Matey!" end
 
-        newstatus = formatstring("Inventory: {1} | Storage: {2}", { uj.inventory[v] or 0, uj.storage[v] or 0 })
+        local newstatus = formatstring("Inventory: {1} | Storage: {2}", { uj.inventory[v] or 0, uj.storage[v] or 0 })
         if not uj.storage[v] then
             newstatus = "[NEW CARD!]"
         end
 
-        footer = "Season " .. cdb[v].season .. " | " .. newstatus
+        local footer = "Season " .. cdb[v].season .. " | " .. newstatus
 
         if v == "rdnot" then
             message:reply("```" ..
