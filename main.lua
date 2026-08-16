@@ -15,6 +15,7 @@ _G["inspect"] = require('libs/inspect')
 _G["prosel"] = require('libs/prosel')
 _G["vips"] = require('vips')
 _G["http"] = require('coro-http')
+require("libs/extra_functions") -- adds more to base classes
 
 -- load all the extensions
 discordia.extensions()

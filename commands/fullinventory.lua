@@ -127,7 +127,7 @@ function command.run(message, mt)
 
 	local invtable = {}
 	local invstring = ''
-	local invfilter = uj.inventory
+	local invfilter = table.shallow_copy(uj.inventory)
 
 	if filterSeasonsCount > 0 then
 		for k, v in pairs(invfilter) do

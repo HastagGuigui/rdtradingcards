@@ -68,11 +68,11 @@ end
 _G["format_inventory_page"] = function(sorted_inv, pagenumber, card_per_page, enableSeason, lang, placeholder)
 	-- Only create the lines we need lol
 	local invstring = ""
-    for i = (pagenumber - 1) * card_per_page + 1, (pagenumber) * card_per_page do
-        if sorted_inv[i] then
-            invstring = invstring .. format_card_line(sorted_inv[i], enableSeason, lang, placeholder)
-        end
-    end
+	for i = (pagenumber - 1) * card_per_page + 1, (pagenumber) * card_per_page do
+		if sorted_inv[i] then
+			invstring = invstring .. format_card_line(sorted_inv[i], enableSeason, lang, placeholder)
+		end
+	end
 	print(invstring)
 	return invstring
 end
@@ -168,12 +168,12 @@ function command.run(message, mt)
 	end
 
 	local invstring = ''
-	local invfilter = uj.inventory
+	local invfilter = table.shallow_copy(uj.inventory)
 
 	if not next(invfilter) then
 		message:reply({
 			embed = {
-                color = uj.embedc,
+				color = uj.embedc,
 				title = formatstring(lang.empty_inventory_title, {}),
 				description = formatstring(lang.empty_inventory_desc, { prefix }),
 			}

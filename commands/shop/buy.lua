@@ -19,16 +19,19 @@ local command = {
 }
 function command.run(message, mt)
 	local uj = db.get_user(message._author.id)
+	local lang = dpf.loadjson("langs/" .. uj.lang .. "/use/shop/buy.json", "")
 	if uj.unlocked_commands.shop or uj.room == 3 then
-		command.buy(message, mt, uj)
+		command.buy(message, mt, uj, lang)
 	else
-		message:reply("Uh, there doesn't seem to be a shop around here... How about moving around?")
+		message:reply(formatstring("You haven't discovered this yet! Try using {1} and {2} to find it.", {
+			formatslash("look", message.guild.id), formatslash("move", message.guild.id),
+		}))
 	end
 end
 
-function command.buy(message, mt, uj)
+function command.buy(message, mt, uj, lang)
+	local author = message._author
 	local time = sw:getTime()
-	local lang = dpf.loadjson("langs/" .. uj.lang .. "/use/shop/buy.json", "")
 	checkforreload(time:toDays())
 	local sj = dpf.loadjson("savedata/shop.json", defaultshopsave)
 	local sprice
@@ -129,13 +132,13 @@ function command.buy(message, mt, uj)
 		end
 
 		--can buy consumable
-		ynbuttons(message, {
-				color = uj.embedc,
-				title = formatstring(lang.buying_item, { sname }),
-				description = lang.consumable_desc .. "\n`" .. consdb[srequest].description .. "`\n" .. formatstring(
-					lang.consumable_buy, { message.author.id, numrequest, sprice }, lang.plural_s
-				),
-			}, "buy",
+		ynbuttons(message, command.buy_embed(
+				uj.embedc,
+				formatstring(lang.buying_item, { sname }),
+				lang.consumable_desc .. "\n```" .. consdb[srequest].description .. "```\n" .. formatstring(
+					lang.consumable_buy, { author.id, numrequest, sprice }, lang.plural_s
+				)
+			), command.reaction,
 			{
 				itemtype = "consumable",
 				sname = sname,
@@ -144,7 +147,7 @@ function command.buy(message, mt, uj)
 				srequest = srequest,
 				numrequest =
 					numrequest
-			}, message.author.id, uj.lang)
+			}, author.id, uj.lang)
 		return true
 	end
 
@@ -184,15 +187,14 @@ function command.buy(message, mt, uj)
 		end
 
 		--can buy item
-		ynbuttons(message, {
-				color = uj.embedc,
-				title = formatstring(lang.buying_item, { sname }),
-				description = lang.item_desc ..
-					"\n`" .. itemdb[srequest].description ..
-					"`\n" .. formatstring(lang.item_buy, { message.author.id, sprice }),
-			}, "buy",
+		ynbuttons(message, command.buy_embed(
+				uj.embedc,
+				formatstring(lang.buying_item, { sname }),
+				lang.item_desc .. "\n`" .. itemdb[srequest].description ..
+				"`\n" .. formatstring(lang.item_buy, { author.id, sprice })
+			), command.reaction,
 			{ itemtype = "item", sname = sname, sprice = sprice, sindex = sindex, srequest = srequest, numrequest = 1 },
-			message.author.id, uj.lang)
+			author.id, uj.lang)
 		return true
 	end
 
@@ -231,26 +233,123 @@ function command.buy(message, mt, uj)
 		end
 
 		--can buy card
-		ynbuttons(message, {
-			color = uj.embedc,
-			title = formatstring(lang.buying_card, { sname }),
-			description = lang.card_desc .. "\n`" .. cdb[srequest].description .. "`\n" .. formatstring(
-				lang.card_buy, { message.author.id, numrequest, sprice }, lang.plural_s
-			),
-		}, "buy", {
-			itemtype = "card",
-			sname = sname,
-			sprice = sprice,
-			sindex = sindex,
-			srequest = srequest,
-			numrequest =
-				numrequest
-		}, message.author.id, uj.lang)
+		ynbuttons(message,
+			command.buy_embed(uj.embedc, formatstring(lang.buying_card, { sname }),
+				lang.card_desc .. "\n`" .. cdb[srequest].description .. "`\n" .. formatstring(
+					lang.card_buy, { author.id, numrequest, sprice }, lang.plural_s
+				)
+			), command.reaction, {
+				itemtype = "card",
+				sname = sname,
+				sprice = sprice,
+				sindex = sindex,
+				srequest = srequest,
+				numrequest =
+					numrequest
+			}, author.id, uj.lang)
 		return true
 	end
 
 	sendshoperror["unknownrequest"]()
 	return true
+end
+
+function command.buy_embed(color, title, description)
+	return {
+		type = 17,
+		accent_color = color,
+		components = {
+			{
+				type = 10,
+				content = "## " .. title
+			}, {
+			type = 10,
+			content = description
+		}
+		}
+	}
+end
+
+function command.reaction(message, interaction, data, response)
+	local uj = db.get_user(interaction.user.id)
+	local lang = dpf.loadjson("langs/" .. uj.lang .. "/use/shop/buy.json", "")
+	local sj = dpf.loadjson("savedata/shop.json", defaultshopsave)
+	print("Loaded uj: it has " .. uj.tokens .. " tokens")
+
+	if response == "yes" then
+		print('user1 has accepted')
+		--sanity check
+		local checked = false
+		if data.itemtype == "consumable" then
+			checked = (sj.consumables[data.sindex].name == data.srequest) and
+				(sj.consumables[data.sindex].stock >= data.numrequest)
+		end --other types also go up here
+
+		if data.itemtype == "card" then
+			checked = (sj.cards[data.sindex].name == data.srequest) and (sj.cards[data.sindex].stock >= data.numrequest)
+		end
+
+		if data.itemtype == "item" then
+			checked = (sj.item == data.srequest) and (sj.itemstock ~= 0)
+		end
+
+		if not checked then
+			interaction:reply(lang.error_not_in_stock)
+			return
+		end
+
+
+		if uj.tokens < data.sprice then
+			interaction:reply(lang.error_not_enough_tokens)
+			return
+		end
+
+		--do the fucking thing here
+
+		if data.itemtype == "consumable" then
+			sj.consumables[data.sindex].stock = sj.consumables[data.sindex].stock - data.numrequest
+			if not uj.consumables then uj.consumables = {} end
+			local adding = (consdb[data.srequest].quantity or 1) * data.numrequest
+			if not uj.consumables[data.srequest] then
+				uj.consumables[data.srequest] = adding
+			else
+				uj.consumables[data.srequest] = uj.consumables[data.srequest] + adding
+			end
+		end
+		if data.itemtype == "card" then
+			sj.cards[data.sindex].stock = sj.cards[data.sindex].stock - data.numrequest
+			if not uj.inventory then uj.inventory = {} end
+			if not uj.inventory[data.srequest] then
+				uj.inventory[data.srequest] = data.numrequest
+			else
+				uj.inventory[data.srequest] = uj.inventory[data.srequest] + data.numrequest
+			end
+			print("state:" .. uj.inventory[data.srequest])
+		end
+		if data.itemtype == "item" then
+			sj.itemstock = sj.itemstock - 1
+			uj.items[data.srequest] = true
+		end
+		uj.tokens = uj.tokens - data.sprice
+		print("tokens now :" .. uj.tokens)
+
+		interaction:reply(formatstring(lang.bought_message, { uj.id, data.sname }))
+		if not uj.unlocked_commands.shop then
+			interaction:reply(formatstring(lang.shorthand_unlocked, {
+				formatslash("shop", message.guild.id),
+				formatslash("buy", message.guild.id),
+			}))
+			uj.unlocked_commands.shop = true
+		end
+
+		db.save_user(interaction.user.id)
+		dpf.savejson("savedata/shop.json", sj)
+	end
+
+	if response == "no" then
+		print('user1 has denied')
+		interaction:reply(formatstring(lang.denied_message, { data.sname }))
+	end
 end
 
 return command

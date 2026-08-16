@@ -127,7 +127,7 @@ function command.run(message, mt)
 	end
 
 	local storagestring = ''
-	local invfilter = uj.storage
+	local invfilter = table.shallow_copy(uj.storage)
 
 	if not next(invfilter) then
 		message:reply({

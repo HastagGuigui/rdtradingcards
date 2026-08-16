@@ -113,7 +113,7 @@ function command.run(message, mt)
 
 	local storetable = {}
 	local storestring = ''
-	local invfilter = uj.storage
+	local invfilter = table.shallow_copy(uj.storage)
 
 	if filterSeasonsCount > 0 then
 		for k, v in pairs(invfilter) do

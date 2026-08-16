@@ -1,77 +1,78 @@
 local command = {
-  name = "items",
-  description = "Shows your items and consumables.",
-  options = {
-    {
-            name = "page",
-      description = "Item page",
-      type = 4,
-      min_value = 1,
-      required = false
-    }
-  }
+	name = "items",
+	description = "Shows your items and consumables.",
+	options = {
+		{
+			name = "page",
+			description = "Item page",
+			type = 4,
+			min_value = 1,
+			required = false
+		}
+	}
 }
 function command.run(message, mt)
-  local author = message.author or message.user
-  print(author.name .. " did !items")
-  local uj = db.get_user(author.id)
-  local lang = dpf.loadjson("langs/" .. uj.lang .. "/items.json", "")
+	local author = message.author or message.user
+	print(author.name .. " did !items")
+	local uj = db.get_user(author.id)
+	local lang = dpf.loadjson("langs/" .. uj.lang .. "/items.json", "")
 
-  local pagenumber = 1
-  if mt[1] and tonumber(mt[1]) then
-      pagenumber = math.floor(mt[1])
-  end
-  if mt.page then
-    pagenumber = math.floor(mt.page)
-  end
-  pagenumber = math.max(1, pagenumber)
+	local pagenumber = 1
+	if mt[1] and tonumber(mt[1]) then
+		pagenumber = math.floor(mt[1])
+	end
+	if mt.page then
+		pagenumber = math.floor(mt.page)
+	end
+	pagenumber = math.max(1, pagenumber)
 
-  local numitems = 0
-  if not uj.items then
-    uj.items = {}
-    uj.items["nothing"] = true
-    uj.equipped = "nothing"
-  end
-  if not uj.consumables then uj.consumables = {} end
+	local numitems = 0
+	if not uj.items then
+		uj.items = {}
+		uj.items["nothing"] = true
+		uj.equipped = "nothing"
+	end
+	if not uj.consumables then uj.consumables = {} end
 
-  for k in pairs(uj.items) do numitems = numitems + 1 end
-  for k in pairs(uj.consumables) do numitems = numitems + 1 end
-  local maxpn = math.ceil(numitems / 10)
-  pagenumber = math.min(pagenumber, maxpn)
-  print("Page number is " .. pagenumber)
+	for k in pairs(uj.items) do numitems = numitems + 1 end
+	for k in pairs(uj.consumables) do numitems = numitems + 1 end
+	local maxpn = math.ceil(numitems / 10)
+	pagenumber = math.min(pagenumber, maxpn)
+	print("Page number is " .. pagenumber)
 
-  local invtable = {}
-  local invstring = ''
+	local invtable = {}
+	local invstring = ''
 
-  for k, v in pairs(uj.items) do
-    if v then table.insert(invtable, "**" .. itemdb[k].name .. "**" .. (uj.equipped == k and " (equipped)" or "") .. "\n") end
-  end
-  for k, v in pairs(uj.consumables) do
-    table.insert(invtable, "**" .. consdb[k].name .. "** x" .. v .. "\n")
-  end
-  table.sort(invtable)
+	for k, v in pairs(uj.items) do
+		if v then table.insert(invtable,
+				"**" .. itemdb[k].name .. "**" .. (uj.equipped == k and " (equipped)" or "") .. "\n") end
+	end
+	for k, v in pairs(uj.consumables) do
+		table.insert(invtable, "**" .. consdb[k].name .. "** x" .. v .. "\n")
+	end
+	table.sort(invtable)
 
-  for i = (pagenumber - 1) * 10 + 1, (pagenumber) * 10 do
-    print(i)
-    if invtable[i] then invstring = invstring .. invtable[i] end
-  end
+	for i = (pagenumber - 1) * 10 + 1, (pagenumber) * 10 do
+		print(i)
+		if invtable[i] then invstring = invstring .. invtable[i] end
+	end
 
-  if not uj.tokens then uj.tokens = 0 end
-  invstring = invstring .. "\n" .. formatstring(lang.embed_token, { uj.tokens }, lang.plural_s)
+	if not uj.tokens then uj.tokens = 0 end
+	invstring = invstring .. "\n" .. formatstring(lang.embed_token, { uj.tokens }, lang.plural_s)
 
 
-  message:reply {
-    content = formatstring(lang.embed_contains, { author.mentionString }),
-    embed = {
-      color = uj.embedc,
-      title = formatstring(lang.embed_title, { author.name }),
-      description = invstring,
-      footer = {
-        text = formatstring(lang.embed_page, { pagenumber, maxpn }),
-        icon_url = author.avatarURL
-      }
-    }
-  }
+	message:reply {
+		content = formatstring(lang.embed_contains, { author.mentionString }),
+		embed = {
+			color = uj.embedc,
+			title = formatstring(lang.embed_title, { author.name }),
+			description = invstring,
+			footer = {
+				text = formatstring(lang.embed_page, { pagenumber, maxpn }),
+				icon_url = author.avatarURL
+			}
+		}
+	}
 end
 
 return command

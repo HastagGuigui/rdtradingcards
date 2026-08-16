@@ -79,22 +79,22 @@ function command.run(message, mt, bypass)
 
 	----------------------------------------------------------PYROWMID
 	if (uj.room == 0 or bypass) and is_poi then
-		found = cmd.pyrowmid_use.run(message, mt)
+		found = cmd.pyrowmid_use.run(message, {request, mt[2], mt[3]})
 	end
 
 	----------------------------------------------------------LAB
 	if (uj.room == 1 or bypass) and wj.labdiscovered and is_poi then
-		found = cmd.lab_use.run(message, mt)
+		found = cmd.lab_use.run(message, {request, mt[2], mt[3]})
 	end
 
 	----------------------------------------------------------WINDY MOUNTAINS
 	if uj.room == 2 and is_poi then
-		found = cmd.mountains_use.run(message, mt)
+		found = cmd.mountains_use.run(message, {request, mt[2], mt[3]})
 	end
 
 	----------------------------------------------------------SHOP
 	if (uj.room == 3) and is_poi then
-		found = cmd.shop_use.run(message, mt)
+		found = cmd.shop_use.run(message, {request, mt[2], mt[3]})
 	end
 
 	if found then return end

@@ -12,18 +12,22 @@ local command = {
 }
 
 function command.autocomplete(ia, comm, focused_option, args)
-	ia:autocomplete({
-		{ name = "Pyrowmid",      value = "pyrowmid" },
-		{ name = "Abandoned Lab", value = "lab" },
-		{ name = "Mountains",     value = "mountains" },
-		{ name = "Shop",          value = "shop" }
-	})
+	local out = {}
+	local uj = db.get_user(ia.user.id)
+	local lang = dpf.loadjson("langs/" .. uj.lang .. "/move.json", "")
+	local wj = dpf.loadjson("savedata/worldsave.json", defaultworldsave)
+	for id, room in pairs(room_definitions) do
+		if room.requirements(wj) then
+			out[#out + 1] = { value = room.name, name = lang["locations_" .. room.name] }
+		end
+	end
+	ia:autocomplete(out)
 end
 
 _G["room_definitions"] = {
 	[0] = {
-		name = "pyrowmid", -- codename
-		requirements = function(wj)  -- can anyone access it?
+		name = "pyrowmid",    -- codename
+		requirements = function(wj) -- can anyone access it?
 			return true
 		end
 	},
@@ -54,13 +58,10 @@ function command.run(message, mt)
 	local wj = dpf.loadjson("savedata/worldsave.json", defaultworldsave)
 	local uj = db.get_user(author.id)
 	local lang = dpf.loadjson("langs/" .. uj.lang .. "/move.json", "")
-	if not mt[1] or mt.location then
-		mt[1] = "pyrowmid"
-	end
 	local locations = { lang.locations_pyrowmid, lang.locations_lab, lang.locations_mountains, lang.locations_shop, lang
 		.locations_hallway, lang.locations_casino }
 	local success = false
-	local request = string.lower(mt[1] or mt.location)
+	local request = string.lower(mt[1] or mt.location or "pyrowmid")
 	local newroom = 0
 
 	--0: pyrowmid
@@ -72,7 +73,7 @@ function command.run(message, mt)
 
 	for i, entry in pairs(room_definitions) do
 		if entry.requirements(wj) then
-			if request == lang["request_" .. entry.name] then
+			if request == lang["request_" .. entry.name] or request == entry.name then
 				success = true
 				newroom = i
 			elseif type(lang["request_" .. entry.name]) == "table" then
