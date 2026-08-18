@@ -1,6 +1,6 @@
 local command = {}
 function command.run(message, mt)
-	local uj = db.get_user(message.author.id)
+	local uj = db.get_user(message._author.id)
 	local wj = dpf.loadjson("savedata/worldsave.json", defaultworldsave)
 	local time = sw:getTime()
 	local lang = dpf.loadjson("langs/" .. uj.lang .. "/use/lab/lab.json", "")
@@ -40,7 +40,7 @@ function command.run(message, mt)
 			ynbuttons(message, {
 				color = uj.embedc,
 				title = lang.using_hole,
-				description = message.author.mentionString .. lang.use_hole_mouse,
+				description = message._author.mentionString .. lang.use_hole_mouse,
 			}, "usemousehole", {}, uj.id, uj.lang)
 			return true
 		else

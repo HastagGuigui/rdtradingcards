@@ -1,7 +1,7 @@
 local command = {}
 function command.run(message, mt)
 	local time = sw:getTime()
-	local uj = db.get_user(message.author.id)
+	local uj = db.get_user(message._author.id)
 	local wj = dpf.loadjson("savedata/worldsave.json", defaultworldsave)
 	local lang = dpf.loadjson("langs/" .. uj.lang .. "/use/mountains.json")
 	local request = mt[1]
@@ -40,7 +40,7 @@ function command.run(message, mt)
 		else
 			message:reply(lang.use_shop)
 			uj.room = 3
-			dpf.savejson("savedata/" .. message.author.id .. ".json", uj)
+			db.save_user(message._author.id)
 		end
 	elseif (request == "barrels" or (uj.lang ~= "en" and request == lang.request_barrels)) then
 		message:reply { embed = {

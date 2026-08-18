@@ -1,6 +1,13 @@
 local command = {
 	name = "terminal",
 	description = "Access the terminal. If you know, you know.",
+	options = {
+		{
+			name = "command",
+			description = "INPUT COMMAND",
+			type = 3
+		}
+	},
 	pre_508_subcommands = {},
 	subcommands = {}
 }
@@ -67,7 +74,7 @@ function command.subcommands.savedata(message, mt, uj, wj, lang, embed)
 		embed["description"] = lang.savedata_not_found
 	else
 		embed["description"] = lang.savedata_success
-		filename = data
+		embed["output_file"] = data
 	end
 end
 
@@ -220,8 +227,8 @@ function command.subcommands.upgrade(message, mt, uj, wj, lang, embed)
 					"https://cdn.discordapp.com/attachments/829197797789532181/838894186472275988/terminal5.png"
 				},
 				footer = {
-					text = message.author.name,
-					icon_url = message.author.avatarURL
+					text = message._author.name,
+					icon_url = message._author.avatarURL
 				}
 			}, "usehole", {}, uj.id, uj.lang)
 			return true
@@ -271,8 +278,8 @@ function command.use(message, mt, uj, wj)
 		title = lang.using_terminal,
 		description = nil,
 		footer = {
-			text = message.author.name,
-			icon_url = message.author.avatarURL
+			text = message._author.name,
+			icon_url = message._author.avatarURL
 		}
 	}
 	print("on the terminal. doing my " .. mt.command)
@@ -287,6 +294,10 @@ function command.use(message, mt, uj, wj)
 	end
 	if out then return out end
 	message:reply { embed = embed, files = embedfiles }
+	if embed["output_file"] then
+		filename = embed["output_file"]
+		embed["output_file"] = nil
+	end
 	if filename then
 		message:reply {
 			file = filename

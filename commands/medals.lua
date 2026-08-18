@@ -43,14 +43,14 @@ function command.run(message, mt)
 	end
 
 	message:reply {
-		content = formatstring(lang.embed_contains, { message.author.mentionString }),
+		content = formatstring(lang.embed_contains, { author.mentionString }),
 		embed = {
 			color = uj.embedc,
-			title = formatstring(lang.embed_title, { message.author.name }),
+			title = formatstring(lang.embed_title, { author.name }),
 			description = medalstring,
 			footer = {
 				text = formatstring(lang.embed_page, { pagenumber, maxpn }),
-				icon_url = message.author.avatarURL
+				icon_url = author.avatarURL
 			}
 		}
 	}

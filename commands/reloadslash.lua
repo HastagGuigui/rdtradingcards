@@ -78,7 +78,7 @@ function command.run(message, mt)
 
 	for _, cmd_command in pairs(command_list) do
 		if cmd_command.name then
-			print(cmd_command.name)
+			print(cmd_command.name .. "(" .. _ .. "/" .. #command_list .. ")")
 			local slash_object = slash_tools.slashCommand(cmd_command.name, cmd_command.description)
 			if cmd_command.options then
 				for i, option in ipairs(cmd_command.options) do
