@@ -35,7 +35,8 @@ local command = {
 			choices = {
 				{ name = "shorthand", value = "shorthand" },
 				{ name = "name",      value = "name" },
-				{ name = "count",     value = "count" }
+				{ name = "count",     value = "count" },
+				{ name = "rarity",    value = "rarity" },
 			}
 		}
 	}
@@ -58,14 +59,14 @@ function command.run(message, mt)
 	local filterSeasonsCount = 0
 	local filterRarities = {}
 	local filterRaritiesCount = 0
-	local sort_type = "name"
+	local sort_type = "rarity"
 
 	local args = {}
 	if mt[1] then
 		for substring in mt[1]:gmatch("%S+") do
 			table.insert(args, substring)
 		end
-	elseif not next(mt) == nil then
+	elseif next(mt) ~= nil then
 		if mt["show-season"] ~= nil then enableSeason = mt["show-season"] end
 		if mt["unstored-only"] ~= nil then filterUnstored = mt["unstored-only"] end
 		if mt["season-filter"] ~= nil then
@@ -81,10 +82,13 @@ function command.run(message, mt)
 		end
 		if mt["rarity-filter"] ~= nil then
 			for substring in mt["rarity-filter"]:gmatch('([^,]+)') do
-				table.insert(args, "-rarity" .. substring)
+				if rarities[substring] then
+					filterRarities[substring] = true
+					filterRaritiesCount = filterRaritiesCount + 1
+				end
 			end
 		end
-		if mt["sorting"] and command.sort[mt.sorting] then
+		if mt["sorting"] and sort_types[mt.sorting] then
 			sort_type = mt.sorting
 		end
 	end
@@ -114,7 +118,7 @@ function command.run(message, mt)
 			filterUnstored = true
 		elseif string.find(value, "-sort-") then
 			local sorting_method = string.gsub(value, "-sort-", "")
-			if command.sort[sorting_method] then
+			if sort_types[sorting_method] then
 				sort_type = sorting_method
 			end
 		else
@@ -223,8 +227,12 @@ function command.run(message, mt)
 		end
 		previnvstring = invstring
 	end
-	message:addReaction("✅")
-	message.author:send {
+	if message.addReaction then
+		message:addReaction("✅")
+	else
+		message:reply("Sent!")
+	end
+	author:send {
 		content = contentstring,
 		embed = {
 			color = uj.embedc,

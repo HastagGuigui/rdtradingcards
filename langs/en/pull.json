@@ -1,26 +1,26 @@
 {
 	"needs_plural_s": true,
-	
+
 	"dm_message": "Sorry, but you cannot pull cards in DMs!",
-	
+
 	"time_hour":  " hour",
 	"time_plural_s": "s",
 	"time_and": " and ",
 	"time_minute": " minute",
 	"wait_message": "Please wait {1} before pulling again.",
-	
+
 	"pulling_card": "Pulling card...",
-	
+
 	"pulled_woah": "Woah!",
 	"pulled_woof": "Woof!",
 	"pulled_yo": "Yo!",
 	"pulled_doubleclick": "Doubleclick!",
 	"pulled_tripleclick": "Tripleclick!!!",
-	
-	"rdnot_message": "{1} got a What is RD Not? card! The What is RD Not? card has been added to {2} inventory. The shorthand form of this card is rdnot.\n",
-	
+
+	"rdnot_message": "{1} got a \u001b[1;2mWhat is RD Not?\u001b[0m card! The \u001b[1;2mWhat is RD Not?\u001b[0m card has been added to {2} inventory. The shorthand form of this card is \u001b[1;2mrdnot\u001b[0m.\n",
+
 	"pulled_message": "{1} got a **{2}** card! The **{2}** card has been added to {3} inventory. The shorthand form of this card is **{4}**.",
-	
+
 	"not_in_storage": "You do not have the **{1}** card in your storage!",
 
 	"ace_of_hearts": "Because of {1} **Ace of Hearts**, {2} also got **10 tokens**!",

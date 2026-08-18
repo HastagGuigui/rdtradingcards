@@ -1,7 +1,7 @@
 local command = {
 	name = "fullstorage",
 	description = "Sends your entire storage in DMs.",
-	{
+	options = {
 		{
 			name = "show-season",
 			type = 5, -- BOOLEAN
@@ -29,7 +29,8 @@ local command = {
 			choices = {
 				{ name = "shorthand", value = "shorthand" },
 				{ name = "name",      value = "name" },
-				{ name = "count",     value = "count" }
+				{ name = "count",     value = "count" },
+				{ name = "rarity",    value = "rarity" },
 			}
 		}
 	}
@@ -41,20 +42,24 @@ function command.run(message, mt)
 	local lang = dpf.loadjson("langs/" .. uj.lang .. "/fullstorage.json", "")
 	local placeholder = dpf.loadjson("langs/" .. uj.lang .. "/look/missingcard.json", "")
 
+	if message.replyDeferred then
+		message:replyDeferred()
+	end
+
 	local enableSeason = false
 
 	local filterSeasons = {}
 	local filterSeasonsCount = 0
 	local filterRarities = {}
 	local filterRaritiesCount = 0
-	local sort_type = "name"
+	local sort_type = "rarity"
 
 	local args = {}
 	if mt[1] then
 		for substring in mt[1]:gmatch("%S+") do
 			table.insert(args, substring)
 		end
-	elseif not next(mt) == nil then
+	elseif next(mt) ~= nil then
 		if mt["show-season"] ~= nil then enableSeason = mt["show-season"] end
 		if mt["season-filter"] ~= nil then
 			for substring in mt["season-filter"]:gmatch('([^,]+)') do
@@ -69,10 +74,13 @@ function command.run(message, mt)
 		end
 		if mt["rarity-filter"] ~= nil then
 			for substring in mt["rarity-filter"]:gmatch('([^,]+)') do
-				table.insert(args, "-rarity" .. substring)
+				if rarities[substring] then
+					filterRarities[substring] = true
+					filterRaritiesCount = filterRaritiesCount + 1
+				end
 			end
 		end
-		if mt["sorting"] and command.sort[mt.sorting] then
+		if mt["sorting"] and sort_types[mt.sorting] then
 			sort_type = mt.sorting
 		end
 	end
@@ -100,7 +108,7 @@ function command.run(message, mt)
 			end
 		elseif string.find(value, "-sort-") then
 			local sorting_method = string.gsub(value, "-sort-", "")
-			if command.sort[sorting_method] then
+			if sort_types[sorting_method] then
 				sort_type = sorting_method
 			end
 		else
@@ -171,7 +179,7 @@ function command.run(message, mt)
 	end
 
 	local contentstring = (uj.id == author.id and lang.embed_your or "<@" .. uj.id .. ">" .. lang.embed_s) ..
-	lang.embed_contains
+		lang.embed_contains
 	local prevstorestring = ''
 	local sorted_inv = {}
 	for k, v in pairs(invfilter) do
@@ -179,11 +187,10 @@ function command.run(message, mt)
 	end
 	table.sort(sorted_inv, sort_types[sort_type])
 	for _, v in ipairs(sorted_inv) do
-		table.insert(sorted_inv,
+		table.insert(storetable,
 			format_card_line(v, enableSeason, lang, placeholder)
 		)
 	end
-	table.sort(storetable)
 	for i = 1, numkey do
 		storestring = storestring .. storetable[i]
 		if #storestring > 4096 then
@@ -209,6 +216,7 @@ function command.run(message, mt)
 			description = storestring
 		},
 	}
+	message:reply("-# Sent!")
 end
 
 return command

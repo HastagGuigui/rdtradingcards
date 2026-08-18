@@ -52,19 +52,19 @@ _G["update_missing_fields"] = function(userid)
 end
 
 _G["handle_autocomplete"] = function(ia, cmd, focused_option, args)
-    print(ia, cmd.name, focused_option.name, args)
-    if cmdslash[cmd.name].autocomplete then
-        local status, err = xpcall(function()
-            cmdslash[cmd.name].autocomplete(ia, cmd, focused_option, args)
-        end, debug.traceback)
-        if not status then
-            ia:autocomplete { {
-                name = "An error occured! Please report...",
-                value = "????"
-            } }
-            print(err)
-        end
-    end
+	print(ia, cmd.name, focused_option.name, args)
+	if cmdslash[cmd.name].autocomplete then
+		local status, err = xpcall(function()
+			cmdslash[cmd.name].autocomplete(ia, cmd, focused_option, args)
+		end, debug.traceback)
+		if not status then
+			ia:autocomplete { {
+				name = "An error occured! Please report...",
+				value = "????"
+			} }
+			print(err)
+		end
+	end
 end
 
 _G["handleslash"] = function(interaction, command, args)
@@ -223,6 +223,22 @@ function sort_types.count(card_1, card_2)
 	return card_1[2] < card_2[2]
 end
 
+function sort_types.rarity(card_1, card_2)
+	local rar1 = rarities_invert[cdb[card_1[1]] and cdb[card_1[1]].type or "s"]
+	local rar2 = rarities_invert[cdb[card_2[1]] and cdb[card_2[1]].type or "s"]
+	local sell1 = rarity_sell_prices[rar1] or 999
+	local sell2 = rarity_sell_prices[rar2] or 999
+	sell1 = type(sell1) == "number" and sell1 or sell1[1]
+	sell2 = type(sell2) == "number" and sell2 or sell2[1]
+    if sell1 == sell2 then
+        if rar1 == rar2 then
+            return sort_types.shorthand(card_1, card_2)
+        end
+        return (rar1 or "ZZZZZZZ") < (rar2 or "ZZZZZZZ")
+    end
+	return sell1 < sell2
+end
+
 _G['ynbuttons'] = function(message, content, pressedfunc, data, userid, lang)
 	local messagecontent, messageembed
 	local langfile = dpf.loadjson("langs/" .. lang .. "/ynbuttons.json", "")
@@ -250,14 +266,14 @@ _G['ynbuttons'] = function(message, content, pressedfunc, data, userid, lang)
 	}
 
 	print(inspect(messageembed))
-    local message_content_field = {}
+	local message_content_field = {}
 	if type(content) == "table" then
-        message_content_field = messageembed
-    else
-	message_content_field = {
-		type = 10,
-		content = messagecontent
-	}
+		message_content_field = messageembed
+	else
+		message_content_field = {
+			type = 10,
+			content = messagecontent
+		}
 	end
 
 	local action_bar = {

@@ -10,19 +10,19 @@ _G["formatslash"] = function(slash, guild)
 			break
 		end
 	end
-    if commandid == "" then
-        local local_commands = client:getGuildApplicationCommands(guild)
-        for cmd_id, cmd_obj in pairs(local_commands) do
-            if cmd_obj.name == slash then
-                commandid = cmd_id
-                break
-            end
-        end
-    end
-    if commandid ~= "" then
-        return "</" .. slash .. ":" .. commandid .. ">"
-    end
-	return "/"..slash
+	if commandid == "" then
+		local local_commands = client:getGuildApplicationCommands(guild)
+		for cmd_id, cmd_obj in pairs(local_commands) do
+			if cmd_obj.name == slash then
+				commandid = cmd_id
+				break
+			end
+		end
+	end
+	if commandid ~= "" then
+		return "</" .. slash .. ":" .. commandid .. ">"
+	end
+	return "/" .. slash
 end
 
 function command.create_option(option)
@@ -86,7 +86,7 @@ function command.run(message, mt)
 					slash_object:addOption(opt)
 				end
 			end
-			print("object: " .. inspect(slash_object))
+			-- print("object: " .. inspect(slash_object))
 			client:createGuildApplicationCommand(message.guild.id, slash_object)
 		end
 	end

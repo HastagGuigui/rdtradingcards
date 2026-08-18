@@ -195,7 +195,8 @@ function command.run(message, mt, overwrite)
       dcalt = "Discontinued Alternate",
       altalt = "Alternate Alternate",
       pico8 = "PICO-8",
-      c = "Collector's"
+      c = "Collector's",
+      s = "Special"
     }
     _G["rarities_alternate"] = {"alt", "dcalt", "altalt", "altr", "altsr", "altur"}
     _G["starrating"] = {
