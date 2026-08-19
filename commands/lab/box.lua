@@ -7,6 +7,9 @@ function command.run(message, mt)
 	local uj = db.get_user(message._author.id)
 	local wj = dpf.loadjson("savedata/worldsave.json", defaultworldsave)
 	if (uj.unlocked_commands and uj.unlocked_commands.lab) or uj.room == 1 then
+		if uj.room ~= 1 then
+			cmd.move.run(message, {room_definitions[1].name}, false)
+		end
 		command.use(message, mt, uj, wj)
 	else
 		message:reply(formatstring("You haven't discovered this yet! Try using {1} and {2} to find it.", {

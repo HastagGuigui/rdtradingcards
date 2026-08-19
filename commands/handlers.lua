@@ -3,6 +3,8 @@
 
 _G["db"] = {
 	cache = {},
+
+	--- returns a mutable copy of the user's savedata, which you can edit and changes will be saved when `save_user` is saved.
 	get_user = function(userid)
 		if not _G["db"].cache[userid] then
 			_G["db"].cache[userid] = dpf.loadjson("savedata/" .. userid .. ".json", defaultjson)

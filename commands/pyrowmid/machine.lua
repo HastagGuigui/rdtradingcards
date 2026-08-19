@@ -5,6 +5,9 @@ local command = {
 function command.run(message, mt)
 	local uj = db.get_user(message._author.id)
 	local wj = dpf.loadjson("savedata/worldsave.json", defaultworldsave)
+	if uj.room ~= 0 then
+		cmd.move.run(message, {room_definitions[0].name}, false)
+	end
 	command.use(message, uj, wj)
 end
 function command.use(message, uj, wj)

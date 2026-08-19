@@ -71,7 +71,7 @@ function command.run(message, mt)
 
 	if uj.inventory[curfilename] >= numcards then
 		ynbuttons(message, formatstring(lang.shred_confirm, { uj.id, numcards, cdb[curfilename].name }, lang.plural_s),
-			"shred", { curfilename = curfilename, numcards = numcards }, uj.id, uj.lang)
+			command.reaction, { curfilename = curfilename, numcards = numcards }, uj.id, uj.lang)
 	else
 		message:reply(formatstring(lang.not_enough, { cdb[curfilename].name }))
 	end

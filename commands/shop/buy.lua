@@ -20,7 +20,10 @@ local command = {
 function command.run(message, mt)
 	local uj = db.get_user(message._author.id)
 	local lang = dpf.loadjson("langs/" .. uj.lang .. "/use/shop/buy.json", "")
-	if uj.unlocked_commands.shop or uj.room == 3 then
+	if (uj.unlocked_commands and uj.unlocked_commands.shop) or uj.room == 3 then
+		if uj.room ~= 3 then
+			cmd.move.run(message, {room_definitions[3].name}, false)
+		end
 		command.buy(message, mt, uj, lang)
 	else
 		message:reply(formatstring("You haven't discovered this yet! Try using {1} and {2} to find it.", {

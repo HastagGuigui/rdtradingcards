@@ -47,6 +47,7 @@ function command.run(message, mt, bypass)
 		or (mt.consumable and mt.consumable.consumable)
 	)
 	local is_poi = (mt[1] or mt.point_of_interest) ~= nil
+	print("we using "..request)
 
 	if not (message.guild or bypass or constexttofn(request)) then
 		message:reply(lang.dm_message)
@@ -75,7 +76,7 @@ function command.run(message, mt, bypass)
 		end
 	end
 
-	local found = true
+	local found = is_poi -- true if this is a point of interest, else false
 
 	----------------------------------------------------------PYROWMID
 	if (uj.room == 0 or bypass) and is_poi then
@@ -122,7 +123,7 @@ function command.run(message, mt, bypass)
 							color = uj.embedc,
 							title = formatstring(lang.using, { consdb[request].name }),
 							description = formatstring(lang.use_confirm, { consdb[request].name }),
-						}, "useconsumable", { crequest = request, mt = mt }, uj.id, uj.lang)
+						}, cmdre.useconsumable.run, { crequest = request, mt = mt }, uj.id, uj.lang)
 						return
 					else
 						if request == "..." then request = "ddd" end
@@ -138,7 +139,7 @@ function command.run(message, mt, bypass)
 						if consdb[request].command then
 							request = consdb[request].command
 						end
-						cmdcons[request].run(uj, "savedata/" .. message.author.id .. ".json", message, mt, nil, fn)
+						cmdcons[request].run(uj, message, mt, nil, fn)
 						return
 					end
 				else
@@ -153,7 +154,6 @@ function command.run(message, mt, bypass)
 	end
 	print("that's worrying if this is a room")
 	dpf.savejson("savedata/worldsave.json", wj)
-	dpf.savejson("savedata/" .. message.author.id .. ".json", uj)
 end
 
 return command

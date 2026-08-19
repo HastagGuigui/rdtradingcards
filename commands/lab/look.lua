@@ -37,7 +37,7 @@ function command.run(message, mt, uj, wj)
 		wj.lablookindex = wj.lablookindex % string.len(wj.lablooktext)
 		dpf.savejson("savedata/worldsave.json", wj)
 	elseif (request == "spider" or request == "spiderweb" or request == "web" or request == "spider web" or (uj.lang ~= "en" and request == lang.request_spider_1 or request == lang.request_spider_2)) then
-		local newmessage = ynbuttons(message, lang.spider_alert, "spiderlook", {}, uj.id, uj.lang)
+		local newmessage = ynbuttons(message, lang.spider_alert, cmdre.spiderlook.run, {}, uj.id, uj.lang)
 	elseif (request == "terminal" or (uj.lang ~= "en" and request == lang.request_terminal)) and wj.labdiscovered then
 		-- TERMINAL FONT IS MS GOTHIC AT 24PX, 8PX FOR SMALL FONT
 		if wj.ws < 508 then
