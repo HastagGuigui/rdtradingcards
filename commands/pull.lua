@@ -8,16 +8,18 @@ function rand_from_table(tab)
 end
 
 function command.run(message, mt)
-	local current_message = nil
-	local function send(data)
-		if current_message then
-			current_message:update { components = data }
+	local replymsg = nil
+	local prevobj = {}
+	local function send(replyobject)
+		if replymsg then
+			replymsg:update(replyobject)
 		else
-			current_message = message:replyComponents { flags = 32768, components = data }
+			replymsg = message:reply(replyobject)
 		end
+		prevobj = replyobject
 	end
 	local time = sw:getTime()
-	local author = message.author ~= nil and message.author or message.user
+	local author = message._author
 	print(author.name .. " did !pull")
 	local uj = db.get_user(author.id)
 	local lang = dpf.loadjson("langs/" .. uj.lang .. "/pull.json", "")
@@ -47,8 +49,6 @@ function command.run(message, mt)
 
 	local maxcryopodstorage = config.cooldowns.pull_cryopod_max
 
-	local message_contents = {}
-
 
 	if uj.equipped == "sparecryopod" then
 		local missedpulls = math.floor((time:toHours() - math.max(uj.lastpull, uj.lastequip)) / cooldown) - 1
@@ -64,10 +64,7 @@ function command.run(message, mt)
 				resultmessage = resultmessage ..
 					formatstring(lang.cryopod_partly, { missedpulls, uj.storedpulls + missedpulls })
 			end
-			message_contents[#message_contents + 1] = {
-				type = 10, content = resultmessage
-			}
-			send(message_contents)
+			send { content = resultmessage }
 			uj.storedpulls = math.min(uj.storedpulls + missedpulls, maxcryopodstorage)
 		end
 	elseif uj.storedpulls > 0 then
@@ -77,18 +74,12 @@ function command.run(message, mt)
 	if uj.lastpull + cooldown > time:toHours() then
 		if uj.storedpulls > 0 then -- use a pull stored in the freezer (the spare cryopod)
 			uj.storedpulls = uj.storedpulls - 1
-			message_contents[#message_contents + 1] = {
-				type = 10, content = formatstring(lang.cryopod_pull, { uj.storedpulls }, "s")
-			}
-			send(message_contents)
+			send { content = (prevobj.content or "") .. formatstring(lang.cryopod_pull, { uj.storedpulls }, "s") }
 		else
 			local minutesleft = math.ceil(uj.lastpull * 60 - time:toMinutes() + cooldown * 60)
 			local durationtext = formattime(minutesleft, uj.lang)
 
-			message_contents[#message_contents + 1] = {
-				type = 10, content = formatstring(lang.wait_message, { durationtext })
-			}
-			send(message_contents)
+			send { content = (prevobj.content or "") .. formatstring(lang.wait_message, { durationtext }) }
 			return
 		end
 	end
@@ -107,10 +98,7 @@ function command.run(message, mt)
 		if uj.sodapt == {} then uj.sodapt = nil end
 	end
 
-	message_contents[#message_contents + 1] = {
-		type = 10, content = lang.pulling_card
-	}
-	send(message_contents)
+	send { content = (prevobj.content or "") .. lang.pulling_card }
 
 	local pulledcards = {}
 	if uj.disablecommunity then
@@ -212,42 +200,27 @@ function command.run(message, mt)
 		uj.has_seen_tutorials.pull = true
 	end
 
+	prevobj.embeds = {}
 	for i, v in ipairs(pulledcards) do
-		local embed = {
-			type = 17,
-			accent_color = uj.embedc,
-			components = {}
-		}
 		local cardname = cdb[v].name
 
 		local title = lang.pulled_woah
 		if uj.equipped == "okamiiscollar" then title = lang.pulled_woof end
+		if v == "yor" or v == "yosr" or v == "your" then title = lang.pulled_yo end
 		if i == 2 then title = lang.pulled_doubleclick end
 		if i == 3 then title = lang.pulled_tripleclick end
-		if v == "yor" or v == "yosr" or v == "your" then title = lang.pulled_yo end
 		if v == "samarrrai" then title = "Ahoy Matey!" end
 
 		local newstatus = formatstring("Inventory: {1} | Storage: {2}", { uj.inventory[v] or 0, uj.storage[v] or 0 })
 		if not uj.storage[v] then
-			newstatus = "[NEW CARD!]"
+			newstatus = "**[NOT IN STORAGE!]**"
 		end
 
 		local footer = "Season " .. cdb[v].season .. " | " .. newstatus
 
-		local msg = formatstring(lang.pulled_message,
-			{ author.mentionString, cardname, uj.pronouns["their"], v })
-
-		embed.components[1] = { type = 10, content = "## " .. title }
-		embed.components[2] = { type = 10, content = msg }
-		embed.components[4] = { type = 10, content = "-# " .. footer }
-
 		if v == "rdnot" then
-			embed.components[1].content = formatstring("## `{1}`", { title })
-			embed.components[2].content = "```ansi\n@"
-				.. formatstring(lang.rdnot_message, { author.name, uj.pronouns["their"] }) .. "\n```"
-			embed.components[3] = {
-				type = 10,
-				content = [[```
+			message:reply { embed = { description = "```ansi\n" ..
+				title .. "\n@" .. formatstring(lang.rdnot_message, { author.name, uj.pronouns["their"] }) .. [[
 _________________
 | SR            |
 |               |
@@ -256,20 +229,27 @@ _________________
 |   /|____|\/   |
 |     l  l      |
 |              𝅘𝅥𝅯 |
-_________________
-```]]
+_________________```]], footer = { text = "`" .. footer .. "`" },
+			} }
+		elseif not cdb[v].spoiler then
+			-- regular image
+			local msg = formatstring(lang.pulled_message,
+				{ author.mentionString, cardname, uj.pronouns["their"], v })
+			prevobj.embeds[#prevobj.embeds + 1] = {
+				color = uj.embedc,
+				title = title,
+				description = msg,
+				image = { url = type(cdb[v].embed) == "table" and cdb[v].embed[math.random(#cdb[v].embed)] or cdb[v].embed }, -- is this actually used for anything?
+				footer = { text = footer }
 			}
-			embed.components[4].content = "-# `" .. footer .. "`"
-			embed.accent_color = nil
+			send(prevobj)
 		else
-			embed.components[3] = {
-				type = 12,
-				items = {
-					{
-						media = { url = type(cdb[v].embed) == "table" and cdb[v].embed[math.random(#cdb[v].embed)] or cdb[v].embed },
-						spoiler = cdb[v].spoiler == true
-					}
-				}
+			print("spider moments")
+			local msg = formatstring(lang.pulled_message,
+				{ author.mentionString, cardname, uj.pronouns["their"], v })
+			message:reply {
+				content = "**" .. title .. "**\n" .. msg .. "\n-# " .. footer,
+				file = "card_images/SPOILER_" .. v .. ".png"
 			}
 		end
 		-- if not uj.togglecheckcard then
@@ -277,20 +257,12 @@ _________________
 		--     message:reply(formatstring(lang.not_in_storage, {cardname}))
 		--   end
 		-- end
-		message_contents[#message_contents + 1] = embed
-		send(message_contents)
 	end
 	if show_tutorial_message then
-		message_contents[#message_contents + 1] = {
-			type = 10, content = formatstring(lang.tutorial, { prefix })
-		}
-		send(message_contents)
+		message:reply(formatstring(lang.tutorial, { prefix }))
 	end
 	if showacemessage then
-		message_contents[#message_contents + 1] = {
-			type = 10, content = formatstring(lang.ace_of_hearts, { uj.pronouns['their'], uj.pronouns['they'] })
-		}
-		send(message_contents)
+		message:reply(formatstring(lang.ace_of_hearts, { uj.pronouns['their'], uj.pronouns['they'] }))
 	end
 end
 

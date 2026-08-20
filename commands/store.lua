@@ -106,7 +106,8 @@ function command.react(message, interaction, data, response, base_reply)
 				})
 			end
 		else
-			message:update({
+			message:reply({
+				flags = 32768,
 				components = { {
 					type = 10,
 					content = text
