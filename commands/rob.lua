@@ -30,6 +30,10 @@ function command.run(message, mt)
 		uj.lastrob = 0
 	end
 
+	if not uj.robheat then
+		uj.robheat = 0
+	end
+
 	if not wj.skiprob then
 		wj.skiprob = false
 		dpf.savejson("savedata/worldsave.json", wj)
