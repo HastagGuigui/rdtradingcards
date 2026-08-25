@@ -1,6 +1,7 @@
 /privatestuff.*
 config.lua
 savedata
+savedata-backup
 discordia.log
 gateway.json
 deps
