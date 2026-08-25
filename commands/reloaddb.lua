@@ -19,7 +19,7 @@ function command.run(message, mt, overwrite)
     end
 
     for i, v in ipairs(scandir("commands")) do
-      if fs.existsSync("commands/"..v.."/") then
+      if fs.isdir("commands/"..v) then
         for _, vrec in ipairs(scandir("commands/"..v)) do
           local filename = string.sub(vrec, 1, -5)
           cmd[v.."_"..filename] = dofile('commands/' .. v.."/"..vrec)
