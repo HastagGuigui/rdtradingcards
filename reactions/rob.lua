@@ -29,12 +29,12 @@ function reaction.run(message, interaction, data, response)
         end
       end
       for i,v in ipairs(sj.consumables) do
-		  if v.stock then
-			if v.stock > 0 then
-			  itemtypes[#itemtypes + 1] = "consumable"
-			  break
-			end
-		  end
+        if v.stock then
+          if v.stock > 0 then
+            itemtypes[#itemtypes + 1] = "consumable"
+            break
+          end
+        end
       end
 
       if #itemtypes ~= 0 then -- and math.random(1,100) ~= 1
@@ -94,7 +94,7 @@ function reaction.run(message, interaction, data, response)
       local robmustache = 0
     end
 
-    elseif uj.equipped == "doubleedge" then
+    if uj.equipped == "doubleedge" then
       local robdoubleedge = 1
     else
       local robdoubleedge = 0
@@ -261,7 +261,7 @@ function reaction.run(message, interaction, data, response)
           else
             uj.lastrob = sj.stocknum + finalpm - 1
           end
-        elseif uj.equipped = "doubleedge" then
+        elseif uj.equipped == "doubleedge" then
           uj.lastrob = sj.stocknum + finalpm + 1
         else
           uj.lastrob = sj.stocknum + finalpm

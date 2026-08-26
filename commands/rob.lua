@@ -1,10 +1,30 @@
-local command = {}
+local command = {
+	name = "rob",
+	description = "Robs the shop",
+}
+
 function command.run(message, mt)
+	local uj = db.get_user(message._author.id)
+	local lang = dpf.loadjson("langs/" .. uj.lang .. "/look/shop.json")
+	if (uj.unlocked_commands and uj.unlocked_commands.shop) or uj.room == 3 then
+		if uj.room ~= 3 then
+			cmd.move.run(message, {room_definitions[3].name}, false)
+		end
+		command.rob(message, mt, uj, lang)
+	else
+		message:reply(formatstring("You haven't discovered this yet! Try using {1} and {2} to find it.", {
+			formatslash("look", message.guild.id), formatslash("move", message.guild.id),
+		}))
+	end
+end
+
+function command.rob(message, args, uj, lang)
+	local uj = db.get_user(message._author.id)
+	local lang = dpf.loadjson("langs/" .. uj.lang .. "/look/shop.json")
 	local time = sw:getTime()
 	checkforreload(time:toDays())
 	local author = message._author
 	print(author.name .. " did !rob")
-	local uj = db.get_user(author.id)
 	local sj = dpf.loadjson("savedata/shop.json", defaultshopsave)
 	local wj = dpf.loadjson("savedata/worldsave.json", defaultworldsave)
 	local lang = dpf.loadjson("langs/" .. uj.lang .. "/rob.json", "")
@@ -20,9 +40,9 @@ function command.run(message, mt)
 	local sindex
 	local numrequest = 1
 
-	if tonumber(mt[2]) then
-		if tonumber(mt[2]) > 1 then
-			numrequest = math.floor(mt[2])
+	if tonumber(args[2]) then
+		if tonumber(args[2]) > 1 then
+			numrequest = math.floor(args[2])
 		end
 	end
 
@@ -75,7 +95,7 @@ function command.run(message, mt)
 
 		donthave = function()
 			if nopeeking then
-				message:reply(formatstring(lang.nopeeking_error, { mt[1] }))
+				message:reply(formatstring(lang.nopeeking_error, { args[1] }))
 			else
 				message:reply(formatstring(lang.donthave, { sname }))
 			end
@@ -95,14 +115,15 @@ function command.run(message, mt)
 
 		unknownrequest = function()
 			if nopeeking then
-				message:reply(formatstring(lang.nopeeking_error, { mt[1] }))
+				message:reply(formatstring(lang.nopeeking_error, { args[1] }))
 			else
-				message:reply(formatstring(lang.unknownrequest, { mt[1] }))
+				message:reply(formatstring(lang.unknownrequest, { args[1] }))
 			end
 		end
 	}
 
-	if not mt[1] or mt[1] == "" then
+	if not args[1] or args[1] == "" then
+		local uj = db.get_user(message._author.id)
 		local itemtypes = {}
 		if sj.itemstock > 0 then
 			if not uj.items[sj.item] then
@@ -137,8 +158,8 @@ function command.run(message, mt)
 		end
 		return
 	else
-		if constexttofn(mt[1]) then
-			srequest = constexttofn(mt[1])
+		if constexttofn(args[1]) then
+			srequest = constexttofn(args[1])
 			sname = consdb[srequest].name
 
 			for i, v in ipairs(sj.consumables) do
@@ -184,8 +205,8 @@ function command.run(message, mt)
 			return
 		end
 
-		if itemtexttofn(mt[1]) then
-			srequest = itemtexttofn(mt[1])
+		if itemtexttofn(args[1]) then
+			srequest = itemtexttofn(args[1])
 			sname = itemdb[srequest].name
 			sprice = sj.itemprice
 
@@ -231,9 +252,9 @@ function command.run(message, mt)
 			return
 		end
 
-		if texttofn(mt[1]) then
+		if texttofn(args[1]) then
 			print("card!")
-			srequest = texttofn(mt[1])
+			srequest = texttofn(args[1])
 			sname = cdb[srequest].name
 
 			for i, v in ipairs(sj.cards) do
