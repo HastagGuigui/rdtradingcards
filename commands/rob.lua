@@ -150,11 +150,7 @@ function command.rob(message, args, uj, lang)
 		if uj.skipprompts and wj.skiprob then
 			cmdre["rob"].run(message, nil, { random = true }, "yes")
 		else
-			ynbuttons(message, {
-				color = uj.embedc,
-				title = lang.robbing_shop_random,
-				description = lang.rob_shop_random
-			}, "rob", { random = true }, uj.id, uj.lang)
+				ynbuttons(message, lang.rob_shop_random, cmdre.rob.run, { random = true }, uj.id, uj.lang)
 		end
 		return
 	else
@@ -192,13 +188,7 @@ function command.rob(message, args, uj, lang)
 					{ itemtype = "consumable", sname = sname, sindex = sindex, srequest = srequest, sprice = sprice, numrequest =
 					numrequest, random = false }, "yes")
 			else
-				ynbuttons(message, {
-					color = uj.embedc,
-					title = formatstring(lang.robbing_shop, { sname }),
-					description = "_" ..
-					lang.rob_shop_desc ..
-					"_\n`" .. consdb[srequest].description .. "`\n" .. formatstring(lang.rob_shop, { numrequest, sname })
-				}, cmdre.rob.run,
+				ynbuttons(message, lang.rob_shop, cmdre.rob.run,
 					{ itemtype = "consumable", sname = sname, sindex = sindex, srequest = srequest, sprice = sprice, numrequest =
 					numrequest, random = false }, uj.id, uj.lang)
 			end
@@ -240,13 +230,7 @@ function command.rob(message, args, uj, lang)
 				cmdre.rob.run(message, nil,
 					{ itemtype = "item", sname = sname, srequest = srequest, sprice = sprice, random = false }, "yes")
 			else
-				ynbuttons(message, {
-					color = uj.embedc,
-					title = formatstring(lang.robbing_shop, { sname }),
-					description = "_" ..
-					lang.rob_shop_desc ..
-					"_\n`" .. itemdb[srequest].description .. "`\n" .. formatstring(lang.rob_shop_item, { sname })
-				}, cmdre.rob.run, { itemtype = "item", sname = sname, srequest = srequest, sprice = sprice, random = false },
+				ynbuttons(message, lang.rob_shop_item, cmdre.rob.run, { itemtype = "item", sname = sname, srequest = srequest, sprice = sprice, random = false },
 					uj.id, uj.lang)
 			end
 			return
@@ -286,13 +270,7 @@ function command.rob(message, args, uj, lang)
 					{ itemtype = "card", sname = sname, sindex = sindex, srequest = srequest, numrequest = numrequest, random = false },
 					"yes")
 			else
-				ynbuttons(message, {
-					color = uj.embedc,
-					title = formatstring(lang.robbing_shop, { sname }),
-					description = "_" ..
-					lang.rob_shop_desc ..
-					"_\n`" .. cdb[srequest].description .. "`\n" .. formatstring(lang.rob_shop, { numrequest, sname })
-				}, cmdre.rob.run,
+				ynbuttons(message, lang.rob_shop, cmdre.rob.run,
 					{ itemtype = "card", sname = sname, sindex = sindex, srequest = srequest, numrequest = numrequest, random = false },
 					uj.id, uj.lang)
 			end
