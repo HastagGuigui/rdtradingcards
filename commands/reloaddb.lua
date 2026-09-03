@@ -249,13 +249,16 @@ function command.run(message, mt, overwrite)
       print("automove")
       local uj = db.get_user(message._author.id)
       local reqroom = "none"
+      if not uj.unlocked_commands then
+        uj.unlocked_commands = {}
+      end
       for k,v in pairs(amtable) do
         for a,b in ipairs(v) do
           if b == r then
             print("trying to use something in " .. k)
             local has_already_been_there = false
             for amk, amv in pairs(amids) do
-              if amv == k and uj.discovered_rooms[amk] then
+              if amv == k and uj.unlocked_commands[amk] then
                 has_already_been_there = true
               end
             end
