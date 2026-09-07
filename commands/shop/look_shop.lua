@@ -7,7 +7,7 @@ function command.run(message, mt)
 	local lang = dpf.loadjson("langs/" .. uj.lang .. "/look/shop.json")
 	if (uj.unlocked_commands and uj.unlocked_commands.shop) or uj.room == 3 then
 		if uj.room ~= 3 then
-			cmd.move.run(message, {room_definitions[3].name}, false)
+			cmd.move.run(message, { room_definitions[3].name }, false)
 		end
 		command.shop(message, mt, uj, lang)
 	else
@@ -21,6 +21,7 @@ function command.shop(message, args, uj, lang)
 	local time = sw:getTime()
 	checkforreload(time:toDays())
 	local showSeasons = false
+	local dont_have_indicator = " **[!!]**"
 
 	if args.season or args[#args] == "-season" then
 		showSeasons = true
@@ -38,11 +39,16 @@ function command.shop(message, args, uj, lang)
 	}
 
 	local sj = dpf.loadjson("savedata/shop.json", defaultshopsave)
-	local cardstr = "### Cards\n"
+
+	-- Cards
+	local cardstr = "### " .. lang.shop_category_card .. "\n"
 	for i, v in ipairs(sj.cards) do
 		local tokentext = formatstring(lang.shop_token, { v.price }, lang.plural_s)
 		local prefix = "\n> "
 		local suffix = " (" .. tokentext .. ")"
+		if not uj.storage[v.name] then
+			suffix = suffix .. dont_have_indicator
+		end
 		if v.stock <= 0 then
 			prefix = prefix .. "~~"
 			suffix = suffix .. "~~"
@@ -53,7 +59,9 @@ function command.shop(message, args, uj, lang)
 	end
 	base_embed.components[#base_embed.components + 1] = { type = 10, content = cardstr }
 	base_embed.components[#base_embed.components + 1] = { type = 14, divider = false }
-	local itemstr = "### Items\n"
+
+	-- Items
+	local itemstr = "### " .. lang.shop_category_item .. "\n"
 	for i, v in ipairs(sj.consumables) do
 		local tokentext = formatstring(lang.shop_token, { v.price }, lang.plural_s)
 		local prefix = "\n> "
@@ -70,6 +78,9 @@ function command.shop(message, args, uj, lang)
 	local tokentext = formatstring(lang.shop_token, { sj.itemprice }, lang.plural_s)
 	local prefix = sj.itemstock <= 0 and "\n > ~~" or "\n > "
 	local suffix = sj.itemstock <= 0 and "~~" or ""
+	if not uj.items[sj.item] then
+		suffix = suffix .. dont_have_indicator
+	end
 	itemstr = itemstr ..
 		prefix ..
 		formatstring("**{1}** `{2}` x{3} ", { itemdb[sj.item].name, sj.item, sj.itemstock }) ..
@@ -87,7 +98,6 @@ function command.shop(message, args, uj, lang)
 		content = "-# " .. formatstring(lang.checktoken, { uj.tokens }, lang.plural_s)
 	}
 
-	print("my bullshit!!!" .. inspect(base_embed))
 	local file = getshopimage()
 	local data, err = message:replyComponents({
 		flags = 32768,
@@ -98,23 +108,6 @@ function command.shop(message, args, uj, lang)
 	if err then
 		print(err)
 	end
-
-	-- message:reply { embed = {
-	-- 	color = uj.embedc,
-	-- 	title = lang.looking_at_shop,
-	-- 	description = lang.looking_shop,
-	-- 	fields = { {
-	-- 		name = lang.shop_selling,
-	-- 		value = shopstr,
-	-- 		inline = true
-	-- 	} },
-	-- 	image = { url = "attachment://shop.png" } },
-	-- 	files = { getshopimage() } }
-	-- if not uj.togglechecktoken then
-	-- 	message:reply(lang.checktoken_1 ..
-	-- 		uj.tokens ..
-	-- 		lang.checktoken_2 ..
-	-- 		(uj.tokens ~= 1 and lang.needs_plural_s == true and lang.plural_s or "") .. lang.checktoken_3)
-	-- end
 end
+
 return command

@@ -50,7 +50,7 @@ function command.rob(message, args, uj, lang)
 	local srequest
 	local sname
 	local stock
-    local sindex
+	local sindex
 	local sprice
 	local numrequest = 1
 
@@ -303,7 +303,6 @@ function command.rob(message, args, uj, lang)
 	end
 end
 
-
 function command.rob_calc(robchance, uj, rob_weight)
 	local robmustache = 0
 	local robdoubleedge = 0
@@ -318,7 +317,9 @@ function command.rob_calc(robchance, uj, rob_weight)
 	else
 		robdoubleedge = 0
 	end
-    return robchance >= math.max((7.5 * (rob_weight * 1.5) * (uj.robheat + 1) * (1 + robmustache * 0.25) * (1 - robdoubleedge * 0.15)) * 100, 90)
+	return robchance >=
+	math.max((7.5 * (rob_weight * 1.5) * (uj.robheat + 1) * (1 + robmustache * 0.25) * (1 - robdoubleedge * 0.15)) * 100,
+		90)
 end
 
 function command.reaction(message, interaction, data, response, base_reply)
@@ -330,7 +331,7 @@ function command.reaction(message, interaction, data, response, base_reply)
 				base_reply:update({ components = { { type = 10, content = text } } })
 			end
 		else
-            local _, err = message:reply({ components = { { type = 10, content = text } } })
+			local _, err = message:reply({ components = { { type = 10, content = text } } })
 			if err then
 				print(err)
 			end
@@ -447,9 +448,13 @@ function command.reaction(message, interaction, data, response, base_reply)
 				else
 					uj.consumables[data.srequest] = uj.consumables[data.srequest] + adding
 				end
-				send(formatstring(lang.rob_succeeded, {data.numrequest, data.sname}))
-				if not uj.timesrobsucceeded then uj.timesrobsucceeded = 1 else uj.timesrobsucceeded = uj
-					.timesrobsucceeded + 1 end
+				send(formatstring(lang.rob_succeeded, { data.numrequest, data.sname }))
+				if not uj.timesrobsucceeded then
+					uj.timesrobsucceeded = 1
+				else
+					uj.timesrobsucceeded = uj
+						.timesrobsucceeded + 1
+				end
 			else
 				print("rob failed")
 
@@ -462,7 +467,7 @@ function command.reaction(message, interaction, data, response, base_reply)
 					finalpm = 0
 				end
 
-				send(formatstring(lang.rob_failed, {data.numrequest, data.sname, 3 + finalpm}))
+				send(formatstring(lang.rob_failed, { data.numrequest, data.sname, 3 + finalpm }))
 				uj.lastrob = sj.stocknum + finalpm
 				uj.room = 2
 				if not uj.timesrobfailed then uj.timesrobfailed = 1 else uj.timesrobfailed = uj.timesrobfailed + 1 end
@@ -472,7 +477,7 @@ function command.reaction(message, interaction, data, response, base_reply)
 			local robsucceed = false
 			local blackpm
 			local randompm = false
-            local robchance = math.random(0, 10000)
+			local robchance = math.random(0, 10000)
 			local rob_weight = 3.5
 			if cdb[data.srequest].type == "Rare" then
 				blackpm = -2
@@ -514,14 +519,18 @@ function command.reaction(message, interaction, data, response, base_reply)
 				print("rob succeeded")
 				sj.cards[data.sindex].stock = sj.cards[data.sindex].stock - data.numrequest
 				if not uj.inventory then uj.inventory = {} end
-                if not uj.inventory[data.srequest] then
-                    uj.inventory[data.srequest] = data.numrequest
-                else
-                    uj.inventory[data.srequest] = uj.inventory[data.srequest] + data.numrequest
-                end
-				send(formatstring(lang.rob_succeeded, {data.numrequest, data.sname}))
-				if not uj.timesrobsucceeded then uj.timesrobsucceeded = 1 else uj.timesrobsucceeded = uj
-					.timesrobsucceeded + 1 end
+				if not uj.inventory[data.srequest] then
+					uj.inventory[data.srequest] = data.numrequest
+				else
+					uj.inventory[data.srequest] = uj.inventory[data.srequest] + data.numrequest
+				end
+				send(formatstring(lang.rob_succeeded, { data.numrequest, data.sname }))
+				if not uj.timesrobsucceeded then
+					uj.timesrobsucceeded = 1
+				else
+					uj.timesrobsucceeded = uj
+						.timesrobsucceeded + 1
+				end
 			else
 				print("rob failed")
 
@@ -538,7 +547,7 @@ function command.reaction(message, interaction, data, response, base_reply)
 					finalpm = 0
 				end
 
-				send(formatstring(lang.rob_failed, {data.numrequest, data.sname, 3 + finalpm}))
+				send(formatstring(lang.rob_failed, { data.numrequest, data.sname, 3 + finalpm }))
 				if uj.equipped == "mustache" then
 					if finalpm == -1 then
 						uj.lastrob = sj.stocknum + finalpm
@@ -570,9 +579,13 @@ function command.reaction(message, interaction, data, response, base_reply)
 				print("rob succeeded")
 				sj.itemstock = sj.itemstock - 1
 				uj.items[data.srequest] = true
-				send(formatstring(lang.rob_succeeded_item, {"", data.sname}))
-				if not uj.timesrobsucceeded then uj.timesrobsucceeded = 1 else uj.timesrobsucceeded = uj
-					.timesrobsucceeded + 1 end
+				send(formatstring(lang.rob_succeeded_item, { "", data.sname }))
+				if not uj.timesrobsucceeded then
+					uj.timesrobsucceeded = 1
+				else
+					uj.timesrobsucceeded = uj
+						.timesrobsucceeded + 1
+				end
 			else
 				print("rob failed")
 
@@ -585,7 +598,7 @@ function command.reaction(message, interaction, data, response, base_reply)
 					finalpm = 0
 				end
 
-				send(formatstring(lang.rob_failed, {"", data.sname, 3 + finalpm}))
+				send(formatstring(lang.rob_failed, { "", data.sname, 3 + finalpm }))
 				uj.lastrob = sj.stocknum + finalpm
 				uj.room = 2
 				if not uj.timesrobfailed then uj.timesrobfailed = 1 else uj.timesrobfailed = uj.timesrobfailed + 1 end
@@ -598,10 +611,8 @@ function command.reaction(message, interaction, data, response, base_reply)
 
 	if response == "no" then
 		print('user1 has denied')
-		interaction:reply(formatstring(lang.rob_cancelled, {uj.id}))
+		interaction:reply(formatstring(lang.rob_cancelled, { uj.id }))
 	end
 end
-
-
 
 return command

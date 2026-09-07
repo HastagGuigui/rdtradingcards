@@ -17,7 +17,7 @@ function command.run(message, mt)
 	local wj = dpf.loadjson("savedata/worldsave.json", defaultworldsave)
 	if (uj.unlocked_commands and uj.unlocked_commands.lab) or uj.room == 1 then
 		if uj.room ~= 1 then
-			cmd.move.run(message, {room_definitions[1].name}, false)
+			cmd.move.run(message, { room_definitions[1].name }, false)
 		end
 		command.use(message, mt, uj, wj)
 	else
@@ -78,6 +78,12 @@ function command.subcommands.savedata(message, mt, uj, wj, lang, embed)
 	else
 		embed["description"] = lang.savedata_success
 		embed["output_file"] = data
+	end
+	embed["post_send"] = function(messageembed, messagefile)
+		embed.description = lang.savedata_success .. "\n" .. "[`COPY LINK`](" .. messagefile.attachments[1].url .. ")"
+		messageembed:update({
+			embed = embed
+		})
 	end
 end
 
@@ -296,15 +302,24 @@ function command.use(message, mt, uj, wj)
 		out = command.subcommands[request](message, mt, uj, wj, lang, embed)
 	end
 	if out then return out end
-	message:reply { embed = embed, files = embedfiles }
+	local embed_func = nil
 	if embed["output_file"] then
 		filename = embed["output_file"]
 		embed["output_file"] = nil
 	end
+	if embed["post_send"] then
+		embed_func = embed["post_send"]
+		embed["post_send"] = nil
+	end
+	local msgembed = message:reply { embed = embed, files = embedfiles }
+	local msgfile = nil
 	if filename then
-		message:reply {
+		msgfile = message:reply {
 			file = filename
 		}
+	end
+	if embed_func then
+		embed_func(msgembed, msgfile)
 	end
 	if not uj.unlocked_commands then
 		uj.unlocked_commands = {}
