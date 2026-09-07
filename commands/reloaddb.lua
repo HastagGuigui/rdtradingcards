@@ -594,26 +594,6 @@ function command.run(message, mt, overwrite)
       end
     end
 
-    _G['resetclocks'] = function ()
-      for i,v in ipairs(scandir("savedata")) do
-        local cuj = dpf.loadjson("savedata/" .. v, defaultjson)
-        if cuj.id and db.cache[cuj.id] then
-    		db.save_user(cuj.id)
-     		db.uncache_user(cuj.id)
-        end
-        if cuj.lastpull then
-          cuj.lastpull = -24
-          cuj.lastprayer = -24
-          cuj.lastequip = -24
-          cuj.lastbox = -24
-        end
-        if cuj.lastrefresh then
-          cuj.lastrefresh = 0
-        end
-        dpf.savejson("savedata/" .. v, cuj)
-      end
-    end
-
     _G['nametofn'] = function (x)
       for i, v in pairs(cdb) do
         if string.lower(v.name) == string.lower(x) then

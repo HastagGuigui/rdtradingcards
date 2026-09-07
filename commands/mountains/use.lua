@@ -22,7 +22,7 @@ function command.run(message, mt)
 		if uj.lastrob + 4 > sj.stocknum and uj.lastrob ~= 0 then
 			lang = dpf.loadjson("langs/" .. uj.lang .. "/rob.json")
 			local stocksleft = uj.lastrob + 4 - sj.stocknum
-			local stockstring = lang.more_restock_1 .. stocksleft .. lang.more_restock_2
+			local stockstring = formatstring(lang.more_restock, { stocksleft })
 			if lang.needs_plural_s == true then
 				if stocksleft > 1 then
 					stockstring = stockstring .. lang.plural_s
