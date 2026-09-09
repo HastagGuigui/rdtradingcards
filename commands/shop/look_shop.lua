@@ -21,7 +21,7 @@ function command.shop(message, args, uj, lang)
 	local time = sw:getTime()
 	checkforreload(time:toDays())
 	local showSeasons = false
-	local dont_have_indicator = " **[!!]**"
+	local dont_have_indicator = uj.togglecheckcard and " **[!!]**" or ""
 
 	if args.season or args[#args] == "-season" then
 		showSeasons = true

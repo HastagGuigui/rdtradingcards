@@ -25,6 +25,15 @@ _G["formatslash"] = function(slash, guild)
 	return "/" .. slash
 end
 
+_G["add_c_command"] = function()
+	local c_slash = slash_tools.slashCommand("c", "Run a regular text command as a slash command.")
+	local c_slash_cmd = slash_tools.string("command", "The actual command"):setRequired(true)
+	local c_slash_data = slash_tools.string("args", "Arguments (usually separated with /)")
+	c_slash:addOption(c_slash_cmd)
+	c_slash:addOption(c_slash_data)
+	client:createGlobalApplicationCommand(c_slash)
+end
+
 function command.create_option(option)
 	local opt = slash_tools.option()
 	opt = opt:setType(option.type):setName(option.name):setDescription(option
@@ -76,27 +85,22 @@ function command.run(message, mt)
 		command_list = { [mt[1]] = cmd[mt[1]] }
 	end
 
-	for _, cmd_command in pairs(command_list) do
-		if cmd_command.name then
-			print(cmd_command.name .. "(" .. _ .. "/" .. #command_list .. ")")
-			local slash_object = slash_tools.slashCommand(cmd_command.name, cmd_command.description)
-			if cmd_command.options then
-				for i, option in ipairs(cmd_command.options) do
-					local opt = command.create_option(option)
-					slash_object:addOption(opt)
-				end
-			end
-			-- print("object: " .. inspect(slash_object))
-			client:createGuildApplicationCommand(message.guild.id, slash_object)
-		end
-	end
-	print("/c isn't real hold on")
-	local c_slash = slash_tools.slashCommand("c", "Run a regular text command as a slash command.")
-	local c_slash_cmd = slash_tools.string("command", "The actual command"):setRequired(true)
-	local c_slash_data = slash_tools.string("args", "Arguments (usually separated with /)")
-	c_slash:addOption(c_slash_cmd)
-	c_slash:addOption(c_slash_data)
-	client:createGlobalApplicationCommand(c_slash)
+    for _, cmd_command in pairs(command_list) do
+        if cmd_command.name then
+            print(cmd_command.name .. "(" .. _ .. "/" .. #command_list .. ")")
+            local slash_object = slash_tools.slashCommand(cmd_command.name, cmd_command.description)
+            if cmd_command.options then
+                for i, option in ipairs(cmd_command.options) do
+                    local opt = command.create_option(option)
+                    slash_object:addOption(opt)
+                end
+            end
+            -- print("object: " .. inspect(slash_object))
+            client:createGuildApplicationCommand(message.guild.id, slash_object)
+        end
+    end
+    add_c_command()
+
 	if not is_interaction then
 		message:addReaction("✅")
 	else

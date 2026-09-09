@@ -39,5 +39,5 @@
 
 	"denied_message": "You decide to not buy the **{1}**.",
 
-	"shorthand_unlocked": "The Wolf **smiles** and gives you a receipt that reads \"Come back again anytime!\".\nYou can now use {1}shop and {1}buy directly."
+	"shorthand_unlocked": "The Wolf **smiles** and gives you a receipt that reads \"Come back again anytime!\".\nYou can now use {1} and {2} directly."
 }

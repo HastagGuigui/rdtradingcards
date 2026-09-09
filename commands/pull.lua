@@ -74,12 +74,12 @@ function command.run(message, mt)
 	if uj.lastpull + cooldown > time:toHours() then
 		if uj.storedpulls > 0 then -- use a pull stored in the freezer (the spare cryopod)
 			uj.storedpulls = uj.storedpulls - 1
-			send { content = (prevobj.content or "") .. formatstring(lang.cryopod_pull, { uj.storedpulls }, "s") }
+			send { content = (prevobj.content and prevobj.content .. "\n" or "") .. formatstring(lang.cryopod_pull, { uj.storedpulls }, "s") }
 		else
 			local minutesleft = math.ceil(uj.lastpull * 60 - time:toMinutes() + cooldown * 60)
 			local durationtext = formattime(minutesleft, uj.lang)
 
-			send { content = (prevobj.content or "") .. formatstring(lang.wait_message, { durationtext }) }
+			send { content = (prevobj.content and prevobj.content .. "\n" or "") .. formatstring(lang.wait_message, { durationtext }) }
 			return
 		end
 	end
@@ -98,7 +98,7 @@ function command.run(message, mt)
 		if uj.sodapt == {} then uj.sodapt = nil end
 	end
 
-	send { content = (prevobj.content or "") .. lang.pulling_card }
+	send { content = (prevobj.content and prevobj.content .. "\n" or "") .. lang.pulling_card }
 
 	local pulledcards = {}
 	if uj.disablecommunity then
