@@ -11,8 +11,19 @@ local command = {
 		},
 	}
 }
+function command.autocomplete(ia, comm, focused, args)
+	local out = {}
+	local uj = db.get_user(ia.user.id)
+	for k, _ in pairs(uj.inventory) do
+		local name = cdb[k] and cdb[k].name or "UNKNOWN CARD"
+		if (string.find(name, args.card) or string.find(k, args.card)) and #out < 25 then
+			out[#out + 1] = { name = string.format("%s [%s]", name, k), value = k }
+		end
+	end
+	ia:autocomplete(out)
+end
 function command.run(message, mt)
-	local author = message.author or message.user
+	local author = message._author
 	print(author.name .. " did !throw")
 	local uj = db.get_user(author.id)
 	local lang = dpf.loadjson("langs/" .. uj.lang .. "/throw.json", "")

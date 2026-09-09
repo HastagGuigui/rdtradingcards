@@ -37,7 +37,7 @@ function command.run(message, mt)
     end
 
 	local my_item_req = mt[1] or mt.my_card
-    local trade_user = mt[2] or mt.trader_nick or mt.trader_user.id
+    local trade_user = mt[2] or mt.trader_nick or (mt.trader_user and mt.trader_user.id)
 	local their_item_req = mt[3] or mt.their_card
 
 	if trade_user == nil or my_item_req == nil or their_item_req == nil then

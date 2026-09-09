@@ -84,22 +84,29 @@ function command.run(message, mt)
 	if cmd[mt[1]] then
 		command_list = { [mt[1]] = cmd[mt[1]] }
 	end
-
-    for _, cmd_command in pairs(command_list) do
-        if cmd_command.name then
-            print(cmd_command.name .. "(" .. _ .. "/" .. #command_list .. ")")
-            local slash_object = slash_tools.slashCommand(cmd_command.name, cmd_command.description)
-            if cmd_command.options then
-                for i, option in ipairs(cmd_command.options) do
-                    local opt = command.create_option(option)
-                    slash_object:addOption(opt)
-                end
-            end
-            -- print("object: " .. inspect(slash_object))
-            client:createGuildApplicationCommand(message.guild.id, slash_object)
-        end
-    end
-    add_c_command()
+	local function tablelength(T)
+		local count = 0
+		for _ in pairs(T) do count = count + 1 end
+		return count
+	end
+	local total_commands = tablelength(command_list)
+	local i = 0
+	for _, cmd_command in pairs(command_list) do
+		i = i + 1
+		if cmd_command.name then
+			print(cmd_command.name .. "(" .. i .. "/" .. total_commands .. ")")
+			local slash_object = slash_tools.slashCommand(cmd_command.name, cmd_command.description)
+			if cmd_command.options then
+				for i, option in ipairs(cmd_command.options) do
+					local opt = command.create_option(option)
+					slash_object:addOption(opt)
+				end
+			end
+			-- print("object: " .. inspect(slash_object))
+			client:createGuildApplicationCommand(message.guild.id, slash_object)
+		end
+	end
+	add_c_command()
 
 	if not is_interaction then
 		message:addReaction("✅")

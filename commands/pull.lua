@@ -213,7 +213,7 @@ function command.run(message, mt)
 
 		local newstatus = formatstring("Inventory: {1} | Storage: {2}", { uj.inventory[v] or 0, uj.storage[v] or 0 })
 		if not uj.storage[v] then
-			newstatus = "**[NOT IN STORAGE!]**"
+			newstatus = "[NOT IN STORAGE!]"
 		end
 
 		local footer = "Season " .. cdb[v].season .. " | " .. newstatus
