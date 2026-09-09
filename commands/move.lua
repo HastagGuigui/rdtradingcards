@@ -1,81 +1,130 @@
-local command = {}
-function command.run(message, mt)
-  print(message.author.name .. " did !move")
+local command = {
+	name = "move",
+	description = "Move to another location.",
+	options = {
+		{
+			name = "location",
+			description = "Where do you want to move?",
+			type = 3,
+			autocomplete = true
+		}
+	}
+}
 
-  local wj = dpf.loadjson("savedata/worldsave.json", defaultworldsave)
-  local uj = dpf.loadjson("savedata/" .. message.author.id .. ".json",defaultjson)
-  local lang = dpf.loadjson("langs/" .. uj.lang .. "/move.json","")
-  if not mt[1] then
-    mt[1] = "pyrowmid"
-  end
-  local locations = {lang.locations_pyrowmid, lang.locations_lab, lang.locations_mountains, lang.locations_shop, lang.locations_hallway, lang.locations_casino}
-  local success = false
-  local request = string.lower(mt[1])
-  local newroom = 0
-  
-  --0: pyrowmid
-  --1: lab
-  --2: mountain
-  --3: shop
-  --4: hallway
-  --5: casino
-  
-  if request == "pyrowmid" or request == "the pyrowmid" or (uj.lang ~= "en" and request == lang.locations_pyrowmid) then
-    success = true
-    newroom = 0
-  elseif wj.ws >= 507 and wj.labdiscovered == true and (request == "lab" or request == "abandonedlab" or request == "the abandoned lab" or request == "abandoned lab" or (uj.lang ~= "en" and request == lang.request_lab_1 or request == lang.request_lab_2 or request == lang.locations_lab)) then
-    success = true
-    newroom = 1
-  elseif wj.ws >= 702 and (request == "mountains" or request == "mountain" or request == "windymountains" or request == "the windy mountains" or request == "windy mountains" or (uj.lang ~= "en" and request == lang.request_mountains_1 or request == lang.request_mountains_2 or request == lang.locations_mountains)) then
-    success = true
-    newroom = 2
-  elseif wj.ws >= 702 and (request == "shop" or request == "quaintshop" or request == "quaint shop" or request == "the quaint shop" or (uj.lang ~= "en" and request == lang.request_shop_1 or request == lang.request_shop_2 or request == lang.request_shop_3 or request == lang.locations_shop)) then
-    success = true
-    newroom = 3
-  -- elseif wj.ws >= 9999 and (request == "hallway" or request == "darkhallway" or request == "the dark hallway" or request == "dark hallway" or (uj.lang ~= "en" and request == lang.request_hallway_1 or request == lang.request_hallway_2 or request == lang.locations_hallway)) then
-  --   success = true
-  --   newroom = 4
-  -- elseif wj.ws >= 9999 and (request == "casino" or request == "shadycasino" or request == "the shady casino" or request == "shady casino" or (uj.lang ~= "en" and request == lang.request_casino_1 or request == lang.request_casino_2 or request == lang.locations_casino)) then
-  --   success = true
-  --   newroom = 5
-  end
-  
-  
-  if success then
-    print("newroom is ".. newroom)
-    local sj = dpf.loadjson("savedata/shop.json", defaultshopsave)
-    if newroom == uj.room then
-      message.channel:send(formatstring(lang.already_in, {locations[newroom+1]}))
-      return
-    elseif newroom == 3 and uj.lastrob + 4 > sj.stocknum and uj.lastrob ~= 0 then
-      lang = dpf.loadjson("langs/" .. uj.lang .. "/rob.json")
-      local time = sw:getTime()
-      local stocksleft = uj.lastrob + 4 - sj.stocknum
-      local stockstring = formatstring(lang.more_restock, {stocksleft})
-      if lang.needs_plural_s == true then
-        if stocksleft > 1 then
-          stockstring = stockstring .. lang.plural_s
-        end
-      end
-      local minutesleft = math.ceil((26/24 - time:toDays() + sj.lastrefresh) * 24 * 60)
-      
-      local durationtext = formattime(minutesleft, uj.lang)
-      if uj.lastrob + 3 == sj.stocknum then
-        message.channel:send(formatstring(lang.blacklist_next, {durationtext}))
-      else
-        message.channel:send(formatstring(lang.blacklist, {stockstring, durationtext}))
-      end
-      return "blacklisted"
-    else
-      uj.room = newroom
-      local eu = uj.lang == "ko" and lang.eu or ""
-      message.channel:send(formatstring(lang.room_changed, {locations[newroom+1], eu}))
-      dpf.savejson("savedata/" .. message.author.id .. ".json",uj)
-      return uj
-    end
-  else
-    message.channel:send(formatstring(lang.no_room, {mt[1]}))
-  end
-
+function command.autocomplete(ia, comm, focused_option, args)
+	local out = {}
+	local uj = db.get_user(ia.user.id)
+	local lang = dpf.loadjson("langs/" .. uj.lang .. "/move.json", "")
+	local wj = dpf.loadjson("savedata/worldsave.json", defaultworldsave)
+	for id, room in pairs(room_definitions) do
+		if room.requirements(wj) then
+			out[#out + 1] = { value = room.name, name = lang["locations_" .. room.name] }
+		end
+	end
+	ia:autocomplete(out)
 end
+
+_G["room_definitions"] = {
+	[0] = {
+		name = "pyrowmid",    -- codename
+		requirements = function(wj) -- can anyone access it?
+			return true
+		end
+	},
+	[1] = {
+		name = "lab",
+		requirements = function(wj)
+			return wj.ws >= 507 and wj.labdiscovered == true
+		end
+	},
+	[2] = {
+		name = "mountains",
+		requirements = function(wj)
+			return wj.ws >= 702
+		end
+	},
+	[3] = {
+		name = "shop",
+		requirements = function(wj)
+			return wj.ws >= 702
+		end
+	}
+}
+
+function command.run(message, mt)
+	local author = message._author
+	print(author.name .. " did !move")
+
+	local wj = dpf.loadjson("savedata/worldsave.json", defaultworldsave)
+	local uj = db.get_user(author.id)
+	local lang = dpf.loadjson("langs/" .. uj.lang .. "/move.json", "")
+	local locations = { lang.locations_pyrowmid, lang.locations_lab, lang.locations_mountains, lang.locations_shop, lang
+		.locations_hallway, lang.locations_casino }
+	local success = false
+	local request = string.lower(mt[1] or mt.location or "pyrowmid")
+	local newroom = 0
+
+	--0: pyrowmid
+	--1: lab
+	--2: mountain
+	--3: shop
+	--4: hallway
+	--5: casino
+
+	for i, entry in pairs(room_definitions) do
+		if entry.requirements(wj) then
+			if request == lang["request_" .. entry.name] or request == entry.name then
+				success = true
+				newroom = i
+			elseif type(lang["request_" .. entry.name]) == "table" then
+				for _, trigger in ipairs(lang["request_" .. entry.name]) do
+					if request == trigger then
+						success = true
+						newroom = i
+						break
+					end
+				end
+			end
+			if success then
+				break
+			end
+		end
+	end
+
+	if success then
+		print("newroom is " .. newroom)
+		local sj = dpf.loadjson("savedata/shop.json", defaultshopsave)
+		if newroom == uj.room then
+			message:reply(formatstring(lang.already_in, { locations[newroom + 1] }))
+			return
+		elseif newroom == 3 and uj.lastrob + 4 > sj.stocknum and uj.lastrob ~= 0 then
+			lang = dpf.loadjson("langs/" .. uj.lang .. "/rob.json")
+			local time = sw:getTime()
+			local stocksleft = uj.lastrob + 4 - sj.stocknum
+			local stockstring = formatstring(lang.more_restock, { stocksleft }, lang.plural_s)
+			if lang.needs_plural_s == true then
+				if stocksleft > 1 then
+					stockstring = stockstring .. lang.plural_s
+				end
+			end
+			local minutesleft = math.ceil((26 / 24 - time:toDays() + sj.lastrefresh) * 24 * 60)
+
+			local durationtext = formattime(minutesleft, uj.lang)
+			if uj.lastrob + 3 == sj.stocknum then
+				message:reply(formatstring(lang.blacklist_next, { durationtext }))
+			else
+				message:reply(formatstring(lang.blacklist, { stockstring, durationtext }))
+			end
+			return "blacklisted"
+		else
+			uj.room = newroom
+			local eu = uj.lang == "ko" and lang.eu or ""
+			message:reply(formatstring(lang.room_changed, { locations[newroom + 1], eu }))
+			return uj
+		end
+	else
+		message:reply(formatstring(lang.no_room, { request }))
+	end
+end
+
 return command

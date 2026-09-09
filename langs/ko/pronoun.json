@@ -1,64 +1,83 @@
 {
-	"they_they": "they",
-	"they_them": "them",
-	"they_their": "their",
-	"they_theirs": "theirs",
-	"they_theirself": "theirself",
-	"they_changed": "당신은 이제부터 they/them으로 호칭됩니다.",
-	
-	"he_they": "he",
-	"he_them": "him",
-	"he_their": "his",
-	"he_theirs": "his",
-	"he_theirself": "himself",
-	"he_changed": "당신은 이제부터 he/him으로 호칭됩니다.",
-	
-	"she_they": "she",
-	"she_them": "her",
-	"she_their": "her",
-	"she_theirs": "hers",
-	"she_theirself": "herself",
-	"she_changed": "당신은 이제부터 she/her로 호칭됩니다.",
-	
-	"it_they": "it",
-	"it_them": "its",
-	"it_their": "its",
-	"it_theirs": "its",
-	"it_theirself": "itself",
-	"it_changed": "당신은 이제부터 it/its로 호칭됩니다.",
-	
-	"xe_they": "xe",
-	"xe_them": "xem",
-	"xe_their": "xir",
-	"xe_theirs": "xirs",
-	"xe_theirself": "xirself",
-	"xe_changed": "당신은 이제부터 xe/xem으로 호칭됩니다.",
-	
-	"sta_they": "sta",
-	"sta_them": "star",
-	"sta_their": "star",
-	"sta_theirs": "stars",
-	"sta_theirself": "starself",
-	"sta_changed": "당신은 이제부터 sta/star로 호칭됩니다.",
-	
-	"ze_they": "ze",
-	"ze_them": "zir",
-	"ze_their": "zir",
-	"ze_theirs": "zirs",
-	"ze_theirself": "zirself",
-	"ze_changed": "당신은 이제부터 ze/zir로 호칭됩니다.",
-	
-	"vee_they": "vee",
-	"vee_them": "veem",
-	"vee_their": "veems",
-	"vee_theirs": "veem's",
-	"vee_theirself": "veeself",
-	"vee_changed": "당신은 이제부터 vee/veem으로 호칭됩니다.",
-	
+	"they": {
+    "selection": "they",
+    "display_name": "they/them",
+    "they": "they",
+    "them": "them",
+    "their": "their",
+    "theirs": "theirs",
+    "theirself": "theirself"
+  },
+  "he": {
+    "selection": "he",
+    "display_name": "he/him",
+    "they": "he",
+    "them": "him",
+    "their": "his",
+    "theirs": "his",
+    "theirself": "himself"
+  },
+  "she": {
+    "selection": "she",
+    "display_name": "she/her",
+    "they": "she",
+    "them": "her",
+    "their": "her",
+    "theirs": "hers",
+    "theirself": "herself"
+  },
+  "it": {
+    "selection": "it",
+    "display_name": "it/its",
+    "they": "it",
+    "them": "its",
+    "their": "its",
+    "theirs": "its",
+    "theirself": "itself"
+  },
+  "xe": {
+    "selection": "xe",
+    "display_name": "xe/xem",
+    "they": "xe",
+    "them": "xem",
+    "their": "xir",
+    "theirs": "xirs",
+    "theirself": "xirself"
+  },
+  "sta": {
+    "selection": "sta",
+    "display_name": "sta/star",
+    "they": "sta",
+    "them": "star",
+    "their": "star",
+    "theirs": "stars",
+    "theirself": "starself"
+  },
+  "ze": {
+    "selection": "ze",
+    "display_name": "ze/zir",
+    "they": "ze",
+    "them": "zir",
+    "their": "zir",
+    "theirs": "zirs",
+    "theirself": "zirself"
+  },
+
+  "vee":{
+    "selection": "vee",
+    "display_name": "vee/veem",
+    "they": "vee",
+    "them": "veem",
+    "their": "veems",
+    "theirs": "veem's",
+    "theirself": "veeself"
+  },
+
+	"changed_pronouns": "당신은 이제부터 {1}으로 호칭됩니다.",
 	"no_value": "원하시는 대명사를 입력해 주세요.",
-	"no_database": "죄송하지만, {1}라는 대명사를 찾을 수 없었습니다. 철자가 맞는지, 또는 c!pronounlist에 원하시는 대명사가 있는지 확인해 주세요. 만약 원하시는 대명사가 없다면, c!pronounform을 통해서 추가를 요청하실 수도 있습니다.", 
-	
+	"no_database": "죄송하지만, {1}라는 대명사를 찾을 수 없었습니다. 철자가 맞는지, 또는 c!pronounlist에 원하시는 대명사가 있는지 확인해 주세요. 만약 원하시는 대명사가 없다면, c!pronounform을 통해서 추가를 요청하실 수도 있습니다.",
+
 	"pronounlist_message": "**일반 대명사:**\nHe, She, They, It\n\n**성 중립 대명사:**\nXe, Ze, Sta, Vee\n\n*원하시는 대명사가 없다면, c!pronounform을 사용해 주세요.",
-	
+
 	"pronounform_message": "원하시는 대명사가 RDCard 봇에 없나요? 구글 설문지에 원하시는 대명사를 기입하면 확인해 보겠습니다!\n**https://forms.gle/nG57xLc8DPHc5G8m9**",
 }

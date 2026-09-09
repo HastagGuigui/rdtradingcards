@@ -21,16 +21,15 @@ function command.run(message, mt)
           end
           dpf.savejson("savedata/"..v,cuj)
         end
-        message.channel:send("Renamed " .. mt[1] .. " to " .. mt[2] .. ".")
+        message:reply("Renamed " .. mt[1] .. " to " .. mt[2] .. ".")
       else
-        message.channel:send("Sorry, but " .. mt[1] .. " doesn't exist in the database.")
+        message:reply("Sorry, but " .. mt[1] .. " doesn't exist in the database.")
       end
     else
-      message.channel:send("Sorry, but the c!renamefile command expects 2 arguments.")
+      message:reply("Sorry, but the c!renamefile command expects 2 arguments.")
     end
   else
-    message.channel:send('Sorry, but only moderators can use this command!')
+    message:reply('Sorry, but only moderators can use this command!')
   end
 end
 return command
-  

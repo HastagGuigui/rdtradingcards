@@ -1,10 +1,13 @@
 
-local command = {}
+local command = {
+  name = "help",
+  description = "Displays the bot's guide."
+}
 function command.run(message, mt)
-  local uj = dpf.loadjson("savedata/" .. message.author.id .. ".json",defaultjson)
+  local author = message.author and message.author or message.user
+  local uj = db.get_user(author.id)
   local lang = dpf.loadjson("langs/" .. uj.lang .. "/help.json", "")
-  print(message.author.name .. " did !help")
-  message.channel:send(lang.help_message)
+  print(author.name .. " did !help")
+  message:reply(lang.help_message)
 end
 return command
-  

@@ -1,11 +1,14 @@
 {
 	"needs_plural_s": true,
 	"plural_s": "s",
-	
+
+	"empty_storage_title": "You don't have anything in your storage!",
+	"empty_storage_desc": "Use `{1}store` to add a card from your inventory to your storage.",
+
 	"embed_title": "{1}'s Storage",
 	"season": " (Season {1})",
 	"rarity": " ({1} Cards)",
 	"embed_contains": "{1}, your storage contains:",
-	
+
 	"embed_page": "(Page {1} of {2})"
 }

@@ -4,10 +4,10 @@ function command.run(message, mt)
   local cmember = message.guild:getMember(message.author)
   if cmember:hasRole(privatestuff.modroleid) then
     local wj = dpf.loadjson("savedata/worldsave.json", defaultworldsave)
-    --betterworldstates: 
-    
+    --betterworldstates:
+
     --0: pre-s5
-	
+
 	--501: s5 intro, a tiny hole appears
 	--502: hole grows larger
     --503: ditto
@@ -16,11 +16,11 @@ function command.run(message, mt)
 	--506: hole grows to max size, capsule machine starts vibrating
 	--507: ladder is placed into the hole, lab can now be acessed
     --508: terminal has been sucessfully logged in to, default pre-s7 state.
-    
+
     --701: s7 intro, c!terminal logs unlocked
-    
-    
-    -- THIS IS NOT ACTUALLY FUNCTIONAL v 
+
+
+    -- THIS IS NOT ACTUALLY FUNCTIONAL v
     --801: s8 intro, The cat poster can be pulled away.
     --802: the cat poster has been pulled away and relocated to reveal the scanner, the terminal is waiting to be pulled from (by kin).
     --803: key card pulled by kin
@@ -30,8 +30,8 @@ function command.run(message, mt)
     --door: can be opened by flipping a coin in front of it. If one person flips it, it opens the door for everyone.
     --lights: flicker in the classic valve light flicker pattern (looking at it returns a gif)
     --note: provides some good ol flavor text.
-    
-    
+
+
     --805: someone has flipped a coin in the hallway, and the Shady Casino can be entered:
     --806: The shady casino has been entered for the first time.
     --Shady Casino contains:
@@ -41,25 +41,25 @@ function command.run(message, mt)
     --locked box: on the counter, for flavor text
     --giant arcade cabinets of RD-adjacent games (blipblop.io, beatblock, tau, Letters(old fizzd game, on his itch.io)), these will probably be in the bg of the image.
     --Security Camera: flavor text probably
-    --The Druid: an npc in a similar vein to The Panda. Sits behind the counter at the Shady Casino. 
+    --The Druid: an npc in a similar vein to The Panda. Sits behind the counter at the Shady Casino.
     --Vault door directly behind the desk that the druid is stationed at,
-    
+
     --FOR LATER: Battle Box: If the player has less than 20 unique cards in their storage, it puts in common cards to fill in the blanks. Here so that new players can play the card game immediately. Also dispenses the Rules Card, which is a hotlink to a manual for the trading card game.
     --FOR LATER: New Machine: chick stuff, see #chick-planning
 
-    
+
     --Misc notes:
     --attempting to look at the factory will alias as c!look hallway or casino when in the hallway or casino. This is because the hallway, and the casino, are located in the factory.
-    
+
 
     -- UPDATE: everything after 801 is inaccessible so here's the actual new season 11 code stuff
     -- 1101: nothing it's just a reference for s11 end
     -- there's stuff planned for s12 yes
 
-    wj.ws = tonumber(mt[1]) 
-    
-    --old states, do not use!: 
-    
+    wj.ws = tonumber(mt[1])
+
+    --old states, do not use!:
+
     --prehole: pre-s5
     --tinyhole: s5 intro
     --smallhole: ditto
@@ -69,12 +69,11 @@ function command.run(message, mt)
     --largesthole: waiting for ladder
     --labopen: lab is initially open
     --terminalopen: terminal has been logged in to
-    
+
     dpf.savejson("savedata/worldsave.json", wj)
-    message.channel:send("world updated")
+    message:reply("world updated")
   else
-    message.channel:send("despite your efforts, the world remains the same")
+    message:reply("despite your efforts, the world remains the same")
   end
 end
 return command
-  

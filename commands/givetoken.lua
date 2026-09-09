@@ -1,26 +1,57 @@
-local command = {}
+local command = {
+  name = "givetoken",
+  description = "Give tokens to another player!",
+  options = {
+    {
+      name = "user",
+      description = "User to give the tokens to",
+      type = 6,       -- USER
+      required = true
+    },
+    {
+      name = "amount",
+      description = "Amount of tokens to give out",
+      type = 4,       -- INT
+      min_value = 1
+    }
+  }
+}
 function command.run(message, mt)
-  print(message.author.name .. " did !givetoken")
-  local uj = dpf.loadjson("savedata/" .. message.author.id .. ".json", defaultjson)
+  local author = message.author ~= nil and message.author or message.user
+  print(author.name .. " did !givetoken")
+  local uj = db.get_user(author.id)
   local lang = dpf.loadjson("langs/" .. uj.lang .. "/givetoken.json", "")
   if not message.guild then
-    message.channel:send(lang.dm_message)
+    message:reply(lang.dm_message)
     return
   end
 
-  if not (#mt == 1 or #mt == 2) then
-    message.channel:send(lang.no_arguments)
-    return
+    if not (#mt == 1 or #mt == 2) then
+        message:reply(lang.no_arguments)
+        return
+    end
+
+    local uj2f = ""
+  local numtokens = 1
+  if mt[1] then
+    uj2f = usernametoid(mt[1])
+    if not uj2f then
+      message:reply(formatstring(lang.no_user, {mt[1]}))
+      return
+    end
+
+    if tonumber(mt[2]) then
+      if tonumber(mt[2]) > 1 then numtokens = math.floor(tonumber(mt[2])) end
+    end
+  elseif mt.user then
+    uj2f = mt.user.id
+    if mt.amount then
+      numtokens = mt.amount
+    end
   end
 
-  local uj2f = usernametojson(mt[1])
 
-  if not uj2f then
-    message.channel:send(formatstring(lang.no_user, {mt[1]}))
-    return
-  end
-
-  local uj2 = dpf.loadjson(uj2f, defaultjson)
+  local uj2 = db.get_user(uj2f)
 
   if not uj2.lang then
     uj2.lang = "en"
@@ -28,14 +59,10 @@ function command.run(message, mt)
 
   local lang2 = dpf.loadjson("langs/" .. uj2.lang .. "/givetoken.json")
   if uj2.id == uj.id then
-    message.channel:send(lang.same_user)
+    message:reply(lang.same_user)
     return
   end
 
-  local numtokens = 1
-  if tonumber(mt[2]) then
-    if tonumber(mt[2]) > 1 then numtokens = math.floor(tonumber(mt[2])) end
-  end
 
   if not uj.tokens then uj.tokens = 0 end
 
@@ -44,7 +71,7 @@ function command.run(message, mt)
   end
 
   if uj.tokens < numtokens then
-    message.channel:send(lang.not_enough)
+    message:reply(lang.not_enough)
     return
   end
 
@@ -54,11 +81,7 @@ function command.run(message, mt)
 
   uj.timestokengiven = uj.timestokengiven and uj.timestokengiven + numtokens or numtokens
   uj2.timestokenreceived = uj2.timestokenreceived and uj2.timestokenreceived + numtokens or numtokens
-  dpf.savejson("savedata/" .. message.author.id .. ".json", uj)
-  dpf.savejson(uj2f, uj2)
-
-  local isplural = numtokens ~= 1 and lang.needs_plural_s == true and lang.plural_s or ""
-  local isplural2 = numtokens ~= 1 and lang2.needs_plural_s == true and lang2.plural_s or ""
+  db.save_user(uj2f)
 
 
   _G['giftedmessage'] = formatstring(lang.gifted_message, { numtokens, uj2.id }, lang.plural_s)
@@ -74,7 +97,7 @@ function command.run(message, mt)
     _G['giftedmessage'] = giftedmessage ..
         "\n" .. formatstring(lang.checktoken, {uj.tokens}, lang.plural_s)
   end
-  _G['recievedmessage'] = formatstring(lang2.recieved_message, {uj.id, numtokens}, isplural2)
+  _G['recievedmessage'] = formatstring(lang2.recieved_message, {uj.id, numtokens}, lang2.plural_s)
   if samelang ~= true then
     if not uj2.togglechecktoken then
       _G['recievedmessage'] = recievedmessage .. "\n" .. formatstring(lang2.checktoken2r, {uj2.tokens}, lang2.plural_s)
@@ -82,9 +105,9 @@ function command.run(message, mt)
   end
 
   if samelang == true then
-    message.channel:send { content = giftedmessage }
+    message:reply { content = giftedmessage }
   else
-    message.channel:send { content = giftedmessage .. "\n" .. recievedmessage }
+    message:reply { content = giftedmessage .. "\n" .. recievedmessage }
   end
 end
 

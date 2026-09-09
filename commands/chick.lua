@@ -1,7 +1,7 @@
 local command = {}
 function command.run(message, mt)
-  local ujf = ("savedata/" .. message.author.id .. ".json")
-  local uj = dpf.loadjson(ujf, defaultjson)
+    local author = message._author
+  local uj = db.get_user(author.id)
 
   if (not uj.chickstats) then
       uj.chickstats = {
@@ -34,7 +34,7 @@ function command.run(message, mt)
     local chickimg = getchickimage(mt[2])
     chickimg:write_to_file("vips_out/chick.png")
 
-    message.channel:send{
+    message:reply{
       content = "Chick",
       file = "vips_out/chick.png"
     }
