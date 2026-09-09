@@ -6,7 +6,7 @@ local command = {
 			name = "item",
 			description = "The item to equip.",
 			required = true,
-			type = 4, -- STRING
+			type = 3, -- STRING
 			autocomplete = true
 		}
 	}
@@ -21,7 +21,8 @@ function command.autocomplete(ia, comm, focused, args)
 			out[#out + 1] = { name = string.format("%s [%s]", name, k), value = k }
 		end
 	end
-	ia:autocomplete(out)
+	local ret, err = ia:autocomplete(out)
+	print(ret, err)
 end
 
 function command.run(message, mt)
