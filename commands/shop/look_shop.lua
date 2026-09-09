@@ -71,7 +71,7 @@ function command.shop(message, args, uj, lang)
 			suffix = suffix .. "~~"
 		end
 		itemstr = itemstr ..
-			prefix .. formatstring("**{1}** `{2}` x{3} ", { consdb[v.name].name, v.name, v.stock })
+			prefix .. format_consumable_line( v.name, v.stock ) .. " "
 			.. suffix
 	end
 
@@ -83,8 +83,7 @@ function command.shop(message, args, uj, lang)
 	end
 	itemstr = itemstr ..
 		prefix ..
-		formatstring("**{1}** `{2}` x{3} ", { itemdb[sj.item].name, sj.item, sj.itemstock }) ..
-		" (" .. tokentext .. ")" .. suffix
+		formatstring("{1} x{2} ({3})", { format_equippable_line(sj.item), sj.itemstock, tokentext }) .. suffix
 	base_embed.components[#base_embed.components + 1] = { type = 10, content = itemstr }
 	base_embed.components[#base_embed.components + 1] = {
 		type = 12,

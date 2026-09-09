@@ -32,7 +32,10 @@ local config = {
 			-- You can define the emoji shown for every rarity here using its shorthand
 			-- Example:
 			--		r = "<:rare_icon:1538469427069059153>"
-		}
+        },
+        --equippable = "",
+        --consumable = "",
+		--essence = ""
 	},
 	rtsitemrole = "1041882546545369199"
 }

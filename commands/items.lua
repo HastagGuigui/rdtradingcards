@@ -11,6 +11,17 @@ local command = {
 		}
 	}
 }
+
+function format_equippable_line(item)
+	return (config.emojis.equippable or "") .. " **" .. itemdb[item].name .. "** `".. item .."`"
+end
+
+function format_consumable_line(item, count)
+    local subtype = "consumable"
+	if consdb[item].unusable then subtype = "essence" end
+	return (config.emojis[subtype] or "") .. " **" .. consdb[item].name .. "** `".. item .."` x" .. count
+end
+
 function command.run(message, mt)
 	local author = message.author or message.user
 	print(author.name .. " did !items")
@@ -44,11 +55,10 @@ function command.run(message, mt)
 	local invstring = ''
 
 	for k, v in pairs(uj.items) do
-		if v then table.insert(invtable,
-				"**" .. itemdb[k].name .. "**" .. (uj.equipped == k and " (equipped)" or "") .. "\n") end
+		if v then table.insert(invtable, format_equippable_line(k) .. (uj.equipped == k and " (equipped)" or "") .. "\n") end
 	end
 	for k, v in pairs(uj.consumables) do
-		table.insert(invtable, "**" .. consdb[k].name .. "** x" .. v .. "\n")
+		table.insert(invtable, format_consumable_line(k, v) .. "\n")
 	end
 	table.sort(invtable)
 
