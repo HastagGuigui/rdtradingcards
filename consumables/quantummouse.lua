@@ -3,7 +3,7 @@ local item = {}
 function item.run(uj, message, mt, interaction)
 	if not uj.conspt then uj.conspt = "none" end
 	local lang = dpf.loadjson("langs/" .. uj.lang .. "/use/cons.json")
-	local replying = interaction or message
+	local replying = message
 	if uj.conspt == "none" then
 		uj.consumables["quantummouse"] = uj.consumables["quantummouse"] - 1
 		if uj.consumables["quantummouse"] == 0 then uj.consumables["quantummouse"] = nil end

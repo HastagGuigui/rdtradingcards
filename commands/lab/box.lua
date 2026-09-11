@@ -45,7 +45,7 @@ function command.use(message, mt, uj, wj)
 		ynbuttons(message, {
 			color = uj.embedc,
 			title = lang.embed_title,
-			description = message.author.mentionString .. lang.confirm_message,
+			description = message._author.mentionString .. lang.confirm_message,
 		}, cmd.lab_box.reaction, {}, uj.id, uj.lang)
 		return true
 	else

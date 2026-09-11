@@ -13,7 +13,7 @@ function item.run(uj, message, mt, interaction)
 	uj.timesitemused = uj.timesitemused and uj.timesitemused + 1 or 1
 	dpf.savejson("savedata/worldsave.json", wj)
 
-	local replying = interaction or message
+	local replying = message
 	replying:reply(lang.replacementvoid_message)
 end
 

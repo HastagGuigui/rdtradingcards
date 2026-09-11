@@ -37,7 +37,7 @@ function item.run(uj, message, mt, interaction)
 		cmd.checkcollectors.run(message, mt)
 		cmd.checkmedals.run(message, mt)
 	else
-		local replying = interaction or message
+		local replying = message
 		replying:reply(lang.ddd_unused)
 	end
 end

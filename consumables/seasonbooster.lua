@@ -8,7 +8,7 @@ function item.run(uj, message, mt, interaction, fn)
 		itemtext = consdb[fn].text_ko
 	end
 	local season = consdb[fn].season
-	local replying = interaction or message
+	local replying = message
 	if uj.conspt == "none" then
 		uj.consumables[fn] = uj.consumables[fn] - 1
 		if uj.consumables[fn] == 0 then uj.consumables[fn] = nil end

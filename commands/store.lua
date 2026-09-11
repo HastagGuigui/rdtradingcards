@@ -31,7 +31,7 @@ function command.autocomplete(ia, comm, focused, args)
 end
 
 function command.run(message, mt)
-	local author = message.author or message.user
+	local author = message._author
 	print(author.name .. " did !store")
 	local uj = db.get_user(author.id)
 	local lang = dpf.loadjson("langs/" .. uj.lang .. "/store.json", "")

@@ -47,7 +47,7 @@ function command.run(message, mt, bypass)
 		or (mt.consumable and mt.consumable.consumable)
 	)
 	local is_poi = (mt[1] or mt.point_of_interest) ~= nil
-	print("we using "..request)
+	print("we using " .. request)
 
 	if not (message.guild or bypass or constexttofn(request)) then
 		message:reply(lang.dm_message)
@@ -80,22 +80,22 @@ function command.run(message, mt, bypass)
 
 	----------------------------------------------------------PYROWMID
 	if (uj.room == 0 or bypass) and is_poi then
-		found = cmd.pyrowmid_use.run(message, {request, mt[2], mt[3]})
+		found = cmd.pyrowmid_use.run(message, { request, mt[2], mt[3] })
 	end
 
 	----------------------------------------------------------LAB
 	if (uj.room == 1 or bypass) and wj.labdiscovered and is_poi then
-		found = cmd.lab_use.run(message, {request, mt[2], mt[3]})
+		found = cmd.lab_use.run(message, { request, mt[2], mt[3] })
 	end
 
 	----------------------------------------------------------WINDY MOUNTAINS
 	if uj.room == 2 and is_poi then
-		found = cmd.mountains_use.run(message, {request, mt[2], mt[3]})
+		found = cmd.mountains_use.run(message, { request, mt[2], mt[3] })
 	end
 
 	----------------------------------------------------------SHOP
 	if (uj.room == 3) and is_poi then
-		found = cmd.shop_use.run(message, {request, mt[2], mt[3]})
+		found = cmd.shop_use.run(message, { request, mt[2], mt[3] })
 	end
 
 	if found then return end
@@ -119,11 +119,16 @@ function command.run(message, mt, bypass)
 			if uj.consumables[request] then
 				if not consdb[request].unusable then
 					if not uj.skipprompts then
-						ynbuttons(message, {
-							color = uj.embedc,
-							title = formatstring(lang.using, { consdb[request].name }),
-							description = formatstring(lang.use_confirm, { consdb[request].name }),
-						}, cmdre.useconsumable.run, { crequest = request, mt = mt }, uj.id, uj.lang)
+						ynbuttons(
+							message,
+							command.use_embed(
+								uj.embedc,
+								formatstring(lang.using, { consdb[request].name }),
+								formatstring(lang.use_confirm, { consdb[request].name })
+							), command.reaction,
+							{ crequest = request, mt = mt },
+							uj.id, uj.lang
+						)
 						return
 					else
 						if request == "..." then request = "ddd" end
@@ -154,6 +159,31 @@ function command.run(message, mt, bypass)
 	end
 	print("that's worrying if this is a room")
 	dpf.savejson("savedata/worldsave.json", wj)
+end
+
+function command.reaction(message, interaction, data, response)
+	local uj = db.get_user(message._author.id)
+	local request = data.crequest
+	if consdb[data.crequest].command then
+		request = consdb[data.crequest].command
+	end
+	cmdcons[request].run(uj, message, data.mt, response, data.crequest)
+end
+
+function command.use_embed(color, title, description)
+	return {
+		type = 17,
+		accent_color = color,
+		components = {
+			{
+				type = 10,
+				content = "## " .. title
+			}, {
+			type = 10,
+			content = description
+		}
+		}
+	}
 end
 
 return command

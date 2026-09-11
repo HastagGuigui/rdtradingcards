@@ -11,7 +11,7 @@ function item.run(uj, message, mt, interaction)
 	else
 		uj.timesitemused = uj.timesitemused + 1
 	end
-	local replying = interaction or message
+	local replying = message
 	replying:reply(lang.scratchoffticket_use)
 	local chance = math.random(100)
 	if chance <= 2 then

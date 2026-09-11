@@ -2,7 +2,7 @@ local item = {}
 
 function item.run(uj, message, mt, interaction)
 	local lang = dpf.loadjson("langs/" .. uj.lang .. "/use/cons.json")
-	local replying = interaction or message
+	local replying = message
 	if uj.conspt == "none" then
 		uj.consumables["decaf"] = uj.consumables["decaf"] - 1
 		if uj.consumables["decaf"] == 0 then uj.consumables["decaf"] = nil end

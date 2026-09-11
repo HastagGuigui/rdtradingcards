@@ -31,7 +31,7 @@ function item.run(uj, message, mt, interaction)
 	uj.lastprayer = -3
 	uj.lastbox = -12
 	uj.lastequip = -12
-	local replying = interaction or message
+	local replying = message
 	replying:reply(lang.caffeinatedsoda_message)
 end
 

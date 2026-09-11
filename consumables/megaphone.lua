@@ -26,7 +26,7 @@ function item.run(uj, message, mt, interaction)
 		end
 		handlemessage(newmessage, text)
 	else
-		local replying = interaction or message
+		local replying = message
 		replying:reply(lang.megaphone_unused)
 	end
 end

@@ -19,7 +19,7 @@ function item.run(uj, message, mt, interaction)
 	uj.timesitemused = uj.timesitemused and uj.timesitemused + 1 or 1
 
 	if interaction then interaction:updateDeferred() end
-	message.author:send {
+	message._author:send {
 		content = lang.xraygoggles_contains,
 		embed = {
 			title = lang.xraygoggles_title,
