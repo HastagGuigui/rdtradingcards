@@ -8,7 +8,7 @@ function command.run(message, mt)
 	local wj = dpf.loadjson("savedata/worldsave.json", defaultworldsave)
 	if (uj.unlocked_commands and uj.unlocked_commands.lab) or uj.room == 1 then
 		if uj.room ~= 1 then
-			cmd.move.run(message, {room_definitions[1].name}, false)
+			cmd.move.run(message, { room_definitions[1].name }, false)
 		end
 		command.use(message, mt, uj, wj)
 	else
@@ -42,16 +42,32 @@ function command.use(message, mt, uj, wj)
 	end
 
 	if not uj.skipprompts then
-		ynbuttons(message, {
-			color = uj.embedc,
-			title = lang.embed_title,
-			description = message._author.mentionString .. lang.confirm_message,
-		}, cmd.lab_box.reaction, {}, uj.id, uj.lang)
+		ynbuttons(message, command.ynembed(
+				uj.embedc,
+				lang.embed_title,
+				message._author.mentionString .. lang.confirm_message),
+			command.reaction, {}, uj.id, uj.lang)
 		return true
 	else
 		command.reaction(message, nil, nil, "yes")
 		return true
 	end
+end
+
+function command.ynembed(color, title, description)
+	return {
+		type = 17,
+		accent_color = color,
+		components = {
+			{
+				type = 10,
+				content = "## " .. title
+			}, {
+			type = 10,
+			content = description
+		}
+		}
+	}
 end
 
 function command.reaction(message, interaction, data, response)
