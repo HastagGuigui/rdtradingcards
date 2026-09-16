@@ -33,7 +33,7 @@ function command.run(message, mt)
     return
   end
 
-  if not (#mt == 2 or #mt == 3) or not (mt.user ~= nil and mt.card ~= nil) then
+  if not (#mt == 2 or #mt == 3) and not (mt.user ~= nil and mt.card ~= nil) then
     message:reply(lang.no_arguments)
     return
   end

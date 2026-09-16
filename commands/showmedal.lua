@@ -2,17 +2,16 @@ local command = {
 	name = "showmedal",
 	description = "Shows info about a medal you've collected",
 	options = {
-        {
-            name = "medal",
-            description = "Name of the medal",
-            type = 3,
-            required = true
+		{
+			name = "medal",
+			description = "Name of the medal",
+			type = 3,
+			required = true
 		}
 	}
 }
 function command.run(message, mt)
-    print(message.author.name .. " did !showmedal")
-	local author = message.author or message.user
+	local author = message._author
 	local uj = db.get_user(author.id)
 	local lang = dpf.loadjson("langs/" .. uj.lang .. "/showmedal.json", "")
 	if #mt ~= 1 and not mt.medal then

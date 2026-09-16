@@ -92,10 +92,10 @@ _G["terminput"] = coroutine.create(function()
 			local status, err = xpcall(function()
 				load(data)()
 			end, debug.traceback)
-            if not status then
-                print("doesn't work!")
-                print(err)
-            end
+			if not status then
+				print("doesn't work!")
+				print(err)
+			end
 			print("-----")
 		end
 		timer.sleep(1000)

@@ -3,6 +3,7 @@
 
 _G["db"] = {
 	cache = {},
+	cache_usages = {},
 
 	--- returns a mutable copy of the user's savedata, which you can edit and changes will be saved when `save_user` is saved.
 	get_user = function(userid)
@@ -20,11 +21,22 @@ _G["db"] = {
 	end,
 	uncache_user = function(userid)
 		_G["db"].cache[userid] = nil
+	end,
+	try_uncache = function(userid)
+		if not db.cache_usages[userid] then return end
+		db.cache_usages[userid] = db.cache_usages[userid] - 1
+		if db.cache_usages[userid] <= 0 then
+			db.cache_usages[userid] = nil
+		end
+		if not db.cache_usages[userid] then
+			db.uncache_user(userid)
+		end
 	end
 }
 
 _G["update_missing_fields"] = function(userid)
 	local uj = db.get_user(userid)
+	db.cache_usages[userid] = (db.cache_usages[userid] or 0) + 1
 	local sj = dpf.loadjson("savedata/shop.json", defaultshopsave)
 	if not uj.embedc then
 		uj.embedc = embed_colors["default"].colorcode
@@ -70,7 +82,6 @@ _G["handle_autocomplete"] = function(ia, cmd, focused_option, args)
 end
 
 _G["handleslash"] = function(interaction, command, args)
-	print("args: " .. inspect(args))
 	interaction._author = interaction.user
 	if command.name == "c" then
 		handlecprefix(interaction, command, args)
@@ -94,7 +105,7 @@ _G["handleslash"] = function(interaction, command, args)
 			end
 		else
 			db.save_user(interaction._author.id)
-			db.uncache_user(interaction._author.id)
+			db.try_uncache(interaction._author.id)
 		end
 	else
 		interaction:reply("Command doesn't exist! This is bad. please report. ")
@@ -146,7 +157,7 @@ _G['handlecprefix'] = function(interaction, command, args)
 				end
 			else
 				db.save_user(interaction._author.id)
-				db.uncache_user(interaction._author.id)
+				db.try_uncache(interaction._author.id)
 			end
 			break
 		end
@@ -201,7 +212,7 @@ _G['handlemessage'] = function(message, content)
 					end
 				else
 					db.save_user(message.author.id)
-					db.uncache_user(message.author.id)
+					db.try_uncache(message.author.id)
 				end
 				break
 			end
@@ -232,12 +243,12 @@ function sort_types.rarity(card_1, card_2)
 	local sell2 = rarity_sell_prices[rar2] or 999
 	sell1 = type(sell1) == "number" and sell1 or sell1[1]
 	sell2 = type(sell2) == "number" and sell2 or sell2[1]
-    if sell1 == sell2 then
-        if rar1 == rar2 then
-            return sort_types.shorthand(card_1, card_2)
-        end
-        return (rar1 or "ZZZZZZZ") < (rar2 or "ZZZZZZZ")
-    end
+	if sell1 == sell2 then
+		if rar1 == rar2 then
+			return sort_types.shorthand(card_1, card_2)
+		end
+		return (rar1 or "ZZZZZZZ") < (rar2 or "ZZZZZZZ")
+	end
 	return sell1 < sell2
 end
 
