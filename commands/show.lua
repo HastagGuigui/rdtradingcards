@@ -14,16 +14,12 @@ local command = {
 function command.autocomplete(ia, comm, focused, args)
 	local out = {}
 	local cardlist = {}
-	if nopeeking then
-		local uj = db.get_user(ia.user.id)
-		for k, v in pairs(uj.inventory) do
-			cardlist[k] = true
-		end
-		for k, v in pairs(uj.storage) do
-			cardlist[k] = true
-		end
-	else
-		cardlist = cdb
+	local uj = db.get_user(ia.user.id)
+	for k, v in pairs(uj.inventory) do
+		cardlist[k] = true
+	end
+	for k, v in pairs(uj.storage) do
+		cardlist[k] = true
 	end
 	for k, _ in pairs(cardlist) do
 		local name = cdb[k] and cdb[k].name or "UNKNOWN CARD"
@@ -40,7 +36,7 @@ function command.run(message, mt)
 	local uj = db.get_user(author.id)
 	local sj = dpf.loadjson("savedata/shop.json", defaultshopsave)
 	local lang = dpf.loadjson("langs/" .. uj.lang .. "/show.json", "")
-	if #mt ~= 1 then
+	if #mt ~= 1 and not mt.card then
 		message:reply(lang.no_arguments)
 		return
 	end
