@@ -2,11 +2,13 @@ local command = {
 	name = "show",
 	description = "Show a card in your inventory or storage.",
 	options = {
-		name = "card",
-		description = "The card to show",
-		type = 3, -- NOT 4!!! 4 IS INT!!! 3 IS STRING!!! THAT'S TOTALLY READABLE!!!
-		required = true,
-		autocomplete = true
+		{
+			name = "card",
+			description = "The card to show",
+			type = 3, -- NOT 4!!! 4 IS INT!!! 3 IS STRING!!! THAT'S TOTALLY READABLE!!!
+			required = true,
+			autocomplete = true
+		}
 	}
 }
 function command.autocomplete(ia, comm, focused, args)
