@@ -4,7 +4,7 @@ local command = {
 	options = {
 		name = "card",
 		description = "The card to show",
-		type = 4,
+		type = 3, -- NOT 4!!! 4 IS INT!!! 3 IS STRING!!! THAT'S TOTALLY READABLE!!!
 		required = true,
 		autocomplete = true
 	}
