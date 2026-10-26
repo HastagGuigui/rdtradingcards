@@ -20,22 +20,22 @@ function command.use(message, uj, wj)
 	end
 	if wj.ws ~= 506 then
 		if not uj.skipprompts then
-			ynbuttons(message, {
+			ynbuttons(message, command.use_embed({
 				color = uj.embedc,
 				title = lang.using_machine,
 				description = formatstring(lang.use_machine, { uj.tokens }),
-			}, command.reaction, {}, uj.id, uj.lang)
+			}), command.reaction, {}, uj.id, uj.lang)
 		else
 			command.reaction(message, nil, nil, "yes")
 		end
 		return true
 	else
 		if uj.tokens >= 4 then
-			ynbuttons(message, {
+			ynbuttons(message, command.use_embed({
 				color = uj.embedc,
 				title = lang.using_machine,
 				description = formatstring(lang.use_machine_four, { uj.tokens }),
-			}, "getladder", {}, uj.id, uj.lang)
+			}), "getladder", {}, uj.id, uj.lang)
 			return true
 		else
 			message:reply(lang.notokens_four)
@@ -100,6 +100,22 @@ function command.reaction(message, interaction, data, response)
 		send(lang.denied_message)
 	end
 	db.uncache_user(message._author.id)
+end
+
+function command.use_embed(color, title, description)
+	return {
+		type = 17,
+		accent_color = color,
+		components = {
+			{
+				type = 10,
+				content = "## " .. title
+			}, {
+			type = 10,
+			content = description
+		}
+		}
+	}
 end
 
 return command
