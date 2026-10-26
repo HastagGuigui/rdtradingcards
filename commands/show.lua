@@ -2,26 +2,24 @@ local command = {
 	name = "show",
 	description = "Show a card in your inventory or storage.",
 	options = {
-		name = "card",
-		description = "The card to show",
-		type = 4,
-		required = true,
-		autocomplete = true
+		{
+			name = "card",
+			description = "The card to show",
+			type = 3, -- NOT 4!!! 4 IS INT!!! 3 IS STRING!!! THAT'S TOTALLY READABLE!!!
+			required = true,
+			autocomplete = true
+		}
 	}
 }
 function command.autocomplete(ia, comm, focused, args)
 	local out = {}
 	local cardlist = {}
-	if nopeeking then
-		local uj = db.get_user(ia.user.id)
-		for k, v in pairs(uj.inventory) do
-			cardlist[k] = true
-		end
-		for k, v in pairs(uj.storage) do
-			cardlist[k] = true
-		end
-	else
-		cardlist = cdb
+	local uj = db.get_user(ia.user.id)
+	for k, v in pairs(uj.inventory) do
+		cardlist[k] = true
+	end
+	for k, v in pairs(uj.storage) do
+		cardlist[k] = true
 	end
 	for k, _ in pairs(cardlist) do
 		local name = cdb[k] and cdb[k].name or "UNKNOWN CARD"
@@ -38,7 +36,7 @@ function command.run(message, mt)
 	local uj = db.get_user(author.id)
 	local sj = dpf.loadjson("savedata/shop.json", defaultshopsave)
 	local lang = dpf.loadjson("langs/" .. uj.lang .. "/show.json", "")
-	if #mt ~= 1 then
+	if #mt ~= 1 and not mt.card then
 		message:reply(lang.no_arguments)
 		return
 	end
