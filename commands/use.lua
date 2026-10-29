@@ -69,7 +69,6 @@ function command.run(message, mt, bypass)
 		local newuj = automove(uj.room, request, message)
 		if newuj then
 			if newuj == "blacklisted" or newuj == "undiscovered" then
-				return
 			else
 				uj = newuj
 			end
